@@ -56,12 +56,12 @@ export default function DashboardPage() {
             <Medal className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">8</div>
+            <div className="text-2xl font-bold">10</div>
             <p className="text-xs text-muted-foreground">
-              Categorias (ex: Profissional, Sub-20)
+              Posições de jogadores
             </p>
              <Button asChild size="sm" className="mt-4">
-                <Link href="/dashboard/categories">Gerenciar Categorias</Link>
+                <Link href="/dashboard/categories">Gerenciar Posições</Link>
             </Button>
           </CardContent>
         </Card>
