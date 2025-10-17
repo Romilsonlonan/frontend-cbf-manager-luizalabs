@@ -31,7 +31,7 @@ export default function DashboardPage() {
               Total de atletas cadastrados
             </p>
             <Button asChild size="sm" className="mt-4">
-                <Link href="#">Ver Atletas</Link>
+                <Link href="/dashboard/athletes">Ver Atletas</Link>
             </Button>
           </CardContent>
         </Card>
@@ -46,7 +46,7 @@ export default function DashboardPage() {
               Clubes parceiros
             </p>
              <Button asChild size="sm" className="mt-4">
-                <Link href="#">Ver Clubes</Link>
+                <Link href="/dashboard/clubs">Ver Clubes</Link>
             </Button>
           </CardContent>
         </Card>
@@ -61,7 +61,7 @@ export default function DashboardPage() {
               Categorias (ex: Profissional, Sub-20)
             </p>
              <Button asChild size="sm" className="mt-4">
-                <Link href="#">Gerenciar Categorias</Link>
+                <Link href="/dashboard/categories">Gerenciar Categorias</Link>
             </Button>
           </CardContent>
         </Card>

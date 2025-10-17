@@ -51,7 +51,7 @@ export function SidebarNav() {
               isActive={pathname.startsWith("/dashboard/athletes")}
               tooltip="Atletas"
             >
-              <Link href="#">
+              <Link href="/dashboard/athletes">
                 <UsersRound />
                 <span>Atletas</span>
               </Link>
@@ -63,7 +63,7 @@ export function SidebarNav() {
               isActive={pathname.startsWith("/dashboard/clubs")}
               tooltip="Clubes"
             >
-              <Link href="#">
+              <Link href="/dashboard/clubs">
                 <Shield />
                 <span>Clubes</span>
               </Link>
@@ -75,7 +75,7 @@ export function SidebarNav() {
               isActive={pathname.startsWith("/dashboard/categories")}
               tooltip="Categorias"
             >
-              <Link href="#">
+              <Link href="/dashboard/categories">
                 <Medal />
                 <span>Categorias</span>
               </Link>
