@@ -25,7 +25,17 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
-import { Search, SlidersHorizontal } from 'lucide-react';
+import { Search, SlidersHorizontal, PlusCircle } from 'lucide-react';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
+import { Label } from '@/components/ui/label';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -126,17 +136,19 @@ export default function AthletesPage() {
       </CardHeader>
       <CardContent>
         <div className="flex flex-col sm:flex-row gap-4 mb-6">
-          <div className="relative flex-1">
-            <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-            <Input
-              placeholder="Nome do Jogador"
-              className="pl-8"
-              value={nameFilter}
-              onChange={(e) => setNameFilter(e.target.value)}
-            />
+           <div className="flex-1">
+            <div className="relative">
+              <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+              <Input
+                placeholder="Nome do Jogador"
+                className="pl-8"
+                value={nameFilter}
+                onChange={(e) => setNameFilter(e.target.value)}
+              />
+            </div>
           </div>
           <Select value={positionFilter} onValueChange={setPositionFilter}>
-            <SelectTrigger className="flex-1">
+            <SelectTrigger>
               <SelectValue placeholder="Posição" />
             </SelectTrigger>
             <SelectContent>
@@ -149,7 +161,7 @@ export default function AthletesPage() {
             </SelectContent>
           </Select>
           <Select value={clubFilter} onValueChange={setClubFilter}>
-            <SelectTrigger className="flex-1">
+            <SelectTrigger>
               <SelectValue placeholder="Clube" />
             </SelectTrigger>
             <SelectContent>
@@ -162,7 +174,7 @@ export default function AthletesPage() {
             </SelectContent>
           </Select>
            <Select value={trainingCenterFilter} onValueChange={setTrainingCenterFilter}>
-            <SelectTrigger className="flex-1">
+            <SelectTrigger>
               <SelectValue placeholder="Centro de Treinamento" />
             </SelectTrigger>
             <SelectContent>
@@ -176,7 +188,7 @@ export default function AthletesPage() {
           </Select>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="outline" className="flex-shrink-0">
+              <Button variant="outline">
                 <SlidersHorizontal className="mr-2 h-4 w-4" />
                 Mais Filtros
               </Button>
@@ -188,6 +200,45 @@ export default function AthletesPage() {
               <DropdownMenuCheckboxItem>Mais Gols</DropdownMenuCheckboxItem>
             </DropdownMenuContent>
           </DropdownMenu>
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button>
+                <PlusCircle className="mr-2 h-4 w-4" />
+                Adicionar Atleta
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="sm:max-w-[425px]">
+              <DialogHeader>
+                <DialogTitle>Adicionar Novo Atleta</DialogTitle>
+                <DialogDescription>
+                  Preencha as informações do atleta para adicioná-lo ao sistema.
+                </DialogDescription>
+              </DialogHeader>
+              <div className="grid gap-4 py-4">
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="name" className="text-right">
+                    Nome
+                  </Label>
+                  <Input id="name" placeholder="Nome completo do atleta" className="col-span-3" />
+                </div>
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="position" className="text-right">
+                    Posição
+                  </Label>
+                  <Input id="position" placeholder="Ex: Atacante" className="col-span-3" />
+                </div>
+                 <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="club" className="text-right">
+                    Clube
+                  </Label>
+                  <Input id="club" placeholder="Ex: SC Corinthians" className="col-span-3" />
+                </div>
+              </div>
+              <DialogFooter>
+                <Button type="submit">Salvar Atleta</Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
         </div>
         <Table>
           <TableHeader>
