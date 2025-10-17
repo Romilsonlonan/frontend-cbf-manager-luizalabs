@@ -25,7 +25,15 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
-import { Search } from 'lucide-react';
+import { Search, SlidersHorizontal } from 'lucide-react';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuCheckboxItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 
 // Mock data ampliada para atletas
 const athletes = [
@@ -37,6 +45,7 @@ const athletes = [
     age: 28,
     goals: 15,
     salary: 150000,
+    trainingCenter: 'CT Dr. Joaquim Grava',
   },
   {
     id: '2',
@@ -46,6 +55,7 @@ const athletes = [
     age: 25,
     goals: 7,
     salary: 120000,
+    trainingCenter: 'Academia de Futebol',
   },
   {
     id: '3',
@@ -55,6 +65,7 @@ const athletes = [
     age: 30,
     goals: 2,
     salary: 100000,
+    trainingCenter: 'CT da Barra Funda',
   },
   {
     id: '4',
@@ -64,6 +75,7 @@ const athletes = [
     age: 32,
     goals: 0,
     salary: 90000,
+    trainingCenter: 'CT Dr. Joaquim Grava',
   },
    {
     id: '5',
@@ -73,6 +85,7 @@ const athletes = [
     age: 22,
     goals: 18,
     salary: 180000,
+    trainingCenter: 'CT da Barra Funda',
   },
 ];
 
@@ -85,27 +98,30 @@ const positions = [
   'Lateral-Esquerdo',
 ];
 const clubs = ['SC Corinthians', 'SE Palmeiras', 'São Paulo FC'];
+const trainingCenters = ['CT Dr. Joaquim Grava', 'Academia de Futebol', 'CT da Barra Funda'];
 
 export default function AthletesPage() {
   const [nameFilter, setNameFilter] = useState('');
   const [positionFilter, setPositionFilter] = useState('');
   const [clubFilter, setClubFilter] = useState('');
+  const [trainingCenterFilter, setTrainingCenterFilter] = useState('');
 
   const filteredAthletes = athletes.filter((athlete) => {
     return (
       (nameFilter === '' ||
         athlete.name.toLowerCase().includes(nameFilter.toLowerCase())) &&
       (positionFilter === '' || athlete.position === positionFilter) &&
-      (clubFilter === '' || athlete.club === clubFilter)
+      (clubFilter === '' || athlete.club === clubFilter) &&
+      (trainingCenterFilter === '' || athlete.trainingCenter === trainingCenterFilter)
     );
   });
 
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Atletas</CardTitle>
+        <CardTitle>Análise de Atletas</CardTitle>
         <CardDescription>
-          Filtre e gerencie os atletas cadastrados no sistema.
+          Filtre e analise os atletas cadastrados no sistema.
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -145,6 +161,33 @@ export default function AthletesPage() {
               ))}
             </SelectContent>
           </Select>
+           <Select value={trainingCenterFilter} onValueChange={setTrainingCenterFilter}>
+            <SelectTrigger className="flex-1">
+              <SelectValue placeholder="Centro de Treinamento" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="">Todos os CTs</SelectItem>
+              {trainingCenters.map((center) => (
+                <SelectItem key={center} value={center}>
+                  {center}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline" className="flex-shrink-0">
+                <SlidersHorizontal className="mr-2 h-4 w-4" />
+                Mais Filtros
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="w-56">
+              <DropdownMenuLabel>Filtros Avançados</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuCheckboxItem>Maior Salário</DropdownMenuCheckboxItem>
+              <DropdownMenuCheckboxItem>Mais Gols</DropdownMenuCheckboxItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
         <Table>
           <TableHeader>
@@ -152,6 +195,7 @@ export default function AthletesPage() {
               <TableHead>Nome</TableHead>
               <TableHead>Posição</TableHead>
               <TableHead>Clube</TableHead>
+              <TableHead>Centro de Treinamento</TableHead>
               <TableHead className="text-right">Idade</TableHead>
               <TableHead className="text-right">Gols (2025)</TableHead>
               <TableHead className="text-right">Salário</TableHead>
@@ -163,6 +207,7 @@ export default function AthletesPage() {
                 <TableCell className="font-medium">{athlete.name}</TableCell>
                 <TableCell>{athlete.position}</TableCell>
                 <TableCell>{athlete.club}</TableCell>
+                <TableCell>{athlete.trainingCenter}</TableCell>
                 <TableCell className="text-right">{athlete.age}</TableCell>
                 <TableCell className="text-right">{athlete.goals}</TableCell>
                 <TableCell className="text-right">

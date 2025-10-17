@@ -16,7 +16,6 @@ import {
   Shield,
   LayoutGrid,
   UsersRound,
-  Medal,
   Dumbbell,
 } from "lucide-react";
 
@@ -66,18 +65,6 @@ export function SidebarNav() {
               <Link href="/dashboard/clubs">
                 <Shield />
                 <span>Clubes</span>
-              </Link>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-           <SidebarMenuItem>
-            <SidebarMenuButton
-              asChild
-              isActive={pathname.startsWith("/dashboard/categories")}
-              tooltip="Categorias"
-            >
-              <Link href="/dashboard/categories">
-                <Medal />
-                <span>Categorias</span>
               </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
