@@ -6,97 +6,79 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { UsersRound, Database, Container, ExternalLink } from "lucide-react";
-import { ServiceStatsChart } from "@/components/dashboard/service-stats-chart";
-import { Button } from "@/components/ui/button";
+import { UsersRound, Shield, Medal, BarChart3 } from "lucide-react";
 import Link from "next/link";
+import { Button } from "@/components/ui/button";
 
 export default function DashboardPage() {
   return (
     <div className="flex flex-col gap-8">
       <div>
-        <h1 className="text-3xl font-bold tracking-tight">Dashboard</h1>
+        <h1 className="text-3xl font-bold tracking-tight">Painel de Controle</h1>
         <p className="text-muted-foreground">
-          Overview of your Firebase services.
+          Visão geral do seu sistema de gerenciamento de atletas.
         </p>
       </div>
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        <Card className="flex flex-col">
+      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+        <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium">Authentication</CardTitle>
+            <CardTitle className="text-sm font-medium">Atletas</CardTitle>
             <UsersRound className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">12,345</div>
+            <div className="text-2xl font-bold">1,254</div>
             <p className="text-xs text-muted-foreground">
-              +12.1% from last month
+              Total de atletas cadastrados
             </p>
-          </CardContent>
-          <div className="flex-grow p-6 pt-0">
-             <ServiceStatsChart />
-          </div>
-        </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium">Firestore</CardTitle>
-            <Database className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">2,350,123</div>
-            <p className="text-xs text-muted-foreground">
-              +180.1% reads from last month
-            </p>
-            <div className="mt-4 text-sm text-muted-foreground grid grid-cols-3 gap-2">
-                <div>
-                    <div className="font-semibold">Reads</div>
-                    <div>1.2M</div>
-                </div>
-                <div>
-                    <div className="font-semibold">Writes</div>
-                    <div>450K</div>
-                </div>
-                <div>
-                    <div className="font-semibold">Deletes</div>
-                    <div>80K</div>
-                </div>
-            </div>
+            <Button asChild size="sm" className="mt-4">
+                <Link href="#">Ver Atletas</Link>
+            </Button>
           </CardContent>
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium">Storage</CardTitle>
-            <Container className="h-4 w-4 text-muted-foreground" />
+            <CardTitle className="text-sm font-medium">Clubes</CardTitle>
+            <Shield className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">10.2 GB</div>
+            <div className="text-2xl font-bold">42</div>
             <p className="text-xs text-muted-foreground">
-              Total storage used
+              Clubes parceiros
             </p>
-             <div className="mt-4 text-sm text-muted-foreground">
-                <div className="font-semibold">Total Files</div>
-                <div>5,432</div>
-            </div>
+             <Button asChild size="sm" className="mt-4">
+                <Link href="#">Ver Clubes</Link>
+            </Button>
           </CardContent>
         </Card>
-        <Card className="md:col-span-2 lg:col-span-3">
-            <CardHeader>
-                <CardTitle>Project Settings</CardTitle>
-                <CardDescription>
-                    Manage your Firebase project configuration and settings.
-                </CardDescription>
-            </CardHeader>
-            <CardContent className="flex flex-wrap gap-4">
-                <Button asChild>
-                    <Link href="/dashboard/credentials">
-                        Manage Credentials
-                    </Link>
-                </Button>
-                 <Button variant="outline" asChild>
-                    <a href="https://console.firebase.google.com/" target="_blank" rel="noopener noreferrer">
-                        Go to Firebase Console <ExternalLink className="ml-2 h-4 w-4" />
-                    </a>
-                </Button>
-            </CardContent>
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between pb-2">
+            <CardTitle className="text-sm font-medium">Categorias</CardTitle>
+            <Medal className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">8</div>
+            <p className="text-xs text-muted-foreground">
+              Categorias (ex: Profissional, Sub-20)
+            </p>
+             <Button asChild size="sm" className="mt-4">
+                <Link href="#">Gerenciar Categorias</Link>
+            </Button>
+          </CardContent>
+        </Card>
+         <Card>
+          <CardHeader className="flex flex-row items-center justify-between pb-2">
+            <CardTitle className="text-sm font-medium">Estatísticas</CardTitle>
+            <BarChart3 className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">2025</div>
+            <p className="text-xs text-muted-foreground">
+              Análise de dados da temporada
+            </p>
+             <Button asChild size="sm" className="mt-4">
+                <Link href="#">Ver Estatísticas</Link>
+            </Button>
+          </CardContent>
         </Card>
       </div>
     </div>
