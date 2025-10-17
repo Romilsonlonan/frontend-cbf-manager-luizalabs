@@ -5,6 +5,24 @@
       "description": "User avatar",
       "imageUrl": "https://picsum.photos/seed/avatar1/40/40",
       "imageHint": "person portrait"
+    },
+    {
+      "id": "club-logo-1",
+      "description": "Club Logo 1",
+      "imageUrl": "https://picsum.photos/seed/logo1/32/32",
+      "imageHint": "club logo"
+    },
+    {
+      "id": "club-logo-2",
+      "description": "Club Logo 2",
+      "imageUrl": "https://picsum.photos/seed/logo2/32/32",
+      "imageHint": "club logo"
+    },
+    {
+      "id": "club-logo-3",
+      "description": "Club Logo 3",
+      "imageUrl": "https://picsum.photos/seed/logo3/32/32",
+      "imageHint": "club logo"
     }
   ]
 }
