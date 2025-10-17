@@ -27,7 +27,7 @@ export function SidebarNav() {
       <SidebarHeader className="p-4">
         <Link href="/dashboard" className="flex items-center gap-2">
           <Dumbbell className="w-8 h-8 text-primary" />
-          <h1 className="text-xl font-bold text-foreground">AthleteManager</h1>
+          <h1 className="text-xl font-bold text-foreground">CBF Manager</h1>
         </Link>
       </SidebarHeader>
       <SidebarContent className="p-2">

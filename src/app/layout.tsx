@@ -4,7 +4,7 @@ import './globals.css';
 import { Toaster } from "@/components/ui/toaster";
 
 export const metadata: Metadata = {
-  title: 'AthleteManager',
+  title: 'CBF Manager',
   description: 'Gestão de Atletas, Clubes e Estatísticas Esportivas',
 };
 
