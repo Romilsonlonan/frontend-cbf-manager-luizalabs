@@ -2,6 +2,7 @@
 'use client';
 
 import Image from "next/image";
+import Link from "next/link";
 import {
   Table,
   TableBody,
@@ -95,8 +96,8 @@ export default function ClubsPage() {
                   <TableCell>{club.initials}</TableCell>
                   <TableCell>{club.city}</TableCell>
                   <TableCell>
-                    <Button variant="outline" size="sm">
-                      Ver Detalhes
+                     <Button asChild variant="outline" size="sm">
+                        <Link href={`/dashboard/clubs/${club.id}`}>Ver Detalhes</Link>
                     </Button>
                   </TableCell>
                 </TableRow>
