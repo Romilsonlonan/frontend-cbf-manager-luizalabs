@@ -110,9 +110,9 @@ export default function AthletesPage() {
     return (
       (nameFilter === '' ||
         athlete.name.toLowerCase().includes(nameFilter.toLowerCase())) &&
-      (positionFilter === '' || athlete.position === positionFilter) &&
-      (clubFilter === '' || athlete.club === clubFilter) &&
-      (trainingCenterFilter === '' || athlete.trainingCenter === trainingCenterFilter)
+      (positionFilter === '' || positionFilter === 'all' || athlete.position === positionFilter) &&
+      (clubFilter === '' || clubFilter === 'all' || athlete.club === clubFilter) &&
+      (trainingCenterFilter === '' || trainingCenterFilter === 'all' || athlete.trainingCenter === trainingCenterFilter)
     );
   });
 
@@ -140,7 +140,7 @@ export default function AthletesPage() {
               <SelectValue placeholder="Posição" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">Todas as Posições</SelectItem>
+              <SelectItem value="all">Todas as Posições</SelectItem>
               {positions.map((pos) => (
                 <SelectItem key={pos} value={pos}>
                   {pos}
@@ -153,7 +153,7 @@ export default function AthletesPage() {
               <SelectValue placeholder="Clube" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">Todos os Clubes</SelectItem>
+              <SelectItem value="all">Todos os Clubes</SelectItem>
               {clubs.map((club) => (
                 <SelectItem key={club} value={club}>
                   {club}
@@ -166,7 +166,7 @@ export default function AthletesPage() {
               <SelectValue placeholder="Centro de Treinamento" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">Todos os CTs</SelectItem>
+              <SelectItem value="all">Todos os CTs</SelectItem>
               {trainingCenters.map((center) => (
                 <SelectItem key={center} value={center}>
                   {center}
