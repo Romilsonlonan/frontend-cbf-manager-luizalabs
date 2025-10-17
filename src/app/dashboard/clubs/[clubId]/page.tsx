@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useParams } from 'next/navigation';
@@ -20,6 +19,19 @@ import {
 } from '@/components/ui/table';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Button } from '@/components/ui/button';
+import { PlusCircle } from 'lucide-react';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
+import { Label } from '@/components/ui/label';
+import { Input } from '@/components/ui/input';
 
 // Mock data
 const clubs = [
@@ -52,20 +64,67 @@ export default function ClubDetailsPage() {
 
   return (
     <Card>
-      <CardHeader className="flex flex-row items-center gap-4">
-        {clubShield && (
-          <Image
-            src={clubShield.imageUrl}
-            width={64}
-            height={64}
-            alt={`Escudo do ${club.name}`}
-            data-ai-hint={clubShield.imageHint}
-          />
-        )}
-        <div>
-          <CardTitle className="text-3xl">{club.name}</CardTitle>
-          <CardDescription>Lista de atletas do clube.</CardDescription>
+      <CardHeader className="flex flex-row items-center justify-between gap-4">
+        <div className='flex flex-row items-center gap-4'>
+            {clubShield && (
+              <Image
+                src={clubShield.imageUrl}
+                width={64}
+                height={64}
+                alt={`Escudo do ${club.name}`}
+                data-ai-hint={clubShield.imageHint}
+              />
+            )}
+            <div>
+              <CardTitle className="text-3xl">{club.name}</CardTitle>
+              <CardDescription>Lista de atletas do clube.</CardDescription>
+            </div>
         </div>
+        <Dialog>
+            <DialogTrigger asChild>
+              <Button>
+                <PlusCircle className="mr-2 h-4 w-4" />
+                Adicionar Jogador
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="sm:max-w-[425px]">
+              <DialogHeader>
+                <DialogTitle>Adicionar Novo Jogador ao {club.name}</DialogTitle>
+                <DialogDescription>
+                  Preencha as informações para adicionar um novo atleta ao elenco.
+                </DialogDescription>
+              </DialogHeader>
+              <div className="grid gap-4 py-4">
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="name" className="text-right">
+                    Nome
+                  </Label>
+                  <Input id="name" placeholder="Nome completo do atleta" className="col-span-3" />
+                </div>
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="position" className="text-right">
+                    Posição
+                  </Label>
+                  <Input id="position" placeholder="Ex: Atacante" className="col-span-3" />
+                </div>
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="age" className="text-right">
+                    Idade
+                  </Label>
+                  <Input id="age" type="number" placeholder="Ex: 25" className="col-span-3" />
+                </div>
+                 <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="club" className="text-right">
+                    Clube
+                  </Label>
+                  <Input id="club" value={club.name} disabled className="col-span-3" />
+                </div>
+              </div>
+              <DialogFooter>
+                <Button type="submit">Salvar Jogador</Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
       </CardHeader>
       <CardContent>
         <Table>
