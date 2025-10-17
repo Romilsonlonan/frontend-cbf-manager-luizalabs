@@ -97,7 +97,7 @@ export default function ClubsPage() {
                   <TableCell>{club.city}</TableCell>
                   <TableCell>
                      <Button asChild variant="outline" size="sm">
-                        <Link href={`/dashboard/clubs/${club.id}`}>Ver Detalhes</Link>
+                        <Link href={`/dashboard/clubs/${club.id}`}>Ver Elenco</Link>
                     </Button>
                   </TableCell>
                 </TableRow>
