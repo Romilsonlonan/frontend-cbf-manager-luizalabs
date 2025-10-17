@@ -147,7 +147,7 @@ export default function AthletesPage() {
               />
             </div>
           </div>
-          <Select value={positionFilter} onValueChange={setPositionFilter}>
+          <Select value={positionFilter} onValuechange={setPositionFilter}>
             <SelectTrigger>
               <SelectValue placeholder="Posição" />
             </SelectTrigger>
@@ -232,6 +232,12 @@ export default function AthletesPage() {
                     Clube
                   </Label>
                   <Input id="club" placeholder="Ex: SC Corinthians" className="col-span-3" />
+                </div>
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="trainingCenter" className="text-right">
+                    CT
+                  </Label>
+                  <Input id="trainingCenter" placeholder="Ex: CT Dr. Joaquim Grava" className="col-span-3" />
                 </div>
               </div>
               <DialogFooter>
