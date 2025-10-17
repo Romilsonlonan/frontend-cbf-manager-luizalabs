@@ -36,7 +36,7 @@ export default function CategoriesPage() {
     <Card>
       <CardHeader className="flex flex-row items-center justify-between">
         <div>
-          <CardTitle>Categorias e Posições</CardTitle>
+          <CardTitle>Posições</CardTitle>
           <CardDescription>
             Gerencie as posições dos atletas no sistema.
           </CardDescription>
