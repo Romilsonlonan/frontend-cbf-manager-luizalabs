@@ -27,7 +27,7 @@ export function SidebarNav() {
     <Sidebar collapsible="icon">
       <SidebarRail />
       <SidebarHeader className="p-4">
-        <Link href="/dashboard" className="flex items-center gap-2">
+        <div className="flex items-center gap-2 w-full">
             <Image
                 src="https://i.ibb.co/WWx6qgWF/cbf.png"
                 width={32}
@@ -36,7 +36,7 @@ export function SidebarNav() {
                 className="shrink-0"
             />
             <h1 className="text-xl font-bold text-foreground group-data-[collapsible=icon]:hidden truncate">CBF Manager</h1>
-        </Link>
+        </div>
       </SidebarHeader>
       <SidebarContent className="p-2">
         <SidebarMenu>

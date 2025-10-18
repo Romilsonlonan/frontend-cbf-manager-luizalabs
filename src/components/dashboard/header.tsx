@@ -55,12 +55,7 @@ export function DashboardHeader() {
       </DropdownMenu>
        <SidebarTrigger className="hidden md:flex" asChild>
           <Button variant="ghost" size="icon">
-            <ChevronLeft
-              className={cn(
-                "transition-transform",
-                state === "collapsed" && "rotate-180"
-              )}
-            />
+            {state === 'expanded' ? <ChevronLeft /> : <ChevronRight />}
           </Button>
         </SidebarTrigger>
     </header>
