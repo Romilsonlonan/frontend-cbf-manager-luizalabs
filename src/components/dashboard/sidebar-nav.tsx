@@ -27,7 +27,7 @@ export function SidebarNav() {
     <Sidebar collapsible="icon">
       <SidebarRail />
       <SidebarHeader className="p-4">
-        <div className="flex items-center gap-2 w-full">
+        <div className="flex items-center justify-center gap-2 w-full group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:w-auto">
             <Image
                 src="https://i.ibb.co/WWx6qgWF/cbf.png"
                 width={32}
