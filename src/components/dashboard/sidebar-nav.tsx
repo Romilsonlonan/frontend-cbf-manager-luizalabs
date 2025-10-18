@@ -33,7 +33,7 @@ export function SidebarNav() {
             width={32}
             height={32}
             alt="CBF Logo"
-            className="rounded-full transition-transform group-data-[collapsible=icon]:-rotate-180"
+            className="rounded-full"
           />
           <h1 className="text-xl font-bold text-foreground group-data-[collapsible=icon]:hidden">CBF Manager</h1>
         </Link>
