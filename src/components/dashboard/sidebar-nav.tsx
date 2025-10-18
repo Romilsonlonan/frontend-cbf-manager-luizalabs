@@ -27,16 +27,18 @@ export function SidebarNav() {
     <Sidebar collapsible="icon">
       <SidebarRail />
       <SidebarHeader className="p-4">
-        <Link href="/dashboard" className="flex items-center gap-2">
-          <Image
-            src="https://i.ibb.co/WWx6qgWF/cbf.png"
-            width={32}
-            height={32}
-            alt="CBF Logo"
-            className="rounded-full"
-          />
-          <h1 className="text-xl font-bold text-foreground group-data-[collapsible=icon]:hidden">CBF Manager</h1>
-        </Link>
+        <div className="flex items-center gap-2 w-full">
+            <Link href="/dashboard" className="flex items-center gap-2">
+            <Image
+                src="https://i.ibb.co/WWx6qgWF/cbf.png"
+                width={32}
+                height={32}
+                alt="CBF Logo"
+                className="rounded-full"
+            />
+            <h1 className="text-xl font-bold text-foreground group-data-[collapsible=icon]:hidden">CBF Manager</h1>
+            </Link>
+        </div>
       </SidebarHeader>
       <SidebarContent className="p-2">
         <SidebarMenu>
