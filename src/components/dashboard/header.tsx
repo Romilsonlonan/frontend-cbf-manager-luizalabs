@@ -2,9 +2,7 @@
 "use client";
 
 import Image from "next/image";
-import {
-  Bell,
-} from "lucide-react";
+import { Bell, ChevronLeft, ChevronRight } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -14,12 +12,14 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
-import { SidebarTrigger } from "@/components/ui/sidebar";
+import { SidebarTrigger, useSidebar } from "@/components/ui/sidebar";
 import { PlaceHolderImages } from "@/lib/placeholder-images";
+import { cn } from "@/lib/utils";
 
 const userAvatar = PlaceHolderImages.find((img) => img.id === "user-avatar");
 
 export function DashboardHeader() {
+  const { state } = useSidebar();
   return (
     <header className="flex h-16 items-center gap-4 border-b bg-card px-4 md:px-6 sticky top-0 z-30">
       <SidebarTrigger className="md:hidden" />
@@ -53,6 +53,16 @@ export function DashboardHeader() {
           <DropdownMenuItem>Logout</DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
+       <SidebarTrigger className="hidden md:flex" asChild>
+          <Button variant="ghost" size="icon">
+            <ChevronLeft
+              className={cn(
+                "transition-transform",
+                state === "collapsed" && "rotate-180"
+              )}
+            />
+          </Button>
+        </SidebarTrigger>
     </header>
   );
 }
