@@ -2,6 +2,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { Bell, ChevronLeft, ChevronRight } from "lucide-react";
 import {
   DropdownMenu,
@@ -14,12 +15,14 @@ import {
 import { Button } from "@/components/ui/button";
 import { SidebarTrigger, useSidebar } from "@/components/ui/sidebar";
 import { PlaceHolderImages } from "@/lib/placeholder-images";
-import { cn } from "@/lib/utils";
 
 const userAvatar = PlaceHolderImages.find((img) => img.id === "user-avatar");
 
 export function DashboardHeader() {
   const { state } = useSidebar();
+  // Mock login state
+  const isLoggedIn = false; 
+
   return (
     <header className="flex h-16 items-center gap-4 border-b bg-card px-4 md:px-6 sticky top-0 z-30">
       <SidebarTrigger className="md:hidden" />
@@ -45,12 +48,25 @@ export function DashboardHeader() {
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
-          <DropdownMenuLabel>My Account</DropdownMenuLabel>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem>Settings</DropdownMenuItem>
-          <DropdownMenuItem>Support</DropdownMenuItem>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem>Logout</DropdownMenuItem>
+          {isLoggedIn ? (
+            <>
+              <DropdownMenuLabel>Minha Conta</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem>Configurações</DropdownMenuItem>
+              <DropdownMenuItem>Suporte</DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem>Sair</DropdownMenuItem>
+            </>
+          ) : (
+            <>
+              <DropdownMenuItem asChild>
+                <Link href="/login">Login</Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link href="/register">Cadastre-se</Link>
+              </DropdownMenuItem>
+            </>
+          )}
         </DropdownMenuContent>
       </DropdownMenu>
        <SidebarTrigger className="hidden md:flex" asChild>
