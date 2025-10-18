@@ -30,8 +30,8 @@ export function SidebarNav() {
         <div className="flex items-center justify-center gap-2 w-full group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:w-auto">
             <Image
                 src="https://i.ibb.co/WWx6qgWF/cbf.png"
-                width={32}
-                height={32}
+                width={40}
+                height={40}
                 alt="CBF Logo"
                 className="shrink-0 rounded-full"
             />
