@@ -12,6 +12,7 @@ import {
   SidebarMenuItem,
   SidebarMenuButton,
   SidebarFooter,
+  SidebarRail,
 } from "@/components/ui/sidebar";
 import {
   Shield,
@@ -23,7 +24,8 @@ export function SidebarNav() {
   const pathname = usePathname();
 
   return (
-    <Sidebar>
+    <Sidebar collapsible="icon">
+      <SidebarRail />
       <SidebarHeader className="p-4">
         <Link href="/dashboard" className="flex items-center gap-2">
           <Image
