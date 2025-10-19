@@ -50,8 +50,10 @@ export function EntityFormDialog({
   const [formData, setFormData] = useState<Record<string, string>>(initialValues);
 
   useEffect(() => {
-    setFormData(initialValues);
-  }, [initialValues]);
+    if (isOpen) {
+      setFormData(initialValues);
+    }
+  }, [isOpen, initialValues]);
 
   const handleChange = (id: string, value: string) => {
     setFormData((prev) => ({ ...prev, [id]: value }));
