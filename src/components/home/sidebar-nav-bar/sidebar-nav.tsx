@@ -16,6 +16,7 @@ import {
   Shield,
   LayoutGrid,
   UsersRound,
+  BarChartHorizontal,
 } from "lucide-react";
 import { SidebarLogo } from "./sidebar-logo/sidebar-logo";
 
@@ -27,7 +28,7 @@ export function SidebarNav() {
       <SidebarHeader className="p-4">
           <SidebarLogo />
       </SidebarHeader>
-      <SidebarContent className="p-2 flex-1">
+      <SidebarContent className="flex-1 p-2">
           <SidebarMenu>
           <SidebarMenuItem>
               <SidebarMenuButton
@@ -59,6 +60,17 @@ export function SidebarNav() {
               <Link href="/home/clubs">
                   <Shield />
                   <span>Clubes</span>
+              </Link>
+              </SidebarMenuButton>
+          </SidebarMenuItem>
+           <SidebarMenuItem>
+              <SidebarMenuButton
+              asChild
+              isActive={pathname.startsWith("/home/statistics")}
+              >
+              <Link href="/home/statistics">
+                  <BarChartHorizontal />
+                  <span>Estatísticas</span>
               </Link>
               </SidebarMenuButton>
           </SidebarMenuItem>

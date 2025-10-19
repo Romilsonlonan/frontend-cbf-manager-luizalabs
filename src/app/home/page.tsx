@@ -61,7 +61,7 @@ export default function DashboardPage() {
               Análise de dados da temporada
             </p>
              <Button asChild size="sm" className="mt-4">
-                <Link href="#">Ver Estatísticas</Link>
+                <Link href="/home/statistics">Ver Estatísticas</Link>
             </Button>
           </CardContent>
         </Card>
