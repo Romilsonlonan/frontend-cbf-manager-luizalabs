@@ -1,74 +1,18 @@
 
 "use client";
 
-import Image from "next/image";
-import Link from "next/link";
-import { Bell } from "lucide-react";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Button } from "@/components/ui/button";
 import { SidebarTrigger } from "@/components/ui/sidebar";
-import { PlaceHolderImages } from "@/lib/placeholder-images";
 import styles from "./header.module.css";
-
-const userAvatar = PlaceHolderImages.find((img) => img.id === "user-avatar");
+import { NotificationButton } from "./notification-button/notification-button";
+import { UserMenu } from "./user-menu/user-menu";
 
 export function DashboardHeader() {
-  // Mock login state
-  const isLoggedIn = false; 
-
   return (
     <header className={styles.header}>
       <SidebarTrigger className={styles.sidebarTrigger} />
       <div className={styles.flexSpacer} />
-      <Button variant="ghost" size="icon" className={styles.notificationButton}>
-        <Bell className={styles.notificationIcon} />
-        <span className={styles.srOnly}>Toggle notifications</span>
-      </Button>
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button variant="ghost" size="icon" className={styles.userMenuButton}>
-            {userAvatar && (
-              <Image
-                src={userAvatar.imageUrl}
-                width={40}
-                height={40}
-                alt={userAvatar.description}
-                data-ai-hint={userAvatar.imageHint}
-                className={styles.userAvatar}
-              />
-            )}
-            <span className={styles.srOnly}>Toggle user menu</span>
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end">
-          {isLoggedIn ? (
-            <>
-              <DropdownMenuLabel>Minha Conta</DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem>Configurações</DropdownMenuItem>
-              <DropdownMenuItem>Suporte</DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem>Sair</DropdownMenuItem>
-            </>
-          ) : (
-            <>
-              <DropdownMenuItem asChild>
-                <Link href="/login">Login</Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem asChild>
-                <Link href="/register">Cadastre-se</Link>
-              </DropdownMenuItem>
-            </>
-          )}
-        </DropdownMenuContent>
-      </DropdownMenu>
+      <NotificationButton />
+      <UserMenu />
     </header>
   );
 }
