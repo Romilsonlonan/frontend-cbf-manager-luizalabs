@@ -22,6 +22,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from '@/components/ui/chart';
+import styles from './statistics.module.css';
 
 // Mock data (o mesmo usado em outras páginas para consistência)
 const athletes = [
@@ -116,13 +117,13 @@ const chartConfigAge = {
 
 export default function Statistics() {
   return (
-    <div className="grid gap-6 md:grid-cols-1 lg:grid-cols-2">
+    <div className={styles.statisticsGrid}>
       <Card>
         <CardHeader>
           <CardTitle>Gols por Atleta</CardTitle>
         </CardHeader>
         <CardContent>
-          <ChartContainer config={chartConfigGoals} className="h-[300px] w-full">
+          <ChartContainer config={chartConfigGoals} className={styles.chartContainer}>
             <ResponsiveContainer>
               <BarChart data={athletes} layout="vertical">
                 <CartesianGrid strokeDasharray="3 3" />
@@ -158,7 +159,7 @@ export default function Statistics() {
         <CardContent>
           <ChartContainer
             config={chartConfigSalary}
-            className="h-[300px] w-full"
+            className={styles.chartContainer}
           >
             <ResponsiveContainer>
               <BarChart data={salaryData} layout="vertical">
@@ -200,12 +201,12 @@ export default function Statistics() {
         </CardContent>
       </Card>
 
-      <Card className="lg:col-span-2">
+      <Card className={styles.fullSpanCard}>
         <CardHeader>
           <CardTitle>Distribuição de Idade</CardTitle>
         </CardHeader>
         <CardContent>
-          <ChartContainer config={chartConfigAge} className="h-[300px] w-full">
+          <ChartContainer config={chartConfigAge} className={styles.chartContainer}>
             <ResponsiveContainer>
               <BarChart data={ageData}>
                 <CartesianGrid vertical={false} />
