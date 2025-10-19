@@ -1,6 +1,7 @@
 
 'use client';
 
+import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import {
@@ -33,9 +34,8 @@ import {
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 
-
-// Mock data for clubs
-const clubs = [
+// Mock data inicial para clubes
+const initialClubs = [
   {
     id: "1",
     name: "SC Corinthians",
@@ -60,6 +60,28 @@ const clubs = [
 ];
 
 export default function ClubsPage() {
+  const [clubs, setClubs] = useState(initialClubs);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [newClub, setNewClub] = useState({ name: '', initials: '', city: '' });
+
+  const handleAddClub = () => {
+    if (newClub.name && newClub.initials && newClub.city) {
+      const newId = (clubs.length + 1).toString();
+      setClubs([
+        ...clubs,
+        {
+          id: newId,
+          ...newClub,
+          // shieldId genérico para novos clubes, pode ser melhorado
+          shieldId: `club-logo-${Math.floor(Math.random() * 3) + 1}`,
+        },
+      ]);
+      setNewClub({ name: '', initials: '', city: '' });
+      setIsDialogOpen(false);
+    }
+  };
+
+
   return (
     <Card className="h-full">
       <CardHeader className="flex flex-row items-center justify-between">
@@ -69,7 +91,7 @@ export default function ClubsPage() {
             Gerencie os clubes cadastrados no sistema.
           </CardDescription>
         </div>
-        <Dialog>
+        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <DialogTrigger asChild>
             <Button>
               <PlusCircle className="mr-2 h-4 w-4" />
@@ -88,23 +110,41 @@ export default function ClubsPage() {
                 <Label htmlFor="name" className="text-right">
                   Nome
                 </Label>
-                <Input id="name" placeholder="Nome do clube" className="col-span-3" />
+                <Input
+                  id="name"
+                  placeholder="Nome do clube"
+                  className="col-span-3"
+                  value={newClub.name}
+                  onChange={(e) => setNewClub({ ...newClub, name: e.target.value })}
+                />
               </div>
               <div className="grid grid-cols-4 items-center gap-4">
                 <Label htmlFor="initials" className="text-right">
                   Sigla
                 </Label>
-                <Input id="initials" placeholder="Ex: COR" className="col-span-3" />
+                <Input
+                  id="initials"
+                  placeholder="Ex: COR"
+                  className="col-span-3"
+                  value={newClub.initials}
+                  onChange={(e) => setNewClub({ ...newClub, initials: e.target.value })}
+                />
               </div>
               <div className="grid grid-cols-4 items-center gap-4">
                 <Label htmlFor="city" className="text-right">
                   Cidade
                 </Label>
-                <Input id="city" placeholder="Ex: São Paulo" className="col-span-3" />
+                <Input
+                  id="city"
+                  placeholder="Ex: São Paulo"
+                  className="col-span-3"
+                  value={newClub.city}
+                  onChange={(e) => setNewClub({ ...newClub, city: e.target.value })}
+                />
               </div>
             </div>
             <DialogFooter>
-              <Button type="submit">Salvar Clube</Button>
+              <Button type="button" onClick={handleAddClub}>Salvar Clube</Button>
             </DialogFooter>
           </DialogContent>
         </Dialog>
