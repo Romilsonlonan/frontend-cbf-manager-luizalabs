@@ -1,12 +1,2 @@
 
-.logoContainer {
-    @apply flex flex-col items-center justify-center gap-2 w-full;
-}
-
-.logoImage {
-    @apply shrink-0 rounded-full;
-}
-
-.logoTitle {
-    @apply text-xl font-bold text-foreground truncate;
-}
+/* Os estilos foram movidos para sidebar-logo.module.css */

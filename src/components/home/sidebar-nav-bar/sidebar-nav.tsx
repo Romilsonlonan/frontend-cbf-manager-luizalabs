@@ -2,7 +2,6 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
 import { usePathname } from "next/navigation";
 import {
   Sidebar,
@@ -18,7 +17,7 @@ import {
   LayoutGrid,
   UsersRound,
 } from "lucide-react";
-import styles from "./sidebar-nav-bar.module.css";
+import { SidebarLogo } from "./sidebar-logo/sidebar-logo";
 
 export function SidebarNav() {
   const pathname = usePathname();
@@ -26,16 +25,7 @@ export function SidebarNav() {
   return (
     <Sidebar>
       <SidebarHeader className="p-4">
-          <div className={styles.logoContainer}>
-              <Image
-                  src="https://i.ibb.co/WWx6qgWF/cbf.png"
-                  width={40}
-                  height={40}
-                  alt="CBF Logo"
-                  className={styles.logoImage}
-              />
-              <h1 className={styles.logoTitle}>CBF Manager</h1>
-          </div>
+          <SidebarLogo />
       </SidebarHeader>
       <SidebarContent className="p-2 flex-1">
           <SidebarMenu>
