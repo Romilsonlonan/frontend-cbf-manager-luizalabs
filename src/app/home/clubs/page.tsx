@@ -22,65 +22,36 @@ import {
 import { Button } from "@/components/ui/button";
 import { PlusCircle } from "lucide-react";
 import { PlaceHolderImages } from "@/lib/placeholder-images";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '@/components/ui/dialog';
-import { Label } from '@/components/ui/label';
-import { Input } from '@/components/ui/input';
+import { clubs as initialClubs } from '@/lib/mock-data';
+import { Club } from '@/lib/types';
+import { EntityFormDialog } from '@/components/home/shared/entity-form-dialog/entity-form-dialog';
 
-// Mock data inicial para clubes
-const initialClubs = [
-  {
-    id: "1",
-    name: "SC Corinthians",
-    initials: "COR",
-    city: "São Paulo",
-    shieldId: "club-logo-1",
-  },
-  {
-    id: "2",
-    name: "SE Palmeiras",
-    initials: "PAL",
-    city: "São Paulo",
-    shieldId: "club-logo-2",
-  },
-  {
-    id: "3",
-    name: "São Paulo FC",
-    initials: "SAO",
-    city: "São Paulo",
-    shieldId: "club-logo-3",
-  },
-];
 
 export default function ClubsPage() {
-  const [clubs, setClubs] = useState(initialClubs);
+  const [clubs, setClubs] = useState<Club[]>(initialClubs);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [newClub, setNewClub] = useState({ name: '', initials: '', city: '' });
 
-  const handleAddClub = () => {
-    if (newClub.name && newClub.initials && newClub.city) {
+  const handleAddClub = (formData: Record<string, string>) => {
+    if (formData.name && formData.initials && formData.city) {
       const newId = (clubs.length + 1).toString();
-      setClubs([
-        ...clubs,
-        {
-          id: newId,
-          ...newClub,
-          // shieldId genérico para novos clubes, pode ser melhorado
-          shieldId: `club-logo-${Math.floor(Math.random() * 3) + 1}`,
-        },
-      ]);
-      setNewClub({ name: '', initials: '', city: '' });
+      const newClub: Club = {
+        id: newId,
+        name: formData.name,
+        initials: formData.initials,
+        city: formData.city,
+        // shieldId genérico para novos clubes, pode ser melhorado
+        shieldId: `club-logo-${Math.floor(Math.random() * 3) + 1}`,
+      };
+      setClubs([...clubs, newClub]);
       setIsDialogOpen(false);
     }
   };
 
+  const clubFormFields = [
+    { id: 'name', label: 'Nome', placeholder: 'Nome do clube' },
+    { id: 'initials', label: 'Sigla', placeholder: 'Ex: COR' },
+    { id: 'city', label: 'Cidade', placeholder: 'Ex: São Paulo' },
+  ];
 
   return (
     <Card className="h-full">
@@ -91,63 +62,20 @@ export default function ClubsPage() {
             Gerencie os clubes cadastrados no sistema.
           </CardDescription>
         </div>
-        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-          <DialogTrigger asChild>
-            <Button>
-              <PlusCircle className="mr-2 h-4 w-4" />
-              Adicionar Clube
-            </Button>
-          </DialogTrigger>
-          <DialogContent className="sm:max-w-[425px]">
-            <DialogHeader>
-              <DialogTitle>Adicionar Novo Clube</DialogTitle>
-              <DialogDescription>
-                Preencha as informações para adicionar um novo clube.
-              </DialogDescription>
-            </DialogHeader>
-            <div className="grid gap-4 py-4">
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="name" className="text-right">
-                  Nome
-                </Label>
-                <Input
-                  id="name"
-                  placeholder="Nome do clube"
-                  className="col-span-3"
-                  value={newClub.name}
-                  onChange={(e) => setNewClub({ ...newClub, name: e.target.value })}
-                />
-              </div>
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="initials" className="text-right">
-                  Sigla
-                </Label>
-                <Input
-                  id="initials"
-                  placeholder="Ex: COR"
-                  className="col-span-3"
-                  value={newClub.initials}
-                  onChange={(e) => setNewClub({ ...newClub, initials: e.target.value })}
-                />
-              </div>
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="city" className="text-right">
-                  Cidade
-                </Label>
-                <Input
-                  id="city"
-                  placeholder="Ex: São Paulo"
-                  className="col-span-3"
-                  value={newClub.city}
-                  onChange={(e) => setNewClub({ ...newClub, city: e.target.value })}
-                />
-              </div>
-            </div>
-            <DialogFooter>
-              <Button type="button" onClick={handleAddClub}>Salvar Clube</Button>
-            </DialogFooter>
-          </DialogContent>
-        </Dialog>
+        <EntityFormDialog
+          isOpen={isDialogOpen}
+          onOpenChange={setIsDialogOpen}
+          dialogTitle="Adicionar Novo Clube"
+          dialogDescription="Preencha as informações para adicionar um novo clube."
+          formFields={clubFormFields}
+          onSubmit={handleAddClub}
+          submitButtonText="Salvar Clube"
+        >
+          <Button>
+            <PlusCircle className="mr-2 h-4 w-4" />
+            Adicionar Clube
+          </Button>
+        </EntityFormDialog>
       </CardHeader>
       <CardContent>
         <Table>

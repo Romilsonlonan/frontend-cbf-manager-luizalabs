@@ -1,6 +1,7 @@
 
 'use client';
 
+import { useState } from 'react';
 import { useParams } from 'next/navigation';
 import Image from 'next/image';
 import {
@@ -22,46 +23,35 @@ import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { PlusCircle } from 'lucide-react';
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '@/components/ui/dialog';
-import { Label } from '@/components/ui/label';
-import { Input } from '@/components/ui/input';
-
-// Mock data
-const clubs = [
-  { id: '1', name: 'SC Corinthians', shieldId: 'club-logo-1' },
-  { id: '2', name: 'SE Palmeiras', shieldId: 'club-logo-2' },
-  { id: '3', name: 'São Paulo FC', shieldId: 'club-logo-3' },
-];
-
-const athletes = [
-    { id: '1', name: 'Carlos Alberto', position: 'Atacante', club: 'SC Corinthians', age: 28, avatarId: 'user-avatar' },
-    { id: '4', name: 'Jonas Pereira', position: 'Goleiro', club: 'SC Corinthians', age: 32, avatarId: 'user-avatar' },
-    { id: '2', name: 'Bruna Santos', position: 'Meio-campo', club: 'SE Palmeiras', age: 25, avatarId: 'user-avatar' },
-    { id: '3', name: 'Ricardo Lima', position: 'Zagueiro', club: 'São Paulo FC', age: 30, avatarId: 'user-avatar' },
-    { id: '5', name: 'Livia Costa', position: 'Atacante', club: 'São Paulo FC', age: 22, avatarId: 'user-avatar' },
-];
+import { athletesInClubs, clubs } from '@/lib/mock-data';
+import { EntityFormDialog } from '@/components/home/shared/entity-form-dialog/entity-form-dialog';
 
 const userAvatar = PlaceHolderImages.find((img) => img.id === 'user-avatar');
 
 export default function ClubDetailsPage() {
   const params = useParams();
   const clubId = params.clubId as string;
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const club = clubs.find((c) => c.id === clubId);
-  const clubAthletes = athletes.filter((a) => a.club === club?.name);
+  const clubAthletes = athletesInClubs.filter((a) => a.club === club?.name);
   const clubShield = PlaceHolderImages.find((img) => img.id === club?.shieldId);
 
   if (!club) {
     return <div>Clube não encontrado.</div>;
   }
+
+  const handleAddPlayer = (formData: Record<string, string>) => {
+    console.log('Novo jogador adicionado:', { ...formData, club: club.name });
+    // Lógica para adicionar o novo jogador
+    setIsDialogOpen(false);
+  };
+  
+  const playerFormFields = [
+    { id: 'name', label: 'Nome', placeholder: 'Nome completo do atleta' },
+    { id: 'position', label: 'Posição', placeholder: 'Ex: Atacante' },
+    { id: 'age', label: 'Idade', type: 'number', placeholder: 'Ex: 25' },
+  ];
 
   return (
     <Card>
@@ -81,51 +71,22 @@ export default function ClubDetailsPage() {
               <CardDescription>Lista de atletas do clube.</CardDescription>
             </div>
         </div>
-        <Dialog>
-            <DialogTrigger asChild>
-              <Button>
-                <PlusCircle className="mr-2 h-4 w-4" />
-                Adicionar Jogador
-              </Button>
-            </DialogTrigger>
-            <DialogContent className="sm:max-w-[425px]">
-              <DialogHeader>
-                <DialogTitle>Adicionar Novo Jogador ao {club.name}</DialogTitle>
-                <DialogDescription>
-                  Preencha as informações para adicionar um novo atleta ao elenco.
-                </DialogDescription>
-              </DialogHeader>
-              <div className="grid gap-4 py-4">
-                <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="name" className="text-right">
-                    Nome
-                  </Label>
-                  <Input id="name" placeholder="Nome completo do atleta" className="col-span-3" />
-                </div>
-                <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="position" className="text-right">
-                    Posição
-                  </Label>
-                  <Input id="position" placeholder="Ex: Atacante" className="col-span-3" />
-                </div>
-                <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="age" className="text-right">
-                    Idade
-                  </Label>
-                  <Input id="age" type="number" placeholder="Ex: 25" className="col-span-3" />
-                </div>
-                 <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="club" className="text-right">
-                    Clube
-                  </Label>
-                  <Input id="club" value={club.name} disabled className="col-span-3" />
-                </div>
-              </div>
-              <DialogFooter>
-                <Button type="submit">Salvar Jogador</Button>
-              </DialogFooter>
-            </DialogContent>
-          </Dialog>
+        <EntityFormDialog
+            isOpen={isDialogOpen}
+            onOpenChange={setIsDialogOpen}
+            dialogTitle={`Adicionar Novo Jogador ao ${club.name}`}
+            dialogDescription="Preencha as informações para adicionar um novo atleta ao elenco."
+            formFields={playerFormFields}
+            onSubmit={handleAddPlayer}
+            submitButtonText="Salvar Jogador"
+            initialValues={{ club: club.name }}
+            readOnlyFields={['club']}
+          >
+            <Button>
+              <PlusCircle className="mr-2 h-4 w-4" />
+              Adicionar Jogador
+            </Button>
+          </EntityFormDialog>
       </CardHeader>
       <CardContent>
         <Table>
