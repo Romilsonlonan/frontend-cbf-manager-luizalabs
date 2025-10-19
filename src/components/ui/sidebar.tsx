@@ -34,7 +34,8 @@ type SidebarContext = {
   openMobile: boolean
   setOpenMobile: (open: boolean) => void
   isMobile: boolean
-  toggleSidebar: () => void
+  toggleSidebar: () => void,
+  collapsible: boolean,
 }
 
 const SidebarContext = React.createContext<SidebarContext | null>(null)
@@ -54,6 +55,7 @@ const SidebarProvider = React.forwardRef<
     defaultOpen?: boolean
     open?: boolean
     onOpenChange?: (open: boolean) => void
+    collapsible?: boolean
   }
 >(
   (
@@ -61,6 +63,7 @@ const SidebarProvider = React.forwardRef<
       defaultOpen = true,
       open: openProp,
       onOpenChange: setOpenProp,
+      collapsible = true,
       className,
       style,
       children,
@@ -77,6 +80,8 @@ const SidebarProvider = React.forwardRef<
     const open = openProp ?? _open
     const setOpen = React.useCallback(
       (value: boolean | ((value: boolean) => boolean)) => {
+        if (!collapsible) return
+
         const openState = typeof value === "function" ? value(open) : value
         if (setOpenProp) {
           setOpenProp(openState)
@@ -87,20 +92,22 @@ const SidebarProvider = React.forwardRef<
         // This sets the cookie to keep the sidebar state.
         document.cookie = `${SIDEBAR_COOKIE_NAME}=${openState}; path=/; max-age=${SIDEBAR_COOKIE_MAX_AGE}`
       },
-      [setOpenProp, open]
+      [setOpenProp, open, collapsible]
     )
 
     // Helper to toggle the sidebar.
     const toggleSidebar = React.useCallback(() => {
+      if (!collapsible) return
       return isMobile
         ? setOpenMobile((open) => !open)
         : setOpen((open) => !open)
-    }, [isMobile, setOpen, setOpenMobile])
+    }, [isMobile, setOpen, setOpenMobile, collapsible])
 
     // Adds a keyboard shortcut to toggle the sidebar.
     React.useEffect(() => {
       const handleKeyDown = (event: KeyboardEvent) => {
         if (
+          collapsible &&
           event.key === SIDEBAR_KEYBOARD_SHORTCUT &&
           (event.metaKey || event.ctrlKey)
         ) {
@@ -111,7 +118,7 @@ const SidebarProvider = React.forwardRef<
 
       window.addEventListener("keydown", handleKeyDown)
       return () => window.removeEventListener("keydown", handleKeyDown)
-    }, [toggleSidebar])
+    }, [toggleSidebar, collapsible])
 
     // We add a state so that we can do data-state="expanded" or "collapsed".
     // This makes it easier to style the sidebar with Tailwind classes.
@@ -126,8 +133,9 @@ const SidebarProvider = React.forwardRef<
         openMobile,
         setOpenMobile,
         toggleSidebar,
+        collapsible
       }),
-      [state, open, setOpen, isMobile, openMobile, setOpenMobile, toggleSidebar]
+      [state, open, setOpen, isMobile, openMobile, setOpenMobile, toggleSidebar, collapsible]
     )
 
     return (
@@ -162,36 +170,20 @@ const Sidebar = React.forwardRef<
   React.ComponentProps<"div"> & {
     side?: "left" | "right"
     variant?: "sidebar" | "floating" | "inset"
-    collapsible?: "offcanvas" | "icon" | "none"
   }
 >(
   (
     {
       side = "left",
       variant = "sidebar",
-      collapsible = "icon",
       className,
       children,
       ...props
     },
     ref
   ) => {
-    const { isMobile, state, openMobile, setOpenMobile } = useSidebar()
-
-    if (collapsible === "none") {
-      return (
-        <div
-          ref={ref}
-          className={cn(
-            "hidden h-full w-[--sidebar-width] flex-col bg-sidebar text-sidebar-foreground md:flex",
-            className
-          )}
-          {...props}
-        >
-          {children}
-        </div>
-      );
-    }
+    const { isMobile, state, openMobile, setOpenMobile, collapsible } = useSidebar()
+    const collapsibleType = collapsible ? "icon" : "none";
 
     if (isMobile) {
       return (
@@ -217,8 +209,8 @@ const Sidebar = React.forwardRef<
       <div
         ref={ref}
         className="group peer hidden md:block text-sidebar-foreground"
-        data-state={state}
-        data-collapsible={state === "collapsed" ? collapsible : ""}
+        data-state={collapsible ? state : 'expanded'}
+        data-collapsible={collapsible ? (state === "collapsed" ? collapsibleType : "") : 'none'}
         data-variant={variant}
         data-side={side}
       >
@@ -264,8 +256,10 @@ const SidebarTrigger = React.forwardRef<
   React.ElementRef<typeof Button>,
   React.ComponentProps<typeof Button> & { asChild?: boolean }
 >(({ className, onClick, asChild, ...props }, ref) => {
-  const { toggleSidebar } = useSidebar()
+  const { toggleSidebar, collapsible } = useSidebar()
   const Comp = asChild ? Slot : Button
+
+  if (!collapsible) return null
 
   return (
     <Comp
@@ -295,7 +289,9 @@ const SidebarRail = React.forwardRef<
   HTMLButtonElement,
   React.ComponentProps<"button">
 >(({ className, ...props }, ref) => {
-  const { toggleSidebar } = useSidebar()
+  const { toggleSidebar, collapsible } = useSidebar()
+
+  if (!collapsible) return null
 
   return (
     <button

@@ -23,7 +23,7 @@ export function SidebarNav() {
   const pathname = usePathname();
 
   return (
-    <Sidebar collapsible="none" className="flex flex-col h-full">
+    <Sidebar className="flex flex-col h-full">
       <SidebarHeader className="p-4">
           <div className="flex flex-col items-center justify-center gap-2 w-full">
               <Image
