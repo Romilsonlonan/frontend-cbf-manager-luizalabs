@@ -1,0 +1,7 @@
+.chartContainer {
+  @apply h-[300px] w-full;
+}
+
+.fullSpanCard {
+  @apply lg:col-span-2;
+}

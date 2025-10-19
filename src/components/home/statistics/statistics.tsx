@@ -1,28 +1,10 @@
 
 'use client';
 
-import {
-  Bar,
-  BarChart,
-  CartesianGrid,
-  XAxis,
-  YAxis,
-  Tooltip,
-  Legend,
-  ResponsiveContainer,
-} from 'recharts';
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
-import {
-  ChartContainer,
-  ChartTooltip,
-  ChartTooltipContent,
-} from '@/components/ui/chart';
 import styles from './statistics.module.css';
+import GoalsChart from './goals-chart/goals-chart';
+import SalaryChart from './salary-chart/salary-chart';
+import AgeDistributionChart from './age-distribution-chart/age-distribution-chart';
 
 // Mock data (o mesmo usado em outras páginas para consistência)
 const athletes = [
@@ -89,145 +71,18 @@ const athletes = [
     goals: 9,
     salary: 130000,
   },
-].sort((a, b) => b.goals - a.goals); // Ordenar por gols para o gráfico
-
-const salaryData = [...athletes].sort((a, b) => b.salary - a.salary);
-const ageData = [...athletes].sort((a, b) => b.age - a.age);
-
-const chartConfigGoals = {
-  goals: {
-    label: 'Gols',
-    color: 'hsl(var(--chart-1))',
-  },
-};
-
-const chartConfigSalary = {
-  salary: {
-    label: 'Salário (R$)',
-    color: 'hsl(var(--chart-2))',
-  },
-};
-
-const chartConfigAge = {
-  age: {
-    label: 'Idade',
-    color: 'hsl(var(--chart-3))',
-  },
-};
+];
 
 export default function Statistics() {
+  const goalsData = [...athletes].sort((a, b) => b.goals - a.goals);
+  const salaryData = [...athletes].sort((a, b) => b.salary - a.salary);
+  const ageData = [...athletes].sort((a, b) => b.age - a.age);
+
   return (
     <div className={styles.statisticsGrid}>
-      <Card>
-        <CardHeader>
-          <CardTitle>Gols por Atleta</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <ChartContainer config={chartConfigGoals} className={styles.chartContainer}>
-            <ResponsiveContainer>
-              <BarChart data={athletes} layout="vertical">
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis type="number" />
-                <YAxis
-                  dataKey="name"
-                  type="category"
-                  tickLine={false}
-                  axisLine={false}
-                  width={80}
-                />
-                <ChartTooltip
-                  cursor={{ fill: 'hsl(var(--muted))' }}
-                  content={<ChartTooltipContent />}
-                />
-                <Legend />
-                <Bar
-                  dataKey="goals"
-                  name="Gols"
-                  fill="hsl(var(--chart-1))"
-                  radius={4}
-                />
-              </BarChart>
-            </ResponsiveContainer>
-          </ChartContainer>
-        </CardContent>
-      </Card>
-
-      <Card>
-        <CardHeader>
-          <CardTitle>Salários por Atleta</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <ChartContainer
-            config={chartConfigSalary}
-            className={styles.chartContainer}
-          >
-            <ResponsiveContainer>
-              <BarChart data={salaryData} layout="vertical">
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis
-                  type="number"
-                  tickFormatter={(value) => `R$${Number(value) / 1000}k`}
-                />
-                <YAxis
-                  dataKey="name"
-                  type="category"
-                  tickLine={false}
-                  axisLine={false}
-                  width={80}
-                />
-                <ChartTooltip
-                  cursor={{ fill: 'hsl(var(--muted))' }}
-                  content={
-                    <ChartTooltipContent
-                      formatter={(value) =>
-                        value.toLocaleString('pt-BR', {
-                          style: 'currency',
-                          currency: 'BRL',
-                        })
-                      }
-                    />
-                  }
-                />
-                <Legend />
-                <Bar
-                  dataKey="salary"
-                  name="Salário"
-                  fill="hsl(var(--chart-2))"
-                  radius={4}
-                />
-              </BarChart>
-            </ResponsiveContainer>
-          </ChartContainer>
-        </CardContent>
-      </Card>
-
-      <Card className={styles.fullSpanCard}>
-        <CardHeader>
-          <CardTitle>Distribuição de Idade</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <ChartContainer config={chartConfigAge} className={styles.chartContainer}>
-            <ResponsiveContainer>
-              <BarChart data={ageData}>
-                <CartesianGrid vertical={false} />
-                <XAxis dataKey="name" tickLine={false} axisLine={false} />
-                <YAxis />
-                <ChartTooltip
-                  cursor={{ fill: 'hsl(var(--muted))' }}
-                  content={<ChartTooltipContent />}
-                />
-                <Legend />
-                <Bar
-                  dataKey="age"
-                  name="Idade"
-                  fill="hsl(var(--chart-3))"
-                  radius={4}
-                />
-              </BarChart>
-            </ResponsiveContainer>
-          </ChartContainer>
-        </CardContent>
-      </Card>
+      <GoalsChart data={goalsData} />
+      <SalaryChart data={salaryData} />
+      <AgeDistributionChart data={ageData} />
     </div>
   );
 }
