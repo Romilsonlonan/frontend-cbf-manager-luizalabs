@@ -155,7 +155,7 @@ export default function AthletesPage() {
           Filtre e analise os atletas cadastrados no sistema.
         </CardDescription>
       </CardHeader>
-      <CardContent className="flex flex-col flex-1 p-0 overflow-hidden">
+      <CardContent className="flex flex-col flex-1 p-0 overflow-y-auto">
         <div className="flex flex-col sm:flex-row gap-4 px-6 pt-0 pb-6 border-b">
            <div className="flex-1">
             <div className="relative">
@@ -285,7 +285,7 @@ export default function AthletesPage() {
             </DialogContent>
           </Dialog>
         </div>
-        <ScrollArea className="flex-1">
+        <ScrollArea className="flex-1 h-[320px]">
           <div className='px-6'>
             <Table>
               <TableHeader>
