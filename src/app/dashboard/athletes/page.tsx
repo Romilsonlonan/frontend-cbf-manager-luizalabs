@@ -155,8 +155,8 @@ export default function AthletesPage() {
           Filtre e analise os atletas cadastrados no sistema.
         </CardDescription>
       </CardHeader>
-      <CardContent className="flex flex-col flex-1 overflow-hidden p-0">
-        <div className="flex flex-col sm:flex-row gap-4 mb-6 px-6">
+      <CardContent className="flex flex-col flex-1 p-0 overflow-hidden">
+        <div className="flex flex-col sm:flex-row gap-4 px-6 pt-0 pb-6 border-b">
            <div className="flex-1">
             <div className="relative">
               <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
@@ -285,38 +285,40 @@ export default function AthletesPage() {
             </DialogContent>
           </Dialog>
         </div>
-        <ScrollArea className="flex-1 px-6">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Nome</TableHead>
-                <TableHead>Posição</TableHead>
-                <TableHead>Clube</TableHead>
-                <TableHead>Centro de Treinamento</TableHead>
-                <TableHead className="text-right">Idade</TableHead>
-                <TableHead className="text-right">Gols (2025)</TableHead>
-                <TableHead className="text-right">Salário</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {filteredAthletes.map((athlete) => (
-                <TableRow key={athlete.id}>
-                  <TableCell className="font-medium">{athlete.name}</TableCell>
-                  <TableCell>{athlete.position}</TableCell>
-                  <TableCell>{athlete.club}</TableCell>
-                  <TableCell>{athlete.trainingCenter}</TableCell>
-                  <TableCell className="text-right">{athlete.age}</TableCell>
-                  <TableCell className="text-right">{athlete.goals}</TableCell>
-                  <TableCell className="text-right">
-                    {athlete.salary.toLocaleString('pt-BR', {
-                      style: 'currency',
-                      currency: 'BRL',
-                    })}
-                  </TableCell>
+        <ScrollArea className="flex-1">
+          <div className='px-6'>
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Nome</TableHead>
+                  <TableHead>Posição</TableHead>
+                  <TableHead>Clube</TableHead>
+                  <TableHead>Centro de Treinamento</TableHead>
+                  <TableHead className="text-right">Idade</TableHead>
+                  <TableHead className="text-right">Gols (2025)</TableHead>
+                  <TableHead className="text-right">Salário</TableHead>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+              </TableHeader>
+              <TableBody>
+                {filteredAthletes.map((athlete) => (
+                  <TableRow key={athlete.id}>
+                    <TableCell className="font-medium">{athlete.name}</TableCell>
+                    <TableCell>{athlete.position}</TableCell>
+                    <TableCell>{athlete.club}</TableCell>
+                    <TableCell>{athlete.trainingCenter}</TableCell>
+                    <TableCell className="text-right">{athlete.age}</TableCell>
+                    <TableCell className="text-right">{athlete.goals}</TableCell>
+                    <TableCell className="text-right">
+                      {athlete.salary.toLocaleString('pt-BR', {
+                        style: 'currency',
+                        currency: 'BRL',
+                      })}
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
         </ScrollArea>
       </CardContent>
     </Card>
