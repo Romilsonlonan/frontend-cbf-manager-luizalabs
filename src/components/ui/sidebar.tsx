@@ -189,23 +189,21 @@ const Sidebar = React.forwardRef<
     }
 
     if (!collapsible) {
-      return (
+       return (
         <>
-          <Sheet open={isMobile ? openMobile : false} onOpenChange={isMobile ? setOpenMobile : () => {}}>
+          {/* Mobile: Sheet */}
+          <Sheet open={isMobile ? openMobile : false} onOpenChange={setOpenMobile}>
             <SheetContent
               data-sidebar="sidebar"
               data-mobile="true"
-              className="w-[--sidebar-width] bg-sidebar p-0 text-sidebar-foreground [&>button]:hidden"
-              style={
-                {
-                  "--sidebar-width": SIDEBAR_WIDTH_MOBILE,
-                } as React.CSSProperties
-              }
+              className={cn("w-[--sidebar-width] bg-sidebar p-0 text-sidebar-foreground [&>button]:hidden", isMobile ? "flex" : "hidden")}
+              style={{ "--sidebar-width": SIDEBAR_WIDTH_MOBILE } as React.CSSProperties}
               side={side}
             >
               <div className="flex h-full w-full flex-col">{children}</div>
             </SheetContent>
           </Sheet>
+           {/* Desktop: Static */}
           <div
             ref={ref}
             data-testid="sidebar-desktop"
@@ -438,7 +436,7 @@ const SidebarContent = React.forwardRef<
       ref={ref}
       data-sidebar="content"
       className={cn(
-        "flex min-h-0 flex-1 flex-col gap-2 overflow-auto group-data-[collapsible=icon]:overflow-hidden",
+        "flex min-h-0 flex-col gap-2 overflow-auto group-data-[collapsible=icon]:overflow-hidden",
         className
       )}
       {...props}

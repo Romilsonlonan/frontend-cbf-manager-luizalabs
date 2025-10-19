@@ -36,7 +36,7 @@ export function SidebarNav() {
               <h1 className="text-xl font-bold text-foreground truncate">CBF Manager</h1>
           </div>
       </SidebarHeader>
-      <SidebarContent className="p-2">
+      <SidebarContent className="p-2 flex-1">
           <SidebarMenu>
           <SidebarMenuItem>
               <SidebarMenuButton
