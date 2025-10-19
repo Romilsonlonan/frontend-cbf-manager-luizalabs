@@ -21,6 +21,18 @@ import {
 import { Button } from "@/components/ui/button";
 import { PlusCircle } from "lucide-react";
 import { PlaceHolderImages } from "@/lib/placeholder-images";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
+import { Label } from '@/components/ui/label';
+import { Input } from '@/components/ui/input';
+
 
 // Mock data for clubs
 const clubs = [
@@ -57,10 +69,45 @@ export default function ClubsPage() {
             Gerencie os clubes cadastrados no sistema.
           </CardDescription>
         </div>
-        <Button>
-          <PlusCircle className="mr-2 h-4 w-4" />
-          Adicionar Clube
-        </Button>
+        <Dialog>
+          <DialogTrigger asChild>
+            <Button>
+              <PlusCircle className="mr-2 h-4 w-4" />
+              Adicionar Clube
+            </Button>
+          </DialogTrigger>
+          <DialogContent className="sm:max-w-[425px]">
+            <DialogHeader>
+              <DialogTitle>Adicionar Novo Clube</DialogTitle>
+              <DialogDescription>
+                Preencha as informações para adicionar um novo clube.
+              </DialogDescription>
+            </DialogHeader>
+            <div className="grid gap-4 py-4">
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="name" className="text-right">
+                  Nome
+                </Label>
+                <Input id="name" placeholder="Nome do clube" className="col-span-3" />
+              </div>
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="initials" className="text-right">
+                  Sigla
+                </Label>
+                <Input id="initials" placeholder="Ex: COR" className="col-span-3" />
+              </div>
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="city" className="text-right">
+                  Cidade
+                </Label>
+                <Input id="city" placeholder="Ex: São Paulo" className="col-span-3" />
+              </div>
+            </div>
+            <DialogFooter>
+              <Button type="submit">Salvar Clube</Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
       </CardHeader>
       <CardContent>
         <Table>
