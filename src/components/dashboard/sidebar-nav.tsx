@@ -24,57 +24,59 @@ export function SidebarNav() {
 
   return (
     <Sidebar collapsible="none">
-      <SidebarHeader className="p-4">
-        <div className="flex flex-col items-center justify-center gap-2 w-full">
-            <Image
-                src="https://i.ibb.co/WWx6qgWF/cbf.png"
-                width={40}
-                height={40}
-                alt="CBF Logo"
-                className="shrink-0 rounded-full"
-            />
-            <h1 className="text-xl font-bold text-foreground truncate">CBF Manager</h1>
+        <div className="flex flex-col h-full">
+            <SidebarHeader className="p-4">
+                <div className="flex flex-col items-center justify-center gap-2 w-full">
+                    <Image
+                        src="https://i.ibb.co/WWx6qgWF/cbf.png"
+                        width={40}
+                        height={40}
+                        alt="CBF Logo"
+                        className="shrink-0 rounded-full"
+                    />
+                    <h1 className="text-xl font-bold text-foreground truncate">CBF Manager</h1>
+                </div>
+            </SidebarHeader>
+            <SidebarContent className="p-2 flex-1">
+                <SidebarMenu>
+                <SidebarMenuItem>
+                    <SidebarMenuButton
+                    asChild
+                    isActive={pathname === "/dashboard"}
+                    >
+                    <Link href="/dashboard">
+                        <LayoutGrid />
+                        <span>Painel</span>
+                    </Link>
+                    </SidebarMenuButton>
+                </SidebarMenuItem>
+                <SidebarMenuItem>
+                    <SidebarMenuButton
+                    asChild
+                    isActive={pathname.startsWith("/dashboard/athletes")}
+                    >
+                    <Link href="/dashboard/athletes">
+                        <UsersRound />
+                        <span>Atletas</span>
+                    </Link>
+                    </SidebarMenuButton>
+                </SidebarMenuItem>
+                <SidebarMenuItem>
+                    <SidebarMenuButton
+                    asChild
+                    isActive={pathname.startsWith("/dashboard/clubs")}
+                    >
+                    <Link href="/dashboard/clubs">
+                        <Shield />
+                        <span>Clubes</span>
+                    </Link>
+                    </SidebarMenuButton>
+                </SidebarMenuItem>
+                </SidebarMenu>
+            </SidebarContent>
+            <SidebarFooter>
+            </SidebarFooter>
         </div>
-      </SidebarHeader>
-      <SidebarContent className="p-2">
-        <SidebarMenu>
-          <SidebarMenuItem>
-            <SidebarMenuButton
-              asChild
-              isActive={pathname === "/dashboard"}
-            >
-              <Link href="/dashboard">
-                <LayoutGrid />
-                <span>Painel</span>
-              </Link>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-          <SidebarMenuItem>
-            <SidebarMenuButton
-              asChild
-              isActive={pathname.startsWith("/dashboard/athletes")}
-            >
-              <Link href="/dashboard/athletes">
-                <UsersRound />
-                <span>Atletas</span>
-              </Link>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-          <SidebarMenuItem>
-            <SidebarMenuButton
-              asChild
-              isActive={pathname.startsWith("/dashboard/clubs")}
-            >
-              <Link href="/dashboard/clubs">
-                <Shield />
-                <span>Clubes</span>
-              </Link>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-        </SidebarMenu>
-      </SidebarContent>
-      <SidebarFooter>
-      </SidebarFooter>
     </Sidebar>
   );
 }
