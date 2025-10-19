@@ -25,15 +25,15 @@ export function DashboardHeader() {
 
   return (
     <header className={styles.header}>
-      <SidebarTrigger className="md:hidden" />
+      <SidebarTrigger className={styles.sidebarTrigger} />
       <div className={styles.flexSpacer} />
-      <Button variant="ghost" size="icon" className="rounded-full">
-        <Bell className="h-5 w-5" />
-        <span className="sr-only">Toggle notifications</span>
+      <Button variant="ghost" size="icon" className={styles.notificationButton}>
+        <Bell className={styles.notificationIcon} />
+        <span className={styles.srOnly}>Toggle notifications</span>
       </Button>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="ghost" size="icon" className="rounded-full">
+          <Button variant="ghost" size="icon" className={styles.userMenuButton}>
             {userAvatar && (
               <Image
                 src={userAvatar.imageUrl}
@@ -41,10 +41,10 @@ export function DashboardHeader() {
                 height={40}
                 alt={userAvatar.description}
                 data-ai-hint={userAvatar.imageHint}
-                className="rounded-full"
+                className={styles.userAvatar}
               />
             )}
-            <span className="sr-only">Toggle user menu</span>
+            <span className={styles.srOnly}>Toggle user menu</span>
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">

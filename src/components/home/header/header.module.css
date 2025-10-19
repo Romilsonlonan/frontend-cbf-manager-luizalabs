@@ -6,3 +6,27 @@
 .flexSpacer {
     @apply w-full flex-1;
 }
+
+.sidebarTrigger {
+    @apply md:hidden;
+}
+
+.notificationButton {
+    @apply rounded-full;
+}
+
+.notificationIcon {
+    @apply h-5 w-5;
+}
+
+.userMenuButton {
+    @apply rounded-full;
+}
+
+.userAvatar {
+    @apply rounded-full;
+}
+
+.srOnly {
+    @apply sr-only;
+}
