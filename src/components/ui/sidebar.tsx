@@ -169,7 +169,7 @@ const Sidebar = React.forwardRef<
     {
       side = "left",
       variant = "sidebar",
-      collapsible = "offcanvas",
+      collapsible = "icon",
       className,
       children,
       ...props
@@ -181,16 +181,16 @@ const Sidebar = React.forwardRef<
     if (collapsible === "none") {
       return (
         <div
+          ref={ref}
           className={cn(
-            "hidden md:flex h-full w-[--sidebar-width] flex-col bg-sidebar text-sidebar-foreground",
+            "hidden h-full w-[--sidebar-width] flex-col bg-sidebar text-sidebar-foreground md:flex",
             className
           )}
-          ref={ref}
           {...props}
         >
           {children}
         </div>
-      )
+      );
     }
 
     if (isMobile) {
