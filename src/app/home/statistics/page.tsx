@@ -117,7 +117,7 @@ const chartConfigAge = {
 
 export default function StatisticsPage() {
   return (
-    <div className="grid gap-8">
+    <div className="grid gap-8 h-full flex-col">
        <Card>
         <CardHeader>
           <CardTitle>Estatísticas de Desempenho</CardTitle>
