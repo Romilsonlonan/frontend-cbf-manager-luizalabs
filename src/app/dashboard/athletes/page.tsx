@@ -44,6 +44,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { ScrollArea } from '@/components/ui/scroll-area';
 
 // Mock data ampliada para atletas
 const athletes = [
@@ -97,6 +98,26 @@ const athletes = [
     salary: 180000,
     trainingCenter: 'CT da Barra Funda',
   },
+    {
+    id: '6',
+    name: 'Fernanda Alves',
+    position: 'Lateral-Esquerdo',
+    club: 'SE Palmeiras',
+    age: 24,
+    goals: 1,
+    salary: 95000,
+    trainingCenter: 'Academia de Futebol',
+  },
+  {
+    id: '7',
+    name: 'Lucas Martins',
+    position: 'Meio-campo',
+    club: 'SC Corinthians',
+    age: 26,
+    goals: 9,
+    salary: 130000,
+    trainingCenter: 'CT Dr. Joaquim Grava',
+  },
 ];
 
 const positions = [
@@ -127,14 +148,14 @@ export default function AthletesPage() {
   });
 
   return (
-    <Card>
+    <Card className="h-full flex flex-col">
       <CardHeader>
         <CardTitle>Análise de Atletas</CardTitle>
         <CardDescription>
           Filtre e analise os atletas cadastrados no sistema.
         </CardDescription>
       </CardHeader>
-      <CardContent>
+      <CardContent className="flex flex-col flex-1 overflow-hidden">
         <div className="flex flex-col sm:flex-row gap-4 mb-6">
            <div className="flex-1">
             <div className="relative">
@@ -264,37 +285,39 @@ export default function AthletesPage() {
             </DialogContent>
           </Dialog>
         </div>
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Nome</TableHead>
-              <TableHead>Posição</TableHead>
-              <TableHead>Clube</TableHead>
-              <TableHead>Centro de Treinamento</TableHead>
-              <TableHead className="text-right">Idade</TableHead>
-              <TableHead className="text-right">Gols (2025)</TableHead>
-              <TableHead className="text-right">Salário</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {filteredAthletes.map((athlete) => (
-              <TableRow key={athlete.id}>
-                <TableCell className="font-medium">{athlete.name}</TableCell>
-                <TableCell>{athlete.position}</TableCell>
-                <TableCell>{athlete.club}</TableCell>
-                <TableCell>{athlete.trainingCenter}</TableCell>
-                <TableCell className="text-right">{athlete.age}</TableCell>
-                <TableCell className="text-right">{athlete.goals}</TableCell>
-                <TableCell className="text-right">
-                  {athlete.salary.toLocaleString('pt-BR', {
-                    style: 'currency',
-                    currency: 'BRL',
-                  })}
-                </TableCell>
+        <ScrollArea className="flex-1">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Nome</TableHead>
+                <TableHead>Posição</TableHead>
+                <TableHead>Clube</TableHead>
+                <TableHead>Centro de Treinamento</TableHead>
+                <TableHead className="text-right">Idade</TableHead>
+                <TableHead className="text-right">Gols (2025)</TableHead>
+                <TableHead className="text-right">Salário</TableHead>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+            </TableHeader>
+            <TableBody>
+              {filteredAthletes.map((athlete) => (
+                <TableRow key={athlete.id}>
+                  <TableCell className="font-medium">{athlete.name}</TableCell>
+                  <TableCell>{athlete.position}</TableCell>
+                  <TableCell>{athlete.club}</TableCell>
+                  <TableCell>{athlete.trainingCenter}</TableCell>
+                  <TableCell className="text-right">{athlete.age}</TableCell>
+                  <TableCell className="text-right">{athlete.goals}</TableCell>
+                  <TableCell className="text-right">
+                    {athlete.salary.toLocaleString('pt-BR', {
+                      style: 'currency',
+                      currency: 'BRL',
+                    })}
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </ScrollArea>
       </CardContent>
     </Card>
   );

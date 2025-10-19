@@ -14,7 +14,7 @@ export default function DashboardLayout({
       <SidebarNav />
       <SidebarInset>
         <DashboardHeader />
-        <div className="p-4 md:p-8 flex-1">
+        <div className="p-4 md:p-8 flex-1 overflow-hidden">
           {children}
         </div>
       </SidebarInset>
