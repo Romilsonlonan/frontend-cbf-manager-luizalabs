@@ -12,7 +12,6 @@ import {
   SidebarMenuItem,
   SidebarMenuButton,
   SidebarFooter,
-  SidebarRail,
 } from "@/components/ui/sidebar";
 import {
   Shield,
@@ -24,10 +23,9 @@ export function SidebarNav() {
   const pathname = usePathname();
 
   return (
-    <Sidebar collapsible="icon">
-      <SidebarRail />
+    <Sidebar collapsible="none">
       <SidebarHeader className="p-4">
-        <div className="flex flex-col items-center justify-center gap-2 w-full group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:w-auto">
+        <div className="flex flex-col items-center justify-center gap-2 w-full">
             <Image
                 src="https://i.ibb.co/WWx6qgWF/cbf.png"
                 width={40}
@@ -35,7 +33,7 @@ export function SidebarNav() {
                 alt="CBF Logo"
                 className="shrink-0 rounded-full"
             />
-            <h1 className="text-xl font-bold text-foreground group-data-[collapsible=icon]:hidden truncate">CBF Manager</h1>
+            <h1 className="text-xl font-bold text-foreground truncate">CBF Manager</h1>
         </div>
       </SidebarHeader>
       <SidebarContent className="p-2">
@@ -44,7 +42,6 @@ export function SidebarNav() {
             <SidebarMenuButton
               asChild
               isActive={pathname === "/dashboard"}
-              tooltip="Painel"
             >
               <Link href="/dashboard">
                 <LayoutGrid />
@@ -56,7 +53,6 @@ export function SidebarNav() {
             <SidebarMenuButton
               asChild
               isActive={pathname.startsWith("/dashboard/athletes")}
-              tooltip="Atletas"
             >
               <Link href="/dashboard/athletes">
                 <UsersRound />
@@ -68,7 +64,6 @@ export function SidebarNav() {
             <SidebarMenuButton
               asChild
               isActive={pathname.startsWith("/dashboard/clubs")}
-              tooltip="Clubes"
             >
               <Link href="/dashboard/clubs">
                 <Shield />

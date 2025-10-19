@@ -3,7 +3,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { Bell, ChevronLeft, ChevronRight } from "lucide-react";
+import { Bell } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -13,13 +13,12 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
-import { SidebarTrigger, useSidebar } from "@/components/ui/sidebar";
+import { SidebarTrigger } from "@/components/ui/sidebar";
 import { PlaceHolderImages } from "@/lib/placeholder-images";
 
 const userAvatar = PlaceHolderImages.find((img) => img.id === "user-avatar");
 
 export function DashboardHeader() {
-  const { state } = useSidebar();
   // Mock login state
   const isLoggedIn = false; 
 
@@ -69,11 +68,6 @@ export function DashboardHeader() {
           )}
         </DropdownMenuContent>
       </DropdownMenu>
-       <SidebarTrigger className="hidden md:flex" asChild>
-          <Button variant="ghost" size="icon">
-            {state === 'expanded' ? <ChevronLeft /> : <ChevronRight />}
-          </Button>
-        </SidebarTrigger>
     </header>
   );
 }
