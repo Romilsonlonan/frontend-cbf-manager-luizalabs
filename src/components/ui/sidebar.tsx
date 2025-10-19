@@ -129,7 +129,7 @@ const SidebarProvider = React.forwardRef<
         state,
         open,
         setOpen,
-        isMobile,
+        isMobile: isMobile ?? false, // Default to false on server
         openMobile,
         setOpenMobile,
         toggleSidebar,
@@ -182,8 +182,41 @@ const Sidebar = React.forwardRef<
     },
     ref
   ) => {
-    const { state, openMobile, setOpenMobile, collapsible } = useSidebar()
-    const collapsibleType = collapsible ? "icon" : "none";
+    const { state, openMobile, setOpenMobile, collapsible, isMobile } = useSidebar()
+    
+    if (isMobile === undefined) {
+      return <div className={cn("w-[--sidebar-width] p-2", variant === "inset" ? "m-2" : "")}><Skeleton className="w-full h-full" /></div>;
+    }
+
+    if (!collapsible) {
+      return (
+        <>
+          <Sheet open={isMobile ? openMobile : false} onOpenChange={isMobile ? setOpenMobile : () => {}}>
+            <SheetContent
+              data-sidebar="sidebar"
+              data-mobile="true"
+              className="w-[--sidebar-width] bg-sidebar p-0 text-sidebar-foreground [&>button]:hidden"
+              style={
+                {
+                  "--sidebar-width": SIDEBAR_WIDTH_MOBILE,
+                } as React.CSSProperties
+              }
+              side={side}
+            >
+              <div className="flex h-full w-full flex-col">{children}</div>
+            </SheetContent>
+          </Sheet>
+          <div
+            ref={ref}
+            data-testid="sidebar-desktop"
+            className={cn("h-svh w-[--sidebar-width] bg-sidebar text-sidebar-foreground", isMobile ? "hidden" : "flex flex-col", className)}
+            {...props}
+          >
+            {children}
+          </div>
+        </>
+      )
+    }
 
     return (
       <>
@@ -208,8 +241,8 @@ const Sidebar = React.forwardRef<
         <div
           ref={ref}
           className={cn("group peer hidden md:block text-sidebar-foreground", className)}
-          data-state={collapsible ? state : 'expanded'}
-          data-collapsible={collapsible ? (state === "collapsed" ? collapsibleType : "") : 'none'}
+          data-state={state}
+          data-collapsible={collapsible ? (state === "collapsed" ? "icon" : "") : 'none'}
           data-variant={variant}
           data-side={side}
            {...props}
@@ -255,10 +288,10 @@ const SidebarTrigger = React.forwardRef<
   React.ElementRef<typeof Button>,
   React.ComponentProps<typeof Button> & { asChild?: boolean }
 >(({ className, onClick, asChild, ...props }, ref) => {
-  const { toggleSidebar, collapsible } = useSidebar()
+  const { toggleSidebar, collapsible, isMobile } = useSidebar()
   const Comp = asChild ? Slot : Button
 
-  if (!collapsible) return null
+  if (!collapsible && !isMobile) return null
 
   return (
     <Comp
@@ -762,5 +795,3 @@ export {
   SidebarTrigger,
   useSidebar,
 }
-
-    

@@ -23,7 +23,7 @@ export function SidebarNav() {
   const pathname = usePathname();
 
   return (
-    <Sidebar className="flex flex-col h-full">
+    <Sidebar>
       <SidebarHeader className="p-4">
           <div className="flex flex-col items-center justify-center gap-2 w-full">
               <Image
@@ -36,7 +36,7 @@ export function SidebarNav() {
               <h1 className="text-xl font-bold text-foreground truncate">CBF Manager</h1>
           </div>
       </SidebarHeader>
-      <SidebarContent className="p-2 flex-1">
+      <SidebarContent className="p-2">
           <SidebarMenu>
           <SidebarMenuItem>
               <SidebarMenuButton

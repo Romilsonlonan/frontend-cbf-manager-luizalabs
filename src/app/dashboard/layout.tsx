@@ -14,12 +14,10 @@ export default function DashboardLayout({
       <SidebarNav />
       <SidebarInset>
         <DashboardHeader />
-        <div className="p-4 md:p-8 flex-1 overflow-auto">
+        <main className="p-4 md:p-8 flex-1 overflow-auto">
           {children}
-        </div>
+        </main>
       </SidebarInset>
     </SidebarProvider>
   );
 }
-
-    
