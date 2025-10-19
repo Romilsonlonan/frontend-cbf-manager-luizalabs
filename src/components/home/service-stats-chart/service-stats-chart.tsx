@@ -9,6 +9,7 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart"
 import { Skeleton } from "@/components/ui/skeleton"
+import styles from "./service-stats-chart.module.css";
 
 const chartConfig = {
   users: {
@@ -33,11 +34,11 @@ export function ServiceStatsChart() {
   }, [])
   
   if (!chartData) {
-    return <Skeleton className="w-full h-[100px]" />
+    return <Skeleton className={styles.chartSkeleton} />
   }
 
   return (
-    <ChartContainer config={chartConfig} className="w-full h-[100px]">
+    <ChartContainer config={chartConfig} className={styles.chartContainer}>
       <ResponsiveContainer width="100%" height="100%">
         <BarChart data={chartData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
           <XAxis

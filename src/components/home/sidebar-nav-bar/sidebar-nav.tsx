@@ -18,6 +18,7 @@ import {
   LayoutGrid,
   UsersRound,
 } from "lucide-react";
+import styles from "./sidebar-nav-bar.module.css";
 
 export function SidebarNav() {
   const pathname = usePathname();
@@ -25,15 +26,15 @@ export function SidebarNav() {
   return (
     <Sidebar>
       <SidebarHeader className="p-4">
-          <div className="flex flex-col items-center justify-center gap-2 w-full">
+          <div className={styles.logoContainer}>
               <Image
                   src="https://i.ibb.co/WWx6qgWF/cbf.png"
                   width={40}
                   height={40}
                   alt="CBF Logo"
-                  className="shrink-0 rounded-full"
+                  className={styles.logoImage}
               />
-              <h1 className="text-xl font-bold text-foreground truncate">CBF Manager</h1>
+              <h1 className={styles.logoTitle}>CBF Manager</h1>
           </div>
       </SidebarHeader>
       <SidebarContent className="p-2 flex-1">

@@ -1,0 +1,8 @@
+
+.chartSkeleton {
+    @apply w-full h-[100px];
+}
+
+.chartContainer {
+    @apply w-full h-[100px];
+}

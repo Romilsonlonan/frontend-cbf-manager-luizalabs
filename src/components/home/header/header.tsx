@@ -15,6 +15,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { PlaceHolderImages } from "@/lib/placeholder-images";
+import styles from "./header.module.css";
 
 const userAvatar = PlaceHolderImages.find((img) => img.id === "user-avatar");
 
@@ -23,9 +24,9 @@ export function DashboardHeader() {
   const isLoggedIn = false; 
 
   return (
-    <header className="flex h-16 items-center gap-4 border-b bg-card px-4 md:px-6 sticky top-0 z-30">
+    <header className={styles.header}>
       <SidebarTrigger className="md:hidden" />
-      <div className="w-full flex-1" />
+      <div className={styles.flexSpacer} />
       <Button variant="ghost" size="icon" className="rounded-full">
         <Bell className="h-5 w-5" />
         <span className="sr-only">Toggle notifications</span>

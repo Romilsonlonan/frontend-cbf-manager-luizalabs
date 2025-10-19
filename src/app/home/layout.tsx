@@ -1,8 +1,8 @@
 
 import type React from "react";
 import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
-import { SidebarNav } from "@/components/home/sidebar-nav";
-import { DashboardHeader } from "@/components/home/header";
+import { SidebarNav } from "@/components/home/sidebar-nav-bar/sidebar-nav";
+import { DashboardHeader } from "@/components/home/header/header";
 
 export default function DashboardLayout({
   children,
