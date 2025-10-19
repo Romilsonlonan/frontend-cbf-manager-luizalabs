@@ -12,7 +12,7 @@ export default function DashboardLayout({
   return (
     <SidebarProvider collapsible={false}>
       <SidebarNav />
-      <SidebarInset>
+      <SidebarInset className="flex flex-col">
         <DashboardHeader />
         <main className="p-4 md:p-8 flex-1 overflow-auto">
           {children}
