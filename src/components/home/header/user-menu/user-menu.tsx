@@ -1,4 +1,3 @@
-
 "use client";
 
 import Image from "next/image";
@@ -13,7 +12,6 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { PlaceHolderImages } from "@/lib/placeholder-images";
-import styles from "./user-menu.module.css";
 
 const userAvatar = PlaceHolderImages.find((img) => img.id === "user-avatar");
 
@@ -24,7 +22,7 @@ export function UserMenu() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="icon" className={styles.userMenuButton}>
+        <Button variant="ghost" size="icon" className="rounded-full">
           {userAvatar && (
             <Image
               src={userAvatar.imageUrl}
@@ -32,10 +30,10 @@ export function UserMenu() {
               height={40}
               alt={userAvatar.description}
               data-ai-hint={userAvatar.imageHint}
-              className={styles.userAvatar}
+              className="rounded-full"
             />
           )}
-          <span className={styles.srOnly}>Toggle user menu</span>
+          <span className="sr-only">Toggle user menu</span>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
