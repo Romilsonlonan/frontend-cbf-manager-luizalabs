@@ -6,3 +6,11 @@
 .chartContainer {
     @apply w-full h-[100px];
 }
+
+.chartContainer :global(.recharts-cartesian-axis-tick-value) {
+    @apply text-xs fill-muted-foreground;
+}
+
+.chartContainer :global(.recharts-bar-rectangle path) {
+    @apply fill-primary;
+}

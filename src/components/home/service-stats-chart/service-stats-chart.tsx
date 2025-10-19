@@ -39,18 +39,14 @@ export function ServiceStatsChart() {
 
   return (
     <ChartContainer config={chartConfig} className={styles.chartContainer}>
-      <ResponsiveContainer width="100%" height="100%">
+      <ResponsiveContainer>
         <BarChart data={chartData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
           <XAxis
             dataKey="date"
-            stroke="hsl(var(--muted-foreground))"
-            fontSize={12}
             tickLine={false}
             axisLine={false}
           />
           <YAxis
-            stroke="hsl(var(--muted-foreground))"
-            fontSize={12}
             tickLine={false}
             axisLine={false}
             tickFormatter={(value) => `${value}`}
@@ -59,7 +55,7 @@ export function ServiceStatsChart() {
             cursor={false}
             content={<ChartTooltipContent indicator="dot" hideLabel />}
           />
-          <Bar dataKey="users" fill="hsl(var(--primary))" radius={[4, 4, 0, 0]} />
+          <Bar dataKey="users" radius={[4, 4, 0, 0]} />
         </BarChart>
       </ResponsiveContainer>
     </ChartContainer>
