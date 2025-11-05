@@ -12,6 +12,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import React from 'react';
 import { AthletesFiltersWeightButton } from './athletes-filters-weight-button';
+import commonStyles from './athletes-filters-common.module.css';
 
 type AthletesFiltersWeightProps = {
     weightFilter: [number, number];
@@ -34,31 +35,31 @@ export function AthletesFiltersWeight({
             <DialogTrigger asChild>
                 <AthletesFiltersWeightButton weightFilter={weightFilter} />
             </DialogTrigger>
-            <DialogContent className="sm:max-w-md">
+            <DialogContent className={commonStyles.dialogContent}>
                 <DialogHeader>
                     <DialogTitle>Peso</DialogTitle>
                 </DialogHeader>
-                <div className="grid gap-4 py-4">
-                    <div className="flex gap-2">
+                <div className={commonStyles.filterGrid}>
+                    <div className={commonStyles.inputGroup}>
                         <Input
                             type="number"
                             placeholder="Min"
                             value={weightFilter?.[0] === 0 ? '' : String(weightFilter?.[0] || '')}
                             onChange={(e) => handleRangeChange(setWeightFilter, 0, e, weightFilter)}
-                            className="w-1/2"
+                            className={commonStyles.inputHalf}
                         />
                         <Input
                             type="number"
                             placeholder="Max"
                             value={weightFilter?.[1] === Infinity ? '' : String(weightFilter?.[1] || '')}
                             onChange={(e) => handleRangeChange(setWeightFilter, 1, e, weightFilter)}
-                            className="w-1/2"
+                            className={commonStyles.inputHalf}
                         />
                     </div>
                     <Button
                         variant="ghost"
                         onClick={() => setWeightFilter([0, Infinity])}
-                        className="w-full"
+                        className={commonStyles.fullWidthButton}
                     >
                         Todos os Pesos
                     </Button>

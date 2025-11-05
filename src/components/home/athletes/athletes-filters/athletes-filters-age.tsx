@@ -10,7 +10,7 @@ import {
     DialogClose,
 } from '@/components/ui/dialog';
 import React from 'react';
-import styles from './athletes-filters-age.module.css';
+import commonStyles from './athletes-filters-common.module.css';
 import { AthletesFiltersAgeInput } from './athletes-filters-age-input';
 import { AthletesFiltersAgeButton } from './athletes-filters-age-button';
 
@@ -38,11 +38,11 @@ export function AthletesFiltersAge({
                     setAgeFilter={setAgeFilter}
                 />
             </DialogTrigger>
-            <DialogContent className={styles.dialogContent}>
+            <DialogContent className={commonStyles.dialogContent}>
                 <DialogHeader>
                     <DialogTitle>Idade</DialogTitle>
                 </DialogHeader>
-                <div className={styles.filterGrid}>
+                <div className={commonStyles.filterGrid}>
                     <AthletesFiltersAgeInput
                         ageFilter={ageFilter}
                         setAgeFilter={setAgeFilter}
@@ -51,7 +51,7 @@ export function AthletesFiltersAge({
                     <Button
                         variant="ghost"
                         onClick={() => setAgeFilter([0, Infinity])}
-                        className={styles.fullWidthButton}
+                        className={commonStyles.fullWidthButton}
                     >
                         Todas as Idades
                     </Button>

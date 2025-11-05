@@ -11,7 +11,7 @@ import {
 } from '@/components/ui/dialog';
 import { Globe } from 'lucide-react';
 import React from 'react';
-import styles from './athletes-filters-nationality.module.css';
+import commonStyles from './athletes-filters-common.module.css';
 import { AthletesFiltersNationalityInput } from './athletes-filters-nationality-input';
 
 type AthletesFiltersNationalityProps = {
@@ -26,16 +26,16 @@ export function AthletesFiltersNationality({
     return (
         <Dialog>
             <DialogTrigger asChild>
-                <Button variant="ghost-transparent" className={styles.triggerButton}>
-                    <Globe className={styles.icon} />
+                <Button variant="ghost-transparent" className={commonStyles.triggerButton}>
+                    <Globe className={commonStyles.icon} />
                     NAC {nationalityFilter ? nationalityFilter : ''}
                 </Button>
             </DialogTrigger>
-            <DialogContent className={styles.dialogContent}>
+            <DialogContent className={commonStyles.dialogContent}>
                 <DialogHeader>
                     <DialogTitle>Nacionalidade</DialogTitle>
                 </DialogHeader>
-                <div className={styles.filterGrid}>
+                <div className={commonStyles.filterGrid}>
                     <AthletesFiltersNationalityInput
                         nationalityFilter={nationalityFilter}
                         setNationalityFilter={setNationalityFilter}
@@ -43,7 +43,7 @@ export function AthletesFiltersNationality({
                     <Button
                         variant="ghost"
                         onClick={() => setNationalityFilter('')}
-                        className={styles.fullWidthButton}
+                        className={commonStyles.fullWidthButton}
                     >
                         Todas as Nacionalidades
                     </Button>

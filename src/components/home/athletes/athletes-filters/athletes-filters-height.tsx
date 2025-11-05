@@ -12,7 +12,7 @@ import {
 import { Ruler } from 'lucide-react';
 import React from 'react';
 import { AthletesFiltersHeightInput } from './athletes-filters-height-input';
-import styles from './athletes-filters-height.module.css';
+import commonStyles from './athletes-filters-common.module.css';
 
 type AthletesFiltersHeightProps = {
     heightFilter: [number, number];
@@ -33,18 +33,18 @@ export function AthletesFiltersHeight({
     return (
         <Dialog>
             <DialogTrigger asChild>
-                <Button variant="ghost-transparent" className={styles.triggerButton}>
-                    <Ruler className={styles.icon} />
+                <Button variant="ghost-transparent" className={commonStyles.triggerButton}>
+                    <Ruler className={commonStyles.icon} />
                     Alt {heightFilter?.[0] === 0 && heightFilter?.[1] === Infinity
                         ? ''
                         : `${heightFilter?.[0] === 0 ? 'Min' : heightFilter?.[0] ?? ''}  ${heightFilter?.[1] === Infinity ? 'Max' : heightFilter?.[1] ?? ''}`}
                 </Button>
             </DialogTrigger>
-            <DialogContent className={styles.dialogContent}>
+            <DialogContent className={commonStyles.dialogContent}>
                 <DialogHeader>
                     <DialogTitle>Altura</DialogTitle>
                 </DialogHeader>
-                <div className={styles.filterGrid}>
+                <div className={commonStyles.filterGrid}>
                     <AthletesFiltersHeightInput
                         heightFilter={heightFilter}
                         setHeightFilter={setHeightFilter}
@@ -53,7 +53,7 @@ export function AthletesFiltersHeight({
                     <Button
                         variant="ghost"
                         onClick={() => setHeightFilter([0, Infinity])}
-                        className={styles.fullWidthButton}
+                        className={commonStyles.fullWidthButton}
                     >
                         Todas as Alturas
                     </Button>

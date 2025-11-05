@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Target } from "lucide-react";
+import commonStyles from './athletes-filters-common.module.css';
 
 interface AthletesFiltersShotsOnGoalDialogProps {
     shotsOnGoalFilter: [number, number];
@@ -30,38 +31,38 @@ export function AthletesFiltersShotsOnGoalDialog({
     return (
         <Dialog>
             <DialogTrigger asChild>
-                <Button variant="ghost" className="px-3 flex items-center gap-1">
-                    <Target className="h-4 w-4" />
+                <Button variant="ghost" className={commonStyles.triggerButton}>
+                    <Target className={commonStyles.icon} />
                     CG {shotsOnGoalFilter?.[0] === 0 && shotsOnGoalFilter?.[1] === Infinity
                         ? ''
                         : `${shotsOnGoalFilter?.[0] === 0 ? 'Min' : shotsOnGoalFilter?.[0] ?? ''} ${shotsOnGoalFilter?.[1] === Infinity ? 'Max' : shotsOnGoalFilter?.[1] ?? ''}`}
                 </Button>
             </DialogTrigger>
-            <DialogContent className="sm:max-w-[425px]">
+            <DialogContent className={commonStyles.dialogContent}>
                 <DialogHeader>
                     <DialogTitle>Chutes a Gol</DialogTitle>
                 </DialogHeader>
-                <div className="grid gap-2 py-4">
-                    <div className="flex gap-2 items-center">
+                <div className={commonStyles.filterGrid}>
+                    <div className={commonStyles.inputGroup}>
                         <Input
                             type="number"
                             placeholder="Min"
                             value={shotsOnGoalFilter?.[0] === 0 ? '' : String(shotsOnGoalFilter?.[0] || '')}
                             onChange={(e) => handleRangeChange(setShotsOnGoalFilter, 0, e, shotsOnGoalFilter)}
-                            className="w-1/2"
+                            className={commonStyles.inputHalf}
                         />
                         <Input
                             type="number"
                             placeholder="Max"
                             value={shotsOnGoalFilter?.[1] === Infinity ? '' : String(shotsOnGoalFilter?.[1] || '')}
                             onChange={(e) => handleRangeChange(setShotsOnGoalFilter, 1, e, shotsOnGoalFilter)}
-                            className="w-1/2"
+                            className={commonStyles.inputHalf}
                         />
                     </div>
                     <Button
                         variant="ghost"
                         onClick={() => setShotsOnGoalFilter([0, Infinity])}
-                        className="w-full"
+                        className={commonStyles.fullWidthButton}
                     >
                         Chutes a Gol
                     </Button>

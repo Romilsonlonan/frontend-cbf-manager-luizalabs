@@ -11,7 +11,7 @@ import {
 } from '@/components/ui/dialog';
 import { Users } from 'lucide-react';
 import { Position } from '@/lib/types';
-import styles from './athletes-filters-position.module.css';
+import commonStyles from './athletes-filters-common.module.css';
 import { AthletesFiltersPositionInput } from './athletes-filters-position-input';
 
 type AthletesFiltersPositionProps = {
@@ -36,16 +36,16 @@ export function AthletesFiltersPosition({
     return (
         <Dialog>
             <DialogTrigger asChild>
-                <Button variant="ghost-transparent" className={styles.triggerButton}>
-                    <Users className={styles.icon} />
+                <Button variant="ghost" className={commonStyles.triggerButton}>
+                    <Users className={commonStyles.icon} />
                     Posição
                 </Button>
             </DialogTrigger>
-            <DialogContent className={styles.dialogContent}>
+            <DialogContent className={commonStyles.dialogContent}>
                 <DialogHeader>
                     <DialogTitle>Posição</DialogTitle>
                 </DialogHeader>
-                <div className={styles.filterGrid}>
+                <div className={commonStyles.filterGrid}>
                     <AthletesFiltersPositionInput
                         positionFilter={positionFilter}
                         setPositionFilter={setPositionFilter}

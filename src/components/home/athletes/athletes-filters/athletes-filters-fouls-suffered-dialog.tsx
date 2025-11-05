@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Scale } from "lucide-react";
+import commonStyles from './athletes-filters-common.module.css';
 
 interface AthletesFiltersFoulsSufferedDialogProps {
     foulsSufferedFilter: [number, number];
@@ -30,38 +31,38 @@ export function AthletesFiltersFoulsSufferedDialog({
     return (
         <Dialog>
             <DialogTrigger asChild>
-                <Button variant="ghost" className="px-3 flex items-center gap-1">
-                    <Scale className="h-4 w-4" />
+                <Button variant="ghost" className={commonStyles.triggerButton}>
+                    <Scale className={commonStyles.icon} />
                     FS {foulsSufferedFilter?.[0] === 0 && foulsSufferedFilter?.[1] === Infinity
                         ? ''
                         : `${foulsSufferedFilter?.[0] === 0 ? 'Min' : foulsSufferedFilter?.[0] ?? ''}  ${foulsSufferedFilter?.[1] === Infinity ? 'Max' : foulsSufferedFilter?.[1] ?? ''}`}
                 </Button>
             </DialogTrigger>
-            <DialogContent className="sm:max-w-[425px]">
+            <DialogContent className={commonStyles.dialogContent}>
                 <DialogHeader>
                     <DialogTitle>Faltas Sofridas</DialogTitle>
                 </DialogHeader>
-                <div className="grid gap-2 py-4">
-                    <div className="flex gap-2 items-center">
+                <div className={commonStyles.filterGrid}>
+                    <div className={commonStyles.inputGroup}>
                         <Input
                             type="number"
                             placeholder="Min"
                             value={foulsSufferedFilter?.[0] === 0 ? '' : String(foulsSufferedFilter?.[0] || '')}
                             onChange={(e) => handleRangeChange(setFoulsSufferedFilter, 0, e, foulsSufferedFilter)}
-                            className="w-1/2"
+                            className={commonStyles.inputHalf}
                         />
                         <Input
                             type="number"
                             placeholder="Max"
                             value={foulsSufferedFilter?.[1] === Infinity ? '' : String(foulsSufferedFilter?.[1] || '')}
                             onChange={(e) => handleRangeChange(setFoulsSufferedFilter, 1, e, foulsSufferedFilter)}
-                            className="w-1/2"
+                            className={commonStyles.inputHalf}
                         />
                     </div>
                     <Button
                         variant="ghost"
                         onClick={() => setFoulsSufferedFilter([0, Infinity])}
-                        className="w-full"
+                        className={commonStyles.fullWidthButton}
                     >
                         Faltas Sofridas
                     </Button>

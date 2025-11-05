@@ -95,7 +95,7 @@ export default function AtletasPage(): JSX.Element {
     const [clubs, setClubs] = useState<ClubSimpleResponse[]>([]);
     const [loading, setLoading] = useState(true);
     const { toast } = useToast();
-    const { token, isAuthenticated, isLoading: isAuthLoading } = useAuth();
+    const { token, isAuthenticated, loadingUser } = useAuth(); // Corrected to loadingUser
 
     // Filter states
     const [nameFilter, setNameFilter] = useState('');
@@ -127,7 +127,7 @@ export default function AtletasPage(): JSX.Element {
 
     useEffect(() => {
         const loadData = async () => {
-            if (isAuthLoading) {
+            if (loadingUser) { // Use loadingUser here
                 return;
             }
 
@@ -159,7 +159,7 @@ export default function AtletasPage(): JSX.Element {
         };
 
         loadData();
-    }, [token, clubFilter, isAuthenticated, isAuthLoading, toast]);
+    }, [token, clubFilter, isAuthenticated, loadingUser, toast]); // Use loadingUser here
 
     const handleAtualizacaoCompleta = () => {
         // Re-fetch all data after an update
@@ -227,7 +227,7 @@ export default function AtletasPage(): JSX.Element {
     };
 
 
-    if (loading) {
+    if (loading || loadingUser) { // Add loadingUser to display spinner during auth loading
         return (
             <div className="container mx-auto p-6 max-w-5xl">
                 <div className="flex items-center justify-center h-64">

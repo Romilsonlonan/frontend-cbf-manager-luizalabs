@@ -53,24 +53,22 @@ export default function AgeDistributionChart({
           config={chartConfigAge}
           className={styles.chartContainer}
         >
-          <ResponsiveContainer>
-            <BarChart data={data}>
-              <CartesianGrid vertical={false} />
-              <XAxis dataKey="name" tickLine={false} axisLine={false} />
-              <YAxis />
-              <ChartTooltip
-                cursor={{ fill: 'hsl(var(--muted))' }}
-                content={<ChartTooltipContent />}
-              />
-              <Legend />
-              <Bar
-                dataKey="age"
-                name="Idade"
-                fill="hsl(var(--chart-3))"
-                radius={4}
-              />
-            </BarChart>
-          </ResponsiveContainer>
+          <BarChart width={996} height={300} data={data}>
+            <CartesianGrid vertical={false} />
+            <XAxis dataKey="name" tickLine={false} axisLine={false} />
+            <YAxis />
+            <ChartTooltip
+              cursor={{ fill: 'hsl(var(--muted))' }}
+              content={<ChartTooltipContent />}
+            />
+            <Legend />
+            <Bar
+              dataKey="age"
+              name="Idade"
+              fill="hsl(var(--chart-3))"
+              radius={4}
+            />
+          </BarChart>
         </ChartContainer>
       </CardContent>
     </Card>

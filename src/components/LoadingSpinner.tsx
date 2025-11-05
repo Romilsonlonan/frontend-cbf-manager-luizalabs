@@ -12,6 +12,7 @@ export function LoadingSpinner() {
           width={60}
           height={60}
           className="animate-spin"
+          style={{ objectFit: 'contain' }}
         />
         <p className="ml-3 text-lg font-semibold text-white">Aguarde ...</p>
       </div>

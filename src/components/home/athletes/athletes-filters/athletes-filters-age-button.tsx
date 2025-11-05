@@ -3,7 +3,7 @@
 import { Button } from '@/components/ui/button';
 import { CalendarDays } from 'lucide-react';
 import React from 'react';
-import styles from './athletes-filters-age-button.module.css';
+import commonStyles from './athletes-filters-common.module.css';
 
 type AthletesFiltersAgeButtonProps = {
     ageFilter: [number, number];
@@ -17,9 +17,9 @@ export function AthletesFiltersAgeButton({
     return (
         <Button
             variant="ghost"
-            className={styles.triggerButton}
+            className={commonStyles.triggerButton}
         >
-            <CalendarDays className={styles.icon} />
+            <CalendarDays className={commonStyles.icon} />
             Idade {ageFilter?.[0] === 0 && ageFilter?.[1] === Infinity
                 ? ''
                 : `${ageFilter?.[0] === 0 ? 'Min' : ageFilter?.[0] ?? ''}  ${ageFilter?.[1] === Infinity ? 'Max' : ageFilter?.[1] ?? ''}`}

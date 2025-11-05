@@ -12,7 +12,7 @@ import {
 import { User } from 'lucide-react';
 import React from 'react';
 import { AthletesFiltersNameInput } from './athletes-filters-name-input';
-import styles from './athletes-filters-name.module.css';
+import commonStyles from './athletes-filters-common.module.css';
 
 type AthletesFiltersNameProps = {
     nameFilter: string;
@@ -26,16 +26,16 @@ export function AthletesFiltersName({
     return (
         <Dialog>
             <DialogTrigger asChild>
-                <Button variant="ghost-transparent" className={styles.triggerButton}>
-                    <User className={styles.icon} />
+                <Button variant="ghost" className={commonStyles.triggerButton}>
+                    <User className={commonStyles.icon} />
                     Nome {nameFilter ? nameFilter : ''}
                 </Button>
             </DialogTrigger>
-            <DialogContent className={styles.dialogContent}>
+            <DialogContent className={commonStyles.dialogContent}>
                 <DialogHeader>
                     <DialogTitle>Nome</DialogTitle>
                 </DialogHeader>
-                <div className={styles.filterGrid}>
+                <div className={commonStyles.filterGrid}>
                     <AthletesFiltersNameInput
                         nameFilter={nameFilter}
                         setNameFilter={setNameFilter}
@@ -43,7 +43,7 @@ export function AthletesFiltersName({
                     <Button
                         variant="ghost"
                         onClick={() => setNameFilter('')}
-                        className={styles.fullWidthButton}
+                        className={commonStyles.fullWidthButton}
                     >
                         Todos os Nomes
                     </Button>

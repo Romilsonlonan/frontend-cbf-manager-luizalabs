@@ -16,21 +16,23 @@ interface User {
 
 interface AuthContextType {
   user: User | null;
-  isAuthenticated: boolean; // Renamed from isLoggedIn
-  token: string | null; // Adicionado token ao contexto
+  isAuthenticated: boolean;
+  token: string | null;
+  loadingUser: boolean; // Added loadingUser state
   login: (token: string) => void;
   logout: () => void;
-  updateUser: (userData: Partial<User>) => void; // Added function to update user data
+  updateUser: (userData: Partial<User>) => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
-  const [isAuthenticated, setIsAuthenticated] = useState(false); // Renamed from isLoggedIn
-  const [token, setToken] = useState<string | null>(null); // Estado para o token
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [token, setToken] = useState<string | null>(null);
+  const [loadingUser, setLoadingUser] = useState(true); // Initialize loadingUser as true
   const router = useRouter();
-  const { startLoading, stopLoading } = useLoading(); // Global loading context
+  const { startLoading, stopLoading } = useLoading();
 
   const handleAuthError = () => {
     console.log('AuthContext: Authentication error detected, logging out.');
@@ -38,6 +40,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setToken(null);
     setIsAuthenticated(false);
     setUser(null);
+    setLoadingUser(false); // Set loading to false on error
     router.push('/login');
   };
 
@@ -50,11 +53,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     console.log('AuthContext useEffect: Starting to load user.');
+    setLoadingUser(true); // Start loading
     const loadUser = async () => {
       const storedToken = localStorage.getItem('token');
       console.log('AuthContext useEffect: Stored token found:', storedToken ? 'Yes' : 'No');
       if (storedToken) {
-        setToken(storedToken); // Define o token no estado
+        setToken(storedToken);
         try {
           const currentUser: User = await getCurrentUser(storedToken, startLoading, stopLoading, handleAuthError);
           setUser(currentUser);
@@ -72,6 +76,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           setUser(null);
         }
       }
+      setLoadingUser(false); // Finish loading
       console.log('AuthContext useEffect: Finished loading user.');
     };
     loadUser();
@@ -79,31 +84,35 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const login = (newToken: string) => {
     console.log('AuthContext login: Attempting to log in with new token.');
+    setLoadingUser(true); // Start loading on login
     localStorage.setItem('token', newToken);
     setToken(newToken);
     setIsAuthenticated(true);
     getCurrentUser(newToken, startLoading, stopLoading, handleAuthError).then((currentUser: User) => {
       setUser(currentUser);
       console.log('AuthContext login: User fetched and authenticated successfully.');
+      setLoadingUser(false); // Finish loading on successful login
     }).catch((error: any) => {
       console.error('AuthContext login: Failed to fetch user after login:', error);
       localStorage.removeItem('token');
       setToken(null);
       setIsAuthenticated(false);
       setUser(null);
+      setLoadingUser(false); // Finish loading on failed login
     });
   };
 
   const logout = () => {
     localStorage.removeItem('token');
-    setToken(null); // Limpa o token no estado
-    setIsAuthenticated(false); // Renamed from isLoggedIn
+    setToken(null);
+    setIsAuthenticated(false);
     setUser(null);
+    setLoadingUser(false); // Set loading to false on logout
     router.push('/login');
   };
 
   return (
-    <AuthContext.Provider value={{ user, isAuthenticated, token, login, logout, updateUser }}>
+    <AuthContext.Provider value={{ user, isAuthenticated, token, loadingUser, login, logout, updateUser }}>
       {children}
     </AuthContext.Provider>
   );

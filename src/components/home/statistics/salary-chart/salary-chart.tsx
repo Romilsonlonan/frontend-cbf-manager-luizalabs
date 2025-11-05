@@ -51,42 +51,40 @@ export default function SalaryChart({ data }: SalaryChartProps) {
           config={chartConfigSalary}
           className={styles.chartContainer}
         >
-          <ResponsiveContainer>
-            <BarChart data={data} layout="vertical">
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis
-                type="number"
-                tickFormatter={(value) => `R$${Number(value) / 1000}k`}
-              />
-              <YAxis
-                dataKey="name"
-                type="category"
-                tickLine={false}
-                axisLine={false}
-                width={80}
-              />
-              <ChartTooltip
-                cursor={{ fill: 'hsl(var(--muted))' }}
-                content={
-                  <ChartTooltipContent
-                    formatter={(value) =>
-                      Number(value).toLocaleString('pt-BR', {
-                        style: 'currency',
-                        currency: 'BRL',
-                      })
-                    }
-                  />
-                }
-              />
-              <Legend />
-              <Bar
-                dataKey="salary"
-                name="Salário"
-                fill="hsl(var(--chart-2))"
-                radius={4}
-              />
-            </BarChart>
-          </ResponsiveContainer>
+          <BarChart width={996} height={300} data={data} layout="vertical">
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis
+              type="number"
+              tickFormatter={(value) => `R$${Number(value) / 1000}k`}
+            />
+            <YAxis
+              dataKey="name"
+              type="category"
+              tickLine={false}
+              axisLine={false}
+              width={80}
+            />
+            <ChartTooltip
+              cursor={{ fill: 'hsl(var(--muted))' }}
+              content={
+                <ChartTooltipContent
+                  formatter={(value) =>
+                    Number(value).toLocaleString('pt-BR', {
+                      style: 'currency',
+                      currency: 'BRL',
+                    })
+                  }
+                />
+              }
+            />
+            <Legend />
+            <Bar
+              dataKey="salary"
+              name="Salário"
+              fill="hsl(var(--chart-2))"
+              radius={4}
+            />
+          </BarChart>
         </ChartContainer>
       </CardContent>
     </Card>

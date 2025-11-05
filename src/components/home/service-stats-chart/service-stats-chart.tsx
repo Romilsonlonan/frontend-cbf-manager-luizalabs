@@ -30,34 +30,32 @@ export function ServiceStatsChart() {
     ]
     setChartData(data)
   }, [])
-  
+
   if (!chartData) {
     return <Skeleton className="w-full h-[100px]" />
   }
 
   return (
     <ChartContainer config={chartConfig} className="w-full h-[100px]">
-      <ResponsiveContainer>
-        <BarChart data={chartData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-          <XAxis
-            dataKey="date"
-            tickLine={false}
-            axisLine={false}
-            className="text-xs fill-muted-foreground"
-          />
-          <YAxis
-            tickLine={false}
-            axisLine={false}
-            tickFormatter={(value) => `${value}`}
-            className="text-xs fill-muted-foreground"
-          />
-           <ChartTooltip
-            cursor={false}
-            content={<ChartTooltipContent indicator="dot" hideLabel />}
-          />
-          <Bar dataKey="users" radius={[4, 4, 0, 0]} className="fill-primary"/>
-        </BarChart>
-      </ResponsiveContainer>
+      <BarChart width={461} height={100} data={chartData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+        <XAxis
+          dataKey="date"
+          tickLine={false}
+          axisLine={false}
+          className="text-xs fill-muted-foreground"
+        />
+        <YAxis
+          tickLine={false}
+          axisLine={false}
+          tickFormatter={(value) => `${value}`}
+          className="text-xs fill-muted-foreground"
+        />
+        <ChartTooltip
+          cursor={false}
+          content={<ChartTooltipContent indicator="dot" hideLabel />}
+        />
+        <Bar dataKey="users" radius={[4, 4, 0, 0]} className="fill-primary" />
+      </BarChart>
     </ChartContainer>
   )
 }

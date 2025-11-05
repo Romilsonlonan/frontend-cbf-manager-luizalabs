@@ -51,30 +51,28 @@ export default function GoalsChart({ data }: GoalsChartProps) {
           config={chartConfigGoals}
           className={styles.chartContainer}
         >
-          <ResponsiveContainer>
-            <BarChart data={data} layout="vertical">
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis type="number" />
-              <YAxis
-                dataKey="name"
-                type="category"
-                tickLine={false}
-                axisLine={false}
-                width={80}
-              />
-              <ChartTooltip
-                cursor={{ fill: 'hsl(var(--muted))' }}
-                content={<ChartTooltipContent />}
-              />
-              <Legend />
-              <Bar
-                dataKey="goals"
-                name="Gols"
-                fill="hsl(var(--chart-1))"
-                radius={4}
-              />
-            </BarChart>
-          </ResponsiveContainer>
+          <BarChart width={996} height={300} data={data} layout="vertical">
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis type="number" />
+            <YAxis
+              dataKey="name"
+              type="category"
+              tickLine={false}
+              axisLine={false}
+              width={80}
+            />
+            <ChartTooltip
+              cursor={{ fill: 'hsl(var(--muted))' }}
+              content={<ChartTooltipContent />}
+            />
+            <Legend />
+            <Bar
+              dataKey="goals"
+              name="Gols"
+              fill="hsl(var(--chart-1))"
+              radius={4}
+            />
+          </BarChart>
         </ChartContainer>
       </CardContent>
     </Card>

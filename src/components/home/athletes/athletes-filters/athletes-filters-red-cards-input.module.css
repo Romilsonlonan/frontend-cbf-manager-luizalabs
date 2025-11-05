@@ -1,7 +1,0 @@
-.inputGroup {
-    @apply flex gap-2;
-}
-
-.inputHalf {
-    @apply w-1/2;
-}

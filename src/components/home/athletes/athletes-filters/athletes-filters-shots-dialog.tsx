@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Crosshair } from "lucide-react";
+import commonStyles from './athletes-filters-common.module.css';
 
 interface AthletesFiltersShotsDialogProps {
     shotsFilter: [number, number];
@@ -30,38 +31,38 @@ export function AthletesFiltersShotsDialog({
     return (
         <Dialog>
             <DialogTrigger asChild>
-                <Button variant="ghost" className="px-3 flex items-center gap-1">
-                    <Crosshair className="h-4 w-4" />
+                <Button variant="ghost" className={commonStyles.triggerButton}>
+                    <Crosshair className={commonStyles.icon} />
                     TC {shotsFilter?.[0] === 0 && shotsFilter?.[1] === Infinity
                         ? ''
                         : `${shotsFilter?.[0] === 0 ? 'Min' : shotsFilter?.[0] ?? ''} ${shotsFilter?.[1] === Infinity ? 'Max' : shotsFilter?.[1] ?? ''}`}
                 </Button>
             </DialogTrigger>
-            <DialogContent className="sm:max-w-[425px]">
+            <DialogContent className={commonStyles.dialogContent}>
                 <DialogHeader>
                     <DialogTitle>Tentativas de Cruzamento</DialogTitle>
                 </DialogHeader>
-                <div className="grid gap-2 py-4">
-                    <div className="flex gap-2 items-center">
+                <div className={commonStyles.filterGrid}>
+                    <div className={commonStyles.inputGroup}>
                         <Input
                             type="number"
                             placeholder="Min"
                             value={shotsFilter?.[0] === 0 ? '' : String(shotsFilter?.[0] || '')}
                             onChange={(e) => handleRangeChange(setShotsFilter, 0, e, shotsFilter)}
-                            className="w-1/2"
+                            className={commonStyles.inputHalf}
                         />
                         <Input
                             type="number"
                             placeholder="Max"
                             value={shotsFilter?.[1] === Infinity ? '' : String(shotsFilter?.[1] || '')}
                             onChange={(e) => handleRangeChange(setShotsFilter, 1, e, shotsFilter)}
-                            className="w-1/2"
+                            className={commonStyles.inputHalf}
                         />
                     </div>
                     <Button
                         variant="ghost"
                         onClick={() => setShotsFilter([0, Infinity])}
-                        className="w-full"
+                        className={commonStyles.fullWidthButton}
                     >
                         Tentativas de Cruzamento
                     </Button>

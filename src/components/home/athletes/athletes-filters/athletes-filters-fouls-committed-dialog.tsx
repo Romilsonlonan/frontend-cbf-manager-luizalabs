@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Gavel } from "lucide-react";
+import commonStyles from './athletes-filters-common.module.css';
 
 interface AthletesFiltersFoulsCommittedDialogProps {
     foulsCommittedFilter: [number, number];
@@ -30,38 +31,38 @@ export function AthletesFiltersFoulsCommittedDialog({
     return (
         <Dialog>
             <DialogTrigger asChild>
-                <Button variant="ghost" className="px-3 flex items-center gap-1">
-                    <Gavel className="h-4 w-4" />
+                <Button variant="ghost" className={commonStyles.triggerButton}>
+                    <Gavel className={commonStyles.icon} />
                     FC {foulsCommittedFilter?.[0] === 0 && foulsCommittedFilter?.[1] === Infinity
                         ? ''
                         : `${foulsCommittedFilter?.[0] === 0 ? 'Min' : foulsCommittedFilter?.[0] ?? ''} ${foulsCommittedFilter?.[1] === Infinity ? 'Max' : foulsCommittedFilter?.[1] ?? ''}`}
                 </Button>
             </DialogTrigger>
-            <DialogContent className="sm:max-w-[425px]">
+            <DialogContent className={commonStyles.dialogContent}>
                 <DialogHeader>
                     <DialogTitle>Faltas Cometidas</DialogTitle>
                 </DialogHeader>
-                <div className="grid gap-2 py-4">
-                    <div className="flex gap-2 items-center">
+                <div className={commonStyles.filterGrid}>
+                    <div className={commonStyles.inputGroup}>
                         <Input
                             type="number"
                             placeholder="Min"
                             value={foulsCommittedFilter?.[0] === 0 ? '' : String(foulsCommittedFilter?.[0] || '')}
                             onChange={(e) => handleRangeChange(setFoulsCommittedFilter, 0, e, foulsCommittedFilter)}
-                            className="w-1/2"
+                            className={commonStyles.inputHalf}
                         />
                         <Input
                             type="number"
                             placeholder="Max"
                             value={foulsCommittedFilter?.[1] === Infinity ? '' : String(foulsCommittedFilter?.[1] || '')}
                             onChange={(e) => handleRangeChange(setFoulsCommittedFilter, 1, e, foulsCommittedFilter)}
-                            className="w-1/2"
+                            className={commonStyles.inputHalf}
                         />
                     </div>
                     <Button
                         variant="ghost"
                         onClick={() => setFoulsCommittedFilter([0, Infinity])}
-                        className="w-full"
+                        className={commonStyles.fullWidthButton}
                     >
                         Faltas Cometidas
                     </Button>

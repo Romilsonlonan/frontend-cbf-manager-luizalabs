@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import Image from 'next/image'; // Import next/image
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -54,10 +55,13 @@ export default function PaginaLogin() {
       <Card className={styles.cardLogin}>
         <CardHeader>
           <div className={styles.logoContainer}>
-            <img
-              src="https://i.ibb.co/HTNLMqjX/cbf2.png"
+            <Image
+              src="/cbf2.png" // Use local image path
               alt="Logo CBF"
+              width={124} // Set appropriate width
+              height={124} // Set appropriate height
               className={styles.logo}
+              priority // Prioritize loading for LCP
             />
           </div>
           <CardDescription className={styles.titulo}>

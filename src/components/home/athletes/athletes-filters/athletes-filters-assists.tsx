@@ -10,7 +10,7 @@ import {
     DialogClose,
 } from '@/components/ui/dialog';
 import React from 'react';
-import styles from './athletes-filters-assists.module.css';
+import commonStyles from './athletes-filters-common.module.css';
 import { AthletesFiltersAssistsInput } from './athletes-filters-assists-input';
 import { AthletesFiltersAssistsButton } from './athletes-filters-assists-button';
 
@@ -38,11 +38,11 @@ export function AthletesFiltersAssists({
                     setAssistsFilter={setAssistsFilter}
                 />
             </DialogTrigger>
-            <DialogContent className={styles.dialogContent}>
+            <DialogContent className={commonStyles.dialogContent}>
                 <DialogHeader>
                     <DialogTitle>Assistências</DialogTitle>
                 </DialogHeader>
-                <div className={styles.filterGrid}>
+                <div className={commonStyles.filterGrid}>
                     <AthletesFiltersAssistsInput
                         assistsFilter={assistsFilter}
                         setAssistsFilter={setAssistsFilter}
@@ -51,7 +51,7 @@ export function AthletesFiltersAssists({
                     <Button
                         variant="ghost"
                         onClick={() => setAssistsFilter([0, Infinity])}
-                        className={styles.fullWidthButton}
+                        className={commonStyles.fullWidthButton}
                     >
                         Todas as Assistências
                     </Button>

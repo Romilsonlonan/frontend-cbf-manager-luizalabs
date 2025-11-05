@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Shirt } from "lucide-react";
+import commonStyles from './athletes-filters-common.module.css';
 
 interface AthletesFiltersGamesDialogProps {
     gamesFilter: [number, number];
@@ -30,38 +31,38 @@ export function AthletesFiltersGamesDialog({
     return (
         <Dialog>
             <DialogTrigger asChild>
-                <Button variant="ghost" className="px-3 flex items-center gap-1">
-                    <Shirt className="h-4 w-4" />
+                <Button variant="ghost-transparent" className={commonStyles.triggerButton}>
+                    <Shirt className={commonStyles.icon} />
                     J{gamesFilter?.[0] === 0 && gamesFilter?.[1] === Infinity
                         ? ''
                         : `${gamesFilter?.[0] === 0 ? 'Min' : gamesFilter?.[0] ?? ''} ${gamesFilter?.[1] === Infinity ? 'Max' : gamesFilter?.[1] ?? ''}`}
                 </Button>
             </DialogTrigger>
-            <DialogContent className="sm:max-w-[425px]">
+            <DialogContent className={commonStyles.dialogContent}>
                 <DialogHeader>
                     <DialogTitle>Jogos</DialogTitle>
                 </DialogHeader>
-                <div className="grid gap-2 py-4">
-                    <div className="flex gap-2 items-center">
+                <div className={commonStyles.filterGrid}>
+                    <div className={commonStyles.inputGroup}>
                         <Input
                             type="number"
                             placeholder="Min"
                             value={gamesFilter?.[0] === 0 ? '' : String(gamesFilter?.[0] || '')}
                             onChange={(e) => handleRangeChange(setGamesFilter, 0, e, gamesFilter)}
-                            className="w-1/2"
+                            className={commonStyles.inputHalf}
                         />
                         <Input
                             type="number"
                             placeholder="Max"
                             value={gamesFilter?.[1] === Infinity ? '' : String(gamesFilter?.[1] || '')}
                             onChange={(e) => handleRangeChange(setGamesFilter, 1, e, gamesFilter)}
-                            className="w-1/2"
+                            className={commonStyles.inputHalf}
                         />
                     </div>
                     <Button
                         variant="ghost"
                         onClick={() => setGamesFilter([0, Infinity])}
-                        className="w-full"
+                        className={commonStyles.fullWidthButton}
                     >
                         Jogos
                     </Button>

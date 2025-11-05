@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { ArrowRightLeft } from "lucide-react";
+import commonStyles from './athletes-filters-common.module.css';
 
 interface AthletesFiltersSubstitutionsDialogProps {
     substituteAppearancesFilter: [number, number];
@@ -30,38 +31,38 @@ export function AthletesFiltersSubstitutionsDialog({
     return (
         <Dialog>
             <DialogTrigger asChild>
-                <Button variant="ghost" className="px-3 flex items-center gap-1">
-                    <ArrowRightLeft className="h-4 w-4" />
+                <Button variant="ghost-transparent" className={commonStyles.triggerButton}>
+                    <ArrowRightLeft className={commonStyles.icon} />
                     SUB {substituteAppearancesFilter?.[0] === 0 && substituteAppearancesFilter?.[1] === Infinity
                         ? ''
                         : `${substituteAppearancesFilter?.[0] === 0 ? 'Min' : substituteAppearancesFilter?.[0] ?? ''} ${substituteAppearancesFilter?.[1] === Infinity ? 'Max' : substituteAppearancesFilter?.[1] ?? ''}`}
                 </Button>
             </DialogTrigger>
-            <DialogContent className="sm:max-w-[425px]">
+            <DialogContent className={commonStyles.dialogContent}>
                 <DialogHeader>
                     <DialogTitle>Substituições</DialogTitle>
                 </DialogHeader>
-                <div className="grid gap-2 py-4">
-                    <div className="flex gap-2 items-center">
+                <div className={commonStyles.filterGrid}>
+                    <div className={commonStyles.inputGroup}>
                         <Input
                             type="number"
                             placeholder="Min"
                             value={substituteAppearancesFilter?.[0] === 0 ? '' : String(substituteAppearancesFilter?.[0] || '')}
                             onChange={(e) => handleRangeChange(setSubstituteAppearancesFilter, 0, e, substituteAppearancesFilter)}
-                            className="w-1/2"
+                            className={commonStyles.inputHalf}
                         />
                         <Input
                             type="number"
                             placeholder="Max"
                             value={substituteAppearancesFilter?.[1] === Infinity ? '' : String(substituteAppearancesFilter?.[1] || '')}
                             onChange={(e) => handleRangeChange(setSubstituteAppearancesFilter, 1, e, substituteAppearancesFilter)}
-                            className="w-1/2"
+                            className={commonStyles.inputHalf}
                         />
                     </div>
                     <Button
                         variant="ghost"
                         onClick={() => setSubstituteAppearancesFilter([0, Infinity])}
-                        className="w-full"
+                        className={commonStyles.fullWidthButton}
                     >
                         Substituições
                     </Button>

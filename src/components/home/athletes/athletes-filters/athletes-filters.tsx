@@ -60,6 +60,9 @@ import { AthletesFiltersFoulsSufferedDialog } from './athletes-filters-fouls-suf
 import { AthletesFiltersYellowCardsDialog } from './athletes-filters-yellow-cards-dialog';
 import { AthletesFiltersRedCardsDialog } from './athletes-filters-red-cards-dialog';
 import { PlayerTable } from '../player-table/PlayerTable';
+import Image from 'next/image'; // Import next/image
+import styles from './athletes-filters.module.css'; // Import the CSS module
+import commonStyles from './athletes-filters-common.module.css';
 
 
 type ClubFilterOption = {
@@ -163,7 +166,7 @@ export function AthletesFilters({
   goalsConcededFilter,
   setGoalsConcededFilter,
 }: AthletesFiltersProps) {
-  const { token } = useAuth(); // Get token from AuthContext
+  const { token, isAuthenticated, loadingUser } = useAuth(); // Get token, isAuthenticated, and loadingUser from AuthContext
   const [players, setPlayers] = useState<PlayerResponse[]>([]);
   const [isLoadingPlayers, setIsLoadingPlayers] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -173,11 +176,16 @@ export function AthletesFilters({
       setIsLoadingPlayers(true);
       setError(null);
       try {
-        if (token) {
+        if (loadingUser) { // Wait for authentication to finish loading
+          return;
+        }
+
+        if (isAuthenticated && token) { // Only fetch if authenticated and token is available
           const fetchedPlayers = await getPlayers(token);
           setPlayers(fetchedPlayers);
         } else {
-          setError('Token de autenticação não disponível. Faça login novamente.');
+          setError('Token de autenticação não disponível ou sessão expirada. Faça login novamente.');
+          setPlayers([]); // Clear players if not authenticated
         }
       } catch (err: any) {
         console.error('Failed to fetch players:', err);
@@ -188,7 +196,7 @@ export function AthletesFilters({
     };
 
     fetchPlayers();
-  }, [token]); // Refetch when token changes
+  }, [token, isAuthenticated, loadingUser]); // Refetch when token, isAuthenticated, or loadingUser changes
 
   const handleRangeChange: (
     setter: (value: [number, number]) => void,
@@ -218,10 +226,17 @@ export function AthletesFilters({
   };
 
   return (
-    <div className="flex flex-col w-full gap-4"> {/* Main container for vertical stacking, added gap */}
-      <section className="relative w-full max-w-4xl mx-auto p-4 bg-gray-200 rounded-md shadow-md mb-4 border border-gray-300"> {/* Filter section with explicit background, shadow, border, and increased opacity */}
-        <img src="https://i.ibb.co/1JbbX1bK/campolotado.png" alt="Campo de Futebol" className="absolute inset-0 w-full h-full object-cover z-0 rounded-md" />
-        <div className="relative z-10 flex flex-col items-center justify-center gap-4 p-4"> {/* Wrapper for filter grids, added items-center for centering and justify-center for vertical centering */}
+    <div className={styles.mainContainer}>
+      <section className={styles.filterSection}>
+        <Image
+          src="/campolotado.png" // Use local image path
+          alt="Campo de Futebol"
+          layout="fill" // Fill the parent container
+          objectFit="cover" // Cover the area without distortion
+          className={styles.backgroundImage}
+          priority // Prioritize loading for LCP
+        />
+        <div className={styles.filterContentWrapper}>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 w-full mx-auto">
             <AthletesFiltersName
               nameFilter={nameFilter}
@@ -244,8 +259,7 @@ export function AthletesFilters({
               setWeightFilter={setWeightFilter}
               handleRangeChange={handleRangeChange}
             />
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 w-full mx-auto">
+
             {/* Nacionalidade */}
             <AthletesFiltersNationality
               nationalityFilter={nationalityFilter}
@@ -271,8 +285,7 @@ export function AthletesFilters({
               setSubstituteAppearancesFilter={setSubstituteAppearancesFilter}
               handleRangeChange={handleRangeChange}
             />
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 w-full mx-auto">
+
             {/* Gols */}
             <AthletesFiltersGoalsDialog
               goalsFilter={goalsFilter}
@@ -300,8 +313,7 @@ export function AthletesFilters({
               setShotsOnGoalFilter={setShotsOnGoalFilter}
               handleRangeChange={handleRangeChange}
             />
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 w-full mx-auto">
+
             {/* Faltas Cometidas */}
             <AthletesFiltersFoulsCommittedDialog
               foulsCommittedFilter={foulsCommittedFilter}

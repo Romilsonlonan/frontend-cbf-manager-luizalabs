@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { SquareSlash } from "lucide-react";
+import commonStyles from './athletes-filters-common.module.css';
 
 interface AthletesFiltersRedCardsDialogProps {
     redCardsFilter: [number, number];
@@ -30,38 +31,38 @@ export function AthletesFiltersRedCardsDialog({
     return (
         <Dialog>
             <DialogTrigger asChild>
-                <Button variant="outline" className="px-3 flex items-center gap-1">
-                    <SquareSlash className="h-4 w-4" />
+                <Button variant="outline" className={commonStyles.triggerButton}>
+                    <SquareSlash className={commonStyles.icon} />
                     CV {redCardsFilter?.[0] === 0 && redCardsFilter?.[1] === Infinity
                         ? ''
                         : `${redCardsFilter?.[0] === 0 ? 'Min' : redCardsFilter?.[0] ?? ''} ${redCardsFilter?.[1] === Infinity ? 'Max' : redCardsFilter?.[1] ?? ''}`}
                 </Button>
             </DialogTrigger>
-            <DialogContent className="sm:max-w-[425px]">
+            <DialogContent className={commonStyles.dialogContent}>
                 <DialogHeader>
                     <DialogTitle>Cartões Vermelhos</DialogTitle>
                 </DialogHeader>
-                <div className="grid gap-2 py-4">
-                    <div className="flex gap-2 items-center">
+                <div className={commonStyles.filterGrid}>
+                    <div className={commonStyles.inputGroup}>
                         <Input
                             type="number"
                             placeholder="Min"
                             value={redCardsFilter?.[0] === 0 ? '' : String(redCardsFilter?.[0] || '')}
                             onChange={(e) => handleRangeChange(setRedCardsFilter, 0, e, redCardsFilter)}
-                            className="w-1/2"
+                            className={commonStyles.inputHalf}
                         />
                         <Input
                             type="number"
                             placeholder="Max"
                             value={redCardsFilter?.[1] === Infinity ? '' : String(redCardsFilter?.[1] || '')}
                             onChange={(e) => handleRangeChange(setRedCardsFilter, 1, e, redCardsFilter)}
-                            className="w-1/2"
+                            className={commonStyles.inputHalf}
                         />
                     </div>
                     <Button
                         variant={(redCardsFilter?.[0] === 0 && redCardsFilter?.[1] === Infinity) ? 'default' : 'outline'}
                         onClick={() => setRedCardsFilter([0, Infinity])}
-                        className="w-full"
+                        className={commonStyles.fullWidthButton}
                     >
                         Cartões Vermelhos
                     </Button>
