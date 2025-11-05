@@ -41,9 +41,4 @@ npm start
 - `src/context/` - Contextos React
 - `src/hooks/` - Hooks customizados
 
-## Credenciais Padrão
-
-- **Email:** admin@cbfmanager.com
-- **Senha:** admin123
-
 Para começar, veja o arquivo `src/app/page.tsx`.
