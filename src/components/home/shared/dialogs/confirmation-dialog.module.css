@@ -1,0 +1,3 @@
+.dialogContent {
+    @apply sm:max-w-[425px];
+}

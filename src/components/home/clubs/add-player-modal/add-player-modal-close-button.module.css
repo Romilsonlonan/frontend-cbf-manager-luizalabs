@@ -1,0 +1,4 @@
+.closeButton {
+    @apply w-fit;
+    /* Adjust width as needed, e.g., w-fit, w-full, or a specific pixel value */
+}

@@ -1,0 +1,8 @@
+.button {
+    @apply px-4 py-2 rounded-md text-sm font-medium transition-colors duration-200;
+    @apply bg-gray-200 text-gray-800 hover:bg-gray-300;
+}
+
+.active {
+    @apply bg-blue-600 text-white hover:bg-blue-700;
+}

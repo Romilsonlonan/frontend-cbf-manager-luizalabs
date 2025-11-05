@@ -1,0 +1,3 @@
+.errorMessage {
+    @apply text-center text-sm font-medium text-red-600;
+}

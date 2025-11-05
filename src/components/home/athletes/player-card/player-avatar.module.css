@@ -1,0 +1,7 @@
+.avatar {
+    @apply h-12 w-12;
+}
+
+.avatarFallback {
+    @apply bg-blue-100 text-blue-800 font-bold;
+}

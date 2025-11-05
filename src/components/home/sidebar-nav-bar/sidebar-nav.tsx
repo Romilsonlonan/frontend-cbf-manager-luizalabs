@@ -19,64 +19,68 @@ import {
   BarChartHorizontal,
 } from "lucide-react";
 import { SidebarLogo } from "./sidebar-logo/sidebar-logo";
+import styles from "./sidebar-nav.module.css";
+// Removed useAuth and LogOut import as logout button is moved
 
 export function SidebarNav() {
   const pathname = usePathname();
+  // Removed logout from useAuth as logout button is moved
 
   return (
     <Sidebar>
-      <SidebarHeader className="p-4">
-          <SidebarLogo />
+      <SidebarHeader className={styles.sidebarHeader}>
+        <SidebarLogo />
       </SidebarHeader>
-      <SidebarContent className="flex-1 p-2">
-          <SidebarMenu>
+      <SidebarContent className={styles.sidebarContent}>
+        <SidebarMenu>
           <SidebarMenuItem>
-              <SidebarMenuButton
+            <SidebarMenuButton
               asChild
               isActive={pathname === "/home"}
-              >
+            >
               <Link href="/home">
-                  <LayoutGrid />
-                  <span>Painel</span>
+                <LayoutGrid />
+                <span>Painel</span>
               </Link>
-              </SidebarMenuButton>
+            </SidebarMenuButton>
           </SidebarMenuItem>
           <SidebarMenuItem>
-              <SidebarMenuButton
+            <SidebarMenuButton
               asChild
               isActive={pathname.startsWith("/home/athletes")}
-              >
+            >
               <Link href="/home/athletes">
-                  <UsersRound />
-                  <span>Atletas</span>
+                <UsersRound />
+                <span>Atletas</span>
               </Link>
-              </SidebarMenuButton>
+            </SidebarMenuButton>
           </SidebarMenuItem>
           <SidebarMenuItem>
-              <SidebarMenuButton
+            <SidebarMenuButton
               asChild
               isActive={pathname.startsWith("/home/clubs")}
-              >
+            >
               <Link href="/home/clubs">
-                  <Shield />
-                  <span>Clubes</span>
+                <Shield />
+                <span>Clubes</span>
               </Link>
-              </SidebarMenuButton>
+            </SidebarMenuButton>
           </SidebarMenuItem>
-           <SidebarMenuItem>
-              <SidebarMenuButton
+          <SidebarMenuItem>
+            <SidebarMenuButton
               asChild
               isActive={pathname.startsWith("/home/statistics")}
-              >
+            >
               <Link href="/home/statistics">
-                  <BarChartHorizontal />
-                  <span>Estatísticas</span>
+                <BarChartHorizontal />
+                <span>Estatísticas</span>
               </Link>
-              </SidebarMenuButton>
+            </SidebarMenuButton>
           </SidebarMenuItem>
-          </SidebarMenu>
+        </SidebarMenu>
       </SidebarContent>
       <SidebarFooter>
+        {/* Logout button will be moved to DashboardHeader */}
       </SidebarFooter>
     </Sidebar>
   );

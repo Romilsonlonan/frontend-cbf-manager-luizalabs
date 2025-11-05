@@ -1,0 +1,11 @@
+.header {
+    @apply sticky top-0 z-30 flex h-16 items-center gap-4 border-b px-4 md:px-6;
+}
+
+.sidebarTrigger {
+    @apply md:hidden;
+}
+
+.flexSpacer {
+    @apply w-full flex-1;
+}

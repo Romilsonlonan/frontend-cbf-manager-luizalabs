@@ -1,0 +1,15 @@
+.header {
+    @apply text-black text-center font-bold text-2xl;
+}
+
+.logoContainer {
+    @apply flex justify-center mb-4;
+}
+
+.logo {
+    @apply h-20;
+}
+
+.title {
+    @apply text-black text-center font-bold text-2xl;
+}

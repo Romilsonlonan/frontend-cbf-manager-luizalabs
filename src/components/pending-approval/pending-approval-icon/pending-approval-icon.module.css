@@ -1,0 +1,7 @@
+.iconContainer {
+    @apply flex justify-center mb-4;
+}
+
+.icon {
+    @apply w-16 h-16 text-primary;
+}

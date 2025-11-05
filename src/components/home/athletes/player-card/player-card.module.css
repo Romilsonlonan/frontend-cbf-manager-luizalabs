@@ -1,0 +1,15 @@
+.card {
+    @apply hover:shadow-lg transition-shadow;
+}
+
+.cardContent {
+    @apply p-4;
+}
+
+.cardInnerContainer {
+    @apply flex items-start gap-4;
+}
+
+.playerDetailsContainer {
+    @apply flex-1 space-y-2;
+}

@@ -1,0 +1,49 @@
+.containerSelecao {
+    @apply flex flex-col items-center justify-center min-h-screen p-4;
+    /* Changed to flex-col and added padding */
+}
+
+.containerSelecao h2 {
+    @apply text-black text-3xl font-bold mb-8;
+    /* Styled the title */
+    animation: blink-white 1.5s infinite alternate;
+    /* Add blinking animation */
+}
+
+@keyframes blink-white {
+    0% {
+        color: black;
+    }
+
+    100% {
+        color: white;
+    }
+}
+
+.gridPlanos {
+    @apply grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto p-4;
+}
+
+.cardPlano {
+    @apply bg-yellow-300/80 shadow-lg border flex flex-col;
+}
+
+.headerPlano {
+    @apply text-center;
+}
+
+.tituloPlano {
+    @apply text-3xl font-bold text-black;
+}
+
+.descricaoPlano {
+    @apply text-black text-lg;
+}
+
+.icon {
+    @apply flex justify-center mb-4 text-5xl;
+}
+
+.botaoEscolher {
+    @apply w-full bg-black text-yellow-300 hover:bg-gray-800;
+}

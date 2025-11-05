@@ -1,0 +1,11 @@
+.playerCardsContainer {
+    @apply flex gap-2 pt-2;
+}
+
+.yellowCardBadge {
+    @apply bg-yellow-100 text-yellow-800;
+}
+
+.redCardBadge {
+    @apply bg-red-100 text-red-800;
+}

@@ -1,0 +1,6 @@
+.container {
+    @apply flex items-center justify-center min-h-screen;
+    background-image: url('https://i.ibb.co/h1gG6HGW/fundocbf.png');
+    background-size: cover;
+    background-position: center;
+}

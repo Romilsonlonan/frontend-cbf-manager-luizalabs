@@ -1,0 +1,11 @@
+.errorMessageContainer {
+    @apply flex items-center gap-2 rounded-md bg-red-50 p-3 text-red-700;
+}
+
+.icon {
+    @apply h-5 w-5;
+}
+
+.messageText {
+    @apply text-sm font-medium;
+}

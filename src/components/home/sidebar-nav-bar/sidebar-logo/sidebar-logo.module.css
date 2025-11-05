@@ -1,0 +1,7 @@
+.logoContainer {
+    @apply flex flex-col items-center justify-center gap-2 w-full;
+}
+
+.logoTitle {
+    @apply text-xl font-bold truncate;
+}

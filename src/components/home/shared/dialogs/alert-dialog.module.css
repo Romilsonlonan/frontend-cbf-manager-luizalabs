@@ -1,0 +1,27 @@
+.dialogContent {
+    @apply sm:max-w-[425px];
+}
+
+.dialogTitle {
+    @apply flex items-center gap-2 font-bold;
+}
+
+.icon {
+    @apply h-6 w-6;
+}
+
+.infoTitle {
+    @apply text-blue-600;
+}
+
+.successTitle {
+    @apply text-green-600;
+}
+
+.warningTitle {
+    @apply text-yellow-600;
+}
+
+.errorTitle {
+    @apply text-red-600;
+}

@@ -1,61 +1,131 @@
+'use client';
 
-import Link from "next/link"
-import { Button } from "@/components/ui/button"
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
+import { Button } from '@/components/ui/button';
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
+} from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { login } from '@/lib/api'; // Import the login function directly
+import { useAuth } from '@/context/AuthContext';
+import { useLoading } from '@/context/LoadingContext';
+import { EyeIcon, EyeOffIcon } from 'lucide-react';
+import styles from './login.module.css';
 
-export default function LoginPage() {
+export default function PaginaLogin() {
+  const [email, setEmail] = useState('');
+  const [senha, setSenha] = useState('');
+  const [carregando, setCarregando] = useState(false);
+  const [erro, setErro] = useState('');
+  const [mostrarSenha, setMostrarSenha] = useState(false);
+  const router = useRouter();
+  const { login: authLogin } = useAuth();
+  const { startLoading, stopLoading } = useLoading();
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setCarregando(true);
+    setErro('');
+
+    try {
+      const data = await login(email, senha, startLoading, stopLoading); // Use the imported login function
+      if (data && data.access_token) {
+        authLogin(data.access_token);
+        console.log('LoginPage: Attempting to redirect to /home');
+        router.push('/home');
+      } else {
+        setErro('Resposta de login inválida: token não encontrado.');
+      }
+    } catch (error) {
+      setErro('Email ou senha inválidos!');
+    } finally {
+      setCarregando(false);
+    }
+  };
+
   return (
-    <div className="flex items-center justify-center min-h-screen bg-background">
-      <Card className="mx-auto max-w-sm">
+    <div className={styles.containerLogin}>
+      <Card className={styles.cardLogin}>
         <CardHeader>
-          <CardTitle className="text-2xl">Login</CardTitle>
-          <CardDescription>
-            Entre com seu email e senha para acessar o painel
+          <div className={styles.logoContainer}>
+            <img
+              src="https://i.ibb.co/HTNLMqjX/cbf2.png"
+              alt="Logo CBF"
+              className={styles.logo}
+            />
+          </div>
+          <CardDescription className={styles.titulo}>
+            Acessar o painel
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="grid gap-4">
-            <div className="grid gap-2">
+          <form onSubmit={handleSubmit} className={styles.formulario}>
+            <div className={styles.campoFormulario}>
               <Label htmlFor="email">Email</Label>
               <Input
                 id="email"
                 type="email"
-                placeholder="m@example.com"
+                placeholder="seu@email.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 required
+                disabled={carregando}
               />
             </div>
-            <div className="grid gap-2">
-              <div className="flex items-center">
-                <Label htmlFor="password">Senha</Label>
-                <Link href="#" className="ml-auto inline-block text-sm underline">
+            <div className={styles.campoFormulario}>
+              <div className={styles.labelSenha}>
+                <Label htmlFor="senha">Senha</Label>
+                <Link href="#" className={styles.linkEsqueceuSenha}>
                   Esqueceu sua senha?
                 </Link>
               </div>
-              <Input id="password" type="password" required />
+              <div className={styles.inputSenhaContainer}>
+                <Input
+                  id="senha"
+                  type={mostrarSenha ? 'text' : 'password'}
+                  value={senha}
+                  onChange={(e) => setSenha(e.target.value)}
+                  required
+                  disabled={carregando}
+                  className={styles.inputSenha}
+                />
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="sm"
+                  className={styles.botaoMostrarSenha}
+                  onClick={() => setMostrarSenha((prev) => !prev)}
+                  disabled={carregando}
+                >
+                  {mostrarSenha ? (
+                    <EyeIcon className={styles.iconeOlho} />
+                  ) : (
+                    <EyeOffIcon className={styles.iconeOlho} />
+                  )}
+                </Button>
+              </div>
             </div>
-            <Button type="submit" className="w-full">
-              Login
+            {erro && (
+              <div className={styles.mensagemErro}>{erro}</div>
+            )}
+            <Button type="submit" className={styles.botaoSubmit} disabled={carregando}>
+              {carregando ? 'Carregando...' : 'Entrar'}
             </Button>
-            <Button variant="outline" className="w-full">
-              Login com Google
-            </Button>
-          </div>
-          <div className="mt-4 text-center text-sm">
+          </form>
+          <div className={styles.rodape}>
             Não tem uma conta?{" "}
-            <Link href="/register" className="underline">
+            <Link href="/register" className={styles.linkCadastro}>
               Cadastre-se
             </Link>
           </div>
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }

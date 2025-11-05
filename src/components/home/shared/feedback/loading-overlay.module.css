@@ -1,0 +1,15 @@
+.overlay {
+    @apply fixed inset-0 z-50 flex items-center justify-center bg-black/50;
+}
+
+.content {
+    @apply flex flex-col items-center gap-4 rounded-lg bg-background p-8 shadow-lg;
+}
+
+.spinner {
+    @apply h-10 w-10 animate-spin text-primary;
+}
+
+.message {
+    @apply text-lg font-semibold text-muted-foreground;
+}

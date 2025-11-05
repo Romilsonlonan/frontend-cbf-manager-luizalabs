@@ -1,0 +1,7 @@
+.inputGroup {
+    @apply flex gap-2 items-center;
+}
+
+.inputHalf {
+    @apply w-1/2;
+}

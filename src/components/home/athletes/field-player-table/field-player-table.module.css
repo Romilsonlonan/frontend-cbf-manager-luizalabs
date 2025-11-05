@@ -1,0 +1,19 @@
+.tableContainer {
+    @apply rounded-md border overflow-x-auto;
+}
+
+.tableHeadCell {
+    @apply px-0.5 py-1 whitespace-nowrap text-xs;
+}
+
+.tableHeadCellWithIcon {
+    @apply flex items-center gap-0.5 px-0.5 py-1 whitespace-nowrap text-xs;
+}
+
+.icon {
+    @apply h-3 w-3;
+}
+
+.tableBodyCell {
+    @apply font-medium px-0.5 py-1 whitespace-nowrap text-xs;
+}

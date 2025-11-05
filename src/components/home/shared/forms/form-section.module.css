@@ -1,0 +1,15 @@
+.formSectionContainer {
+    @apply space-y-4;
+}
+
+.title {
+    @apply text-xl font-semibold;
+}
+
+.description {
+    @apply text-sm text-muted-foreground;
+}
+
+.content {
+    @apply grid gap-4;
+}

@@ -1,0 +1,19 @@
+.section {
+    @apply mb-8;
+}
+
+.title {
+    @apply text-xl font-semibold mb-4;
+}
+
+.imageContainer {
+    @apply flex items-center space-x-4;
+}
+
+.profileImage {
+    @apply w-24 h-24 rounded-full object-cover;
+}
+
+.changeButton {
+    @apply px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600;
+}

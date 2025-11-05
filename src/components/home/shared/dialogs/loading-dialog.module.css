@@ -1,0 +1,15 @@
+.dialogContent {
+    @apply sm:max-w-[425px];
+}
+
+.dialogHeader {
+    @apply flex flex-col items-center justify-center text-center gap-4;
+}
+
+.spinner {
+    @apply h-10 w-10 animate-spin text-primary;
+}
+
+.dialogTitle {
+    @apply text-xl font-bold;
+}

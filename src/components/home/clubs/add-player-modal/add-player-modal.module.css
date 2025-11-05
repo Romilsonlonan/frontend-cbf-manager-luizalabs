@@ -1,0 +1,24 @@
+.dialogContent {
+    @apply sm:max-w-[600px] max-h-[90vh] overflow-y-auto;
+}
+
+.noClubsMessageContainer {
+    @apply py-8 text-center space-y-4;
+}
+
+.noClubsMessage {
+    @apply text-gray-500;
+}
+
+.formContainer {
+    @apply space-y-4;
+}
+
+.formGrid {
+    @apply grid grid-cols-2 gap-4;
+}
+
+
+.errorMessage {
+    @apply text-sm text-red-500;
+}

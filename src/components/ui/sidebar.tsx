@@ -150,7 +150,7 @@ const SidebarProvider = React.forwardRef<
               } as React.CSSProperties
             }
             className={cn(
-              "group/sidebar-wrapper flex min-h-svh w-full has-[[data-variant=inset]]:bg-sidebar",
+              "group/sidebar-wrapper flex h-screen w-full has-[[data-variant=inset]]:bg-sidebar",
               className
             )}
             ref={ref}
@@ -183,31 +183,32 @@ const Sidebar = React.forwardRef<
     ref
   ) => {
     const { state, openMobile, setOpenMobile, collapsible, isMobile } = useSidebar()
-    
+
     if (isMobile === undefined) {
       return <div className={cn("w-[--sidebar-width] p-2", variant === "inset" ? "m-2" : "")}><Skeleton className="w-full h-full" /></div>;
     }
 
     if (!collapsible) {
-       return (
+      return (
         <>
           {/* Mobile: Sheet */}
           <Sheet open={isMobile ? openMobile : false} onOpenChange={setOpenMobile}>
             <SheetContent
               data-sidebar="sidebar"
               data-mobile="true"
-              className={cn("w-[--sidebar-width] bg-sidebar p-0 text-sidebar-foreground [&>button]:hidden", isMobile ? "flex" : "hidden")}
-              style={{ "--sidebar-width": SIDEBAR_WIDTH_MOBILE } as React.CSSProperties}
+              className={cn("w-[--sidebar-width] p-0 [&>button]:hidden", isMobile ? "flex" : "hidden")}
+              style={{ "--sidebar-width": SIDEBAR_WIDTH_MOBILE, backgroundColor: 'var(--sidebar-bg)', color: 'var(--sidebar-text-color)' } as React.CSSProperties}
               side={side}
             >
               <div className="flex h-full w-full flex-col">{children}</div>
             </SheetContent>
           </Sheet>
-           {/* Desktop: Static */}
+          {/* Desktop: Static */}
           <div
             ref={ref}
             data-testid="sidebar-desktop"
-            className={cn("h-svh w-[--sidebar-width] bg-sidebar text-sidebar-foreground", isMobile ? "hidden" : "flex flex-col", className)}
+            className={cn("h-svh w-[--sidebar-width]", isMobile ? "hidden" : "flex flex-col", className)}
+            style={{ backgroundColor: 'var(--sidebar-bg)', color: 'var(--sidebar-text-color)' }}
             {...props}
           >
             {children}
@@ -234,7 +235,7 @@ const Sidebar = React.forwardRef<
             <div className="flex h-full w-full flex-col">{children}</div>
           </SheetContent>
         </Sheet>
-        
+
         {/* Desktop Sidebar */}
         <div
           ref={ref}
@@ -243,7 +244,7 @@ const Sidebar = React.forwardRef<
           data-collapsible={collapsible ? (state === "collapsed" ? "icon" : "") : 'none'}
           data-variant={variant}
           data-side={side}
-           {...props}
+          {...props}
         >
           {/* This is what handles the sidebar gap on desktop */}
           <div
@@ -258,7 +259,7 @@ const Sidebar = React.forwardRef<
           />
           <div
             className={cn(
-              "duration-200 fixed inset-y-0 h-svh w-[--sidebar-width] transition-[left,right,width] ease-linear md:flex",
+              "duration-200 fixed inset-y-0 h-screem w-[--sidebar-width] transition-[left,right,width] ease-linear md:flex",
               side === "left"
                 ? "left-0 group-data-[collapsible=offcanvas]:left-[calc(var(--sidebar-width)*-1)]"
                 : "right-0 group-data-[collapsible=offcanvas]:right-[calc(var(--sidebar-width)*-1)]",
@@ -270,7 +271,8 @@ const Sidebar = React.forwardRef<
           >
             <div
               data-sidebar="sidebar"
-              className="flex h-full w-full flex-col bg-sidebar group-data-[variant=floating]:rounded-lg group-data-[variant=floating]:border group-data-[variant=floating]:border-sidebar-border group-data-[variant=floating]:shadow"
+              className="flex h-full w-full flex-col group-data-[variant=floating]:rounded-lg group-data-[variant=floating]:border group-data-[variant=floating]:border-sidebar-border group-data-[variant=floating]:shadow"
+              style={{ backgroundColor: 'var(--sidebar-bg)', color: 'var(--sidebar-text-color)' }}
             >
               {children}
             </div>
@@ -646,7 +648,7 @@ const SidebarMenuAction = React.forwardRef<
         "peer-data-[size=lg]/menu-button:top-2.5",
         "group-data-[collapsible=icon]:hidden",
         showOnHover &&
-          "group-focus-within/menu-item:opacity-100 group-hover/menu-item:opacity-100 data-[state=open]:opacity-100 peer-data-[active=true]/menu-button:text-sidebar-accent-foreground md:opacity-0",
+        "group-focus-within/menu-item:opacity-100 group-hover/menu-item:opacity-100 data-[state=open]:opacity-100 peer-data-[active=true]/menu-button:text-sidebar-accent-foreground md:opacity-0",
         className
       )}
       {...props}

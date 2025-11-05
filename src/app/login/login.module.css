@@ -1,0 +1,72 @@
+/* Página de Login - CBF Manager */
+
+.containerLogin {
+  @apply flex items-center justify-center min-h-screen;
+  background-image: url('https://i.ibb.co/TqqszbQy/campo-oficial.png');
+  background-size: cover;
+  background-position: center;
+}
+
+.cardLogin {
+  @apply mx-auto max-w-sm bg-yellow-300/80 shadow-lg border;
+}
+
+.logoContainer {
+  @apply flex justify-center mb-4;
+}
+
+.logo {
+  @apply h-20;
+}
+
+.titulo {
+  @apply text-black text-center font-bold text-2xl;
+}
+
+.formulario {
+  @apply grid gap-4;
+}
+
+.campoFormulario {
+  @apply grid gap-2;
+}
+
+.labelSenha {
+  @apply flex items-center;
+}
+
+.linkEsqueceuSenha {
+  @apply ml-auto inline-block text-sm underline;
+}
+
+.inputSenhaContainer {
+  @apply relative;
+}
+
+.inputSenha {
+  @apply pr-10;
+}
+
+.botaoMostrarSenha {
+  @apply absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent;
+}
+
+.iconeOlho {
+  @apply h-4 w-4 text-gray-500;
+}
+
+.mensagemErro {
+  @apply text-sm text-red-500 text-center;
+}
+
+.botaoSubmit {
+  @apply w-full;
+}
+
+.rodape {
+  @apply mt-4 text-center text-sm;
+}
+
+.linkCadastro {
+  @apply underline;
+}

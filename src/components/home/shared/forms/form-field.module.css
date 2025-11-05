@@ -1,0 +1,11 @@
+.formFieldContainer {
+    @apply space-y-2;
+}
+
+.label {
+    @apply text-right;
+}
+
+.input {
+    @apply col-span-3;
+}

@@ -1,0 +1,7 @@
+.footerText {
+    @apply mt-6 text-center text-sm text-gray-600;
+}
+
+.footerLink {
+    @apply font-medium text-indigo-600 hover:text-indigo-500;
+}

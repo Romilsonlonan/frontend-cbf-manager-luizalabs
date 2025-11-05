@@ -1,0 +1,11 @@
+.button {
+    @apply bg-gray-100 border border-gray-300 px-3 py-2 m-1 rounded-md cursor-pointer text-sm transition-colors duration-200 ease-in-out;
+}
+
+.button:hover {
+    @apply bg-gray-200;
+}
+
+.button.active {
+    @apply bg-blue-600 text-white border-blue-600;
+}

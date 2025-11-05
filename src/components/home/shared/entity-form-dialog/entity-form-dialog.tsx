@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useState, useEffect, ReactNode } from 'react';
@@ -9,11 +8,11 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import styles from './entity-form-dialog.module.css';
 
 type FormField = {
   id: string;
@@ -30,7 +29,6 @@ type EntityFormDialogProps = {
   formFields: FormField[];
   onSubmit: (formData: Record<string, string>) => void;
   submitButtonText: string;
-  children: ReactNode;
   initialValues?: Record<string, string>;
   readOnlyFields?: string[];
 };
@@ -43,17 +41,22 @@ export function EntityFormDialog({
   formFields,
   onSubmit,
   submitButtonText,
-  children,
   initialValues = {},
   readOnlyFields = [],
 }: EntityFormDialogProps) {
   const [formData, setFormData] = useState<Record<string, string>>(initialValues);
 
+  // Usar JSON.stringify para comparar objetos de forma profunda
   useEffect(() => {
     if (isOpen) {
-      setFormData(initialValues);
+      const initialValuesStr = JSON.stringify(initialValues);
+      const currentFormDataStr = JSON.stringify(formData);
+
+      if (initialValuesStr !== currentFormDataStr) {
+        setFormData(initialValues);
+      }
     }
-  }, [isOpen, initialValues]);
+  }, [isOpen, JSON.stringify(initialValues)]);
 
   const handleChange = (id: string, value: string) => {
     setFormData((prev) => ({ ...prev, [id]: value }));
@@ -66,16 +69,15 @@ export function EntityFormDialog({
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogTrigger asChild>{children}</DialogTrigger>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className={styles.dialogContent}>
         <form onSubmit={handleSubmit}>
           <DialogHeader>
             <DialogTitle>{dialogTitle}</DialogTitle>
             <DialogDescription>{dialogDescription}</DialogDescription>
           </DialogHeader>
-          <div className="grid gap-4 py-4">
+          <div className={styles.formGrid}>
             {formFields.map((field) => (
-              <div key={field.id} className="grid grid-cols-4 items-center gap-4">
+              <div key={field.id} className={styles.formField}>
                 <Label htmlFor={field.id} className="text-right">
                   {field.label}
                 </Label>
@@ -85,7 +87,7 @@ export function EntityFormDialog({
                   placeholder={field.placeholder}
                   value={formData[field.id] || ''}
                   onChange={(e) => handleChange(field.id, e.target.value)}
-                  className="col-span-3"
+                  className={styles.inputField}
                   readOnly={readOnlyFields.includes(field.id)}
                   disabled={readOnlyFields.includes(field.id)}
                 />

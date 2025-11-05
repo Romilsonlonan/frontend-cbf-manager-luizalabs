@@ -1,0 +1,15 @@
+.dialogContent {
+    @apply sm:max-w-[425px];
+}
+
+.formGrid {
+    @apply grid gap-4 py-4;
+}
+
+.formField {
+    @apply grid grid-cols-4 items-center gap-4;
+}
+
+.inputField {
+    @apply col-span-3;
+}

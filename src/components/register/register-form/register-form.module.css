@@ -1,0 +1,7 @@
+.form {
+    @apply grid gap-4;
+}
+
+.campoFormulario {
+    @apply grid gap-2;
+}

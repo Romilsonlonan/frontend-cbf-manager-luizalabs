@@ -1,0 +1,11 @@
+.header {
+    @apply text-center;
+}
+
+.title {
+    @apply text-2xl;
+}
+
+.description {
+    @apply text-center text-gray-600;
+}

@@ -1,0 +1,15 @@
+.contactContainer {
+    @apply mt-8 p-4 border rounded-md bg-gray-50;
+}
+
+.contactTitle {
+    @apply text-lg font-semibold mb-2;
+}
+
+.contactItem {
+    @apply text-gray-700;
+}
+
+.contactLink {
+    @apply text-blue-600 hover:underline;
+}

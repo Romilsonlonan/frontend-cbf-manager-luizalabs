@@ -1,0 +1,19 @@
+.section {
+    @apply mb-8;
+}
+
+.title {
+    @apply text-xl font-semibold mb-4;
+}
+
+.formGroup {
+    @apply grid gap-2;
+}
+
+.label {
+    @apply text-sm font-medium;
+}
+
+.select {
+    @apply flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50;
+}

@@ -1,0 +1,19 @@
+.timelineContainer {
+    @apply mt-8;
+}
+
+.timelineTitle {
+    @apply text-lg font-semibold mb-4;
+}
+
+.timelineItem {
+    @apply flex items-start mb-4;
+}
+
+.timelineDate {
+    @apply text-sm text-gray-500 mr-4;
+}
+
+.timelineDescription {
+    @apply text-gray-700;
+}

@@ -1,0 +1,41 @@
+.playerTableContainer {
+    @apply relative z-10 p-4 bg-white rounded-md shadow-lg w-full min-h-[700px] border border-blue-300;
+}
+
+.playerTableTitle {
+    @apply text-lg font-bold text-gray-800 mb-2;
+}
+
+.playerTablePlaceholder {
+    @apply text-gray-700;
+}
+
+.tableWrapper {
+    @apply overflow-x-auto;
+    /* Allows horizontal scrolling for wide tables */
+}
+
+.playerTable {
+    @apply w-full border-collapse;
+}
+
+.playerTable th,
+.playerTable td {
+    @apply px-2 py-1 text-left border border-gray-200 text-xs;
+    /* Basic cell styling, made more compact */
+}
+
+.playerTable th {
+    @apply bg-gray-100 font-semibold text-gray-700 whitespace-nowrap;
+    /* Header styling, prevent wrapping */
+}
+
+.playerTable tbody tr:nth-child(odd) {
+    @apply bg-gray-50;
+    /* Zebra striping for rows */
+}
+
+.playerTable tbody tr:hover {
+    @apply bg-gray-100;
+    /* Hover effect for rows */
+}

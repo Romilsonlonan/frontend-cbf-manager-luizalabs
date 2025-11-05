@@ -1,0 +1,7 @@
+.rodape {
+    @apply mt-4 text-center text-sm;
+}
+
+.linkLogin {
+    @apply underline;
+}

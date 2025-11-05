@@ -1,0 +1,52 @@
+/* Seleção de Tipo de Conta - CBF Manager */
+
+.containerSelecao {
+  @apply flex items-center justify-center min-h-screen;
+  background-image: url('https://i.ibb.co/h1gG6HGW/fundocbf.png');
+  background-size: cover;
+  background-position: center;
+}
+
+.gridPlanos {
+  @apply grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto p-4;
+}
+
+.cardPlano {
+  @apply bg-yellow-300/80 shadow-lg border flex flex-col;
+}
+
+.headerPlano {
+  @apply text-center;
+}
+
+.tituloPlano {
+  @apply text-3xl font-bold text-black;
+}
+
+.descricaoPlano {
+  @apply text-black text-lg;
+}
+
+.conteudoPlano {
+  @apply flex-grow flex flex-col justify-between;
+}
+
+.listaCaracteristicas {
+  @apply grid gap-2 text-black text-base mb-6;
+}
+
+.itemCaracteristica {
+  @apply flex items-center;
+}
+
+.iconeCheck {
+  @apply h-5 w-5 text-green-600 mr-2;
+}
+
+.iconeX {
+  @apply h-5 w-5 text-red-600 mr-2;
+}
+
+.botaoEscolher {
+  @apply w-full bg-black text-yellow-300 hover:bg-gray-800;
+}

@@ -1,0 +1,11 @@
+.headerContainer {
+    @apply text-center;
+}
+
+.title {
+    @apply mt-6 text-3xl font-extrabold text-gray-900;
+}
+
+.subtitle {
+    @apply mt-2 text-sm text-gray-600;
+}

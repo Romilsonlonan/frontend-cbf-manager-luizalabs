@@ -1,0 +1,7 @@
+.notificationButton {
+    @apply rounded-full;
+}
+
+.icon {
+    @apply h-5 w-5;
+}

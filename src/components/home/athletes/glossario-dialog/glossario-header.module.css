@@ -1,0 +1,7 @@
+.dialogTitle {
+    @apply flex items-center gap-2;
+}
+
+.icon {
+    @apply h-6 w-6;
+}

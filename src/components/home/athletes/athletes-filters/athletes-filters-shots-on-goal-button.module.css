@@ -1,0 +1,20 @@
+.triggerButton {
+    @apply flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-colors duration-200;
+    @apply bg-gray-200 text-gray-800 hover:bg-gray-300;
+}
+
+.icon {
+    @apply h-4 w-4;
+}
+
+.dialogContent {
+    @apply sm:max-w-md;
+}
+
+.filterGrid {
+    @apply grid gap-4 py-4;
+}
+
+.fullWidthButton {
+    @apply w-full;
+}

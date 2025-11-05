@@ -1,0 +1,7 @@
+.actionsContainer {
+    @apply flex justify-end space-x-2;
+}
+
+.spinnerIcon {
+    @apply mr-2 h-4 w-4 animate-spin;
+}

@@ -1,0 +1,20 @@
+.dialogContent {
+    @apply sm:max-w-[600px] max-h-[90vh] overflow-y-auto;
+}
+
+.formContainer {
+    @apply space-y-4;
+}
+
+.formGrid {
+    @apply grid grid-cols-2 gap-4;
+}
+
+
+.errorMessage {
+    @apply text-sm text-red-500;
+}
+
+.actionsContainer {
+    @apply flex justify-end space-x-2;
+}

@@ -1,0 +1,11 @@
+.playerInfoContainer {
+    @apply text-center;
+}
+
+.playerName {
+    @apply font-semibold text-lg;
+}
+
+.playerDetails {
+    @apply text-sm text-muted-foreground;
+}

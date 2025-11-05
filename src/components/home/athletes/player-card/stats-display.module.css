@@ -1,0 +1,11 @@
+.statsDisplayContainer {
+    @apply text-center;
+}
+
+.value {
+    @apply text-2xl font-bold;
+}
+
+.label {
+    @apply text-xs text-muted-foreground;
+}

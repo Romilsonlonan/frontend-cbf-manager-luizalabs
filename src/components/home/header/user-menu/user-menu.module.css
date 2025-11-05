@@ -1,0 +1,11 @@
+.userMenuTrigger {
+    @apply rounded-full;
+}
+
+.userAvatar {
+    @apply rounded-full object-cover w-10 h-10;
+}
+
+.placeholderAvatar {
+    @apply rounded-full w-10 h-10;
+}
