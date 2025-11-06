@@ -6,10 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
     RefreshCw,
-    AlertCircle,
     PlusCircle,
-    Goal,
-    User
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { GoalkeeperTable } from "@/components/home/athletes/goalkeeper-table/goalkeeper-table";
@@ -25,6 +22,7 @@ import { AthletesFiltersClub } from '@/components/home/athletes/athletes-filters
 import { PlayerCard } from "@/components/home/athletes/player-card/player-card";
 import { GlossarioDialog } from "@/components/home/athletes/glossario-dialog/glossario-dialog";
 import { SummaryStatistics } from "@/components/home/athletes/summary-statistics/summary-statistics";
+import EmptyStateMessage from "@/components/home/athletes/shared/EmptyStateMessage";
 
 import { Position, PlayerResponse, ClubSimpleResponse } from "@/lib/types";
 import { getPlayers, getClubs } from '@/lib/api';
@@ -328,14 +326,7 @@ export default function AtletasPage(): JSX.Element {
 
                                 <TabsContent value="todos" className="space-y-4">
                                     {filteredAthletes.length === 0 ? (
-                                        <Card>
-                                            <CardContent className="p-8 text-center">
-                                                <AlertCircle className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-                                                <CardDescription>
-                                                    Nenhum atleta encontrado. Use o botão de atualização para buscar os dados mais recentes.
-                                                </CardDescription>
-                                            </CardContent>
-                                        </Card>
+                                        <EmptyStateMessage type="all" />
                                     ) : (
                                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                                             {filteredAthletes.map((player) => (
@@ -347,14 +338,7 @@ export default function AtletasPage(): JSX.Element {
 
                                 <TabsContent value="goleiros" className="space-y-4">
                                     {goleiros.length === 0 ? (
-                                        <Card>
-                                            <CardContent className="p-8 text-center">
-                                                <Goal className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-                                                <CardDescription>
-                                                    Nenhum goleiro encontrado.
-                                                </CardDescription>
-                                            </CardContent>
-                                        </Card>
+                                        <EmptyStateMessage type="goalkeepers" />
                                     ) : (
                                         <GoalkeeperTable goalkeepers={goleiros} />
                                     )}
@@ -362,14 +346,7 @@ export default function AtletasPage(): JSX.Element {
 
                                 <TabsContent value="jogadores" className="space-y-4">
                                     {jogadoresCampo.length === 0 ? (
-                                        <Card>
-                                            <CardContent className="p-8 text-center">
-                                                <User className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-                                                <CardDescription>
-                                                    Nenhum jogador de campo encontrado.
-                                                </CardDescription>
-                                            </CardContent>
-                                        </Card>
+                                        <EmptyStateMessage type="fieldPlayers" />
                                     ) : (
                                         <FieldPlayerTable fieldPlayers={jogadoresCampo} />
                                     )}
