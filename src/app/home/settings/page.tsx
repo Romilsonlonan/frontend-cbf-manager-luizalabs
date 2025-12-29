@@ -163,7 +163,8 @@ export default function UserSettings() {
 
       <ProfileImageSection
         currentImage={profileImageUrl}
-        onImageChange={handleProfileImageUpload} // Pass the upload handler
+        onImageChange={handleProfileImageUpload}
+        isLoading={isLoading}
       />
 
       <EditProfileSection
@@ -179,6 +180,16 @@ export default function UserSettings() {
       <ThemeCustomizationSection
         currentTheme={theme}
         onThemeChange={handleThemeChange}
+        currentNavbarColor={navbarColor}
+        onNavbarColorChange={(color) => {
+          setNavbarColor(color);
+          localStorage.setItem('navbarColor', color);
+        }}
+        currentSidebarColor={sidebarColor}
+        onSidebarColorChange={(color) => {
+          setSidebarColor(color);
+          localStorage.setItem('sidebarColor', color);
+        }}
       />
 
       <DeleteAccountSection

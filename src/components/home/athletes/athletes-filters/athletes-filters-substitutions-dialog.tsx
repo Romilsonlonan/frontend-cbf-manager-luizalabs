@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import {
     Dialog,
@@ -7,6 +7,7 @@ import {
     DialogTitle,
     DialogTrigger,
     DialogClose,
+    DialogFooter,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { ArrowRightLeft } from "lucide-react";
@@ -28,14 +29,35 @@ export function AthletesFiltersSubstitutionsDialog({
     setSubstituteAppearancesFilter,
     handleRangeChange,
 }: AthletesFiltersSubstitutionsDialogProps) {
+    const [isOpen, setIsOpen] = useState(false);
+    const [localSubstituteAppearancesFilter, setLocalSubstituteAppearancesFilter] = useState(substituteAppearancesFilter);
+
+    useEffect(() => {
+        if (!isOpen) {
+            // When the dialog closes, reset local input to the current applied filter
+            setLocalSubstituteAppearancesFilter(substituteAppearancesFilter);
+        }
+    }, [isOpen, substituteAppearancesFilter]);
+
+    const handleApplyFilter = () => {
+        setSubstituteAppearancesFilter(localSubstituteAppearancesFilter);
+        setIsOpen(false);
+    };
+
+    const handleClearFilter = () => {
+        setLocalSubstituteAppearancesFilter([0, Infinity]);
+        setSubstituteAppearancesFilter([0, Infinity]);
+        setIsOpen(false);
+    };
+
     return (
-        <Dialog>
+        <Dialog open={isOpen} onOpenChange={setIsOpen}>
             <DialogTrigger asChild>
                 <Button variant="ghost-transparent" className={commonStyles.triggerButton}>
                     <ArrowRightLeft className={commonStyles.icon} />
                     SUB {substituteAppearancesFilter?.[0] === 0 && substituteAppearancesFilter?.[1] === Infinity
                         ? ''
-                        : `${substituteAppearancesFilter?.[0] === 0 ? 'Min' : substituteAppearancesFilter?.[0] ?? ''} ${substituteAppearancesFilter?.[1] === Infinity ? 'Max' : substituteAppearancesFilter?.[1] ?? ''}`}
+                        : `${substituteAppearancesFilter?.[0] === 0 ? 'Min' : localSubstituteAppearancesFilter?.[0] ?? ''} ${substituteAppearancesFilter?.[1] === Infinity ? 'Max' : localSubstituteAppearancesFilter?.[1] ?? ''}`}
                 </Button>
             </DialogTrigger>
             <DialogContent className={commonStyles.dialogContent}>
@@ -47,31 +69,34 @@ export function AthletesFiltersSubstitutionsDialog({
                         <Input
                             type="number"
                             placeholder="Min"
-                            value={substituteAppearancesFilter?.[0] === 0 ? '' : String(substituteAppearancesFilter?.[0] || '')}
-                            onChange={(e) => handleRangeChange(setSubstituteAppearancesFilter, 0, e, substituteAppearancesFilter)}
+                            value={localSubstituteAppearancesFilter?.[0] === 0 ? '' : String(localSubstituteAppearancesFilter?.[0] || '')}
+                            onChange={(e) => handleRangeChange(setLocalSubstituteAppearancesFilter, 0, e, localSubstituteAppearancesFilter)}
                             className={commonStyles.inputHalf}
                         />
                         <Input
                             type="number"
                             placeholder="Max"
-                            value={substituteAppearancesFilter?.[1] === Infinity ? '' : String(substituteAppearancesFilter?.[1] || '')}
-                            onChange={(e) => handleRangeChange(setSubstituteAppearancesFilter, 1, e, substituteAppearancesFilter)}
+                            value={localSubstituteAppearancesFilter?.[1] === Infinity ? '' : String(localSubstituteAppearancesFilter?.[1] || '')}
+                            onChange={(e) => handleRangeChange(setLocalSubstituteAppearancesFilter, 1, e, localSubstituteAppearancesFilter)}
                             className={commonStyles.inputHalf}
                         />
                     </div>
                     <Button
                         variant="ghost"
-                        onClick={() => setSubstituteAppearancesFilter([0, Infinity])}
+                        onClick={handleClearFilter}
                         className={commonStyles.fullWidthButton}
                     >
-                        Substituições
+                        Todas as Substituições
                     </Button>
                 </div>
-                <DialogClose asChild>
-                    <Button type="button" variant="secondary">
+                <DialogFooter>
+                    <Button type="button" variant="secondary" onClick={() => setIsOpen(false)}>
                         Fechar
                     </Button>
-                </DialogClose>
+                    <Button type="button" onClick={handleApplyFilter}>
+                        Aplicar Filtro
+                    </Button>
+                </DialogFooter>
             </DialogContent>
         </Dialog>
     );

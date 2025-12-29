@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import {
     Dialog,
@@ -7,6 +7,7 @@ import {
     DialogTitle,
     DialogTrigger,
     DialogClose,
+    DialogFooter,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Crosshair } from "lucide-react";
@@ -28,14 +29,35 @@ export function AthletesFiltersShotsDialog({
     setShotsFilter,
     handleRangeChange,
 }: AthletesFiltersShotsDialogProps) {
+    const [isOpen, setIsOpen] = useState(false);
+    const [localShotsFilter, setLocalShotsFilter] = useState(shotsFilter);
+
+    useEffect(() => {
+        if (!isOpen) {
+            // When the dialog closes, reset local input to the current applied filter
+            setLocalShotsFilter(shotsFilter);
+        }
+    }, [isOpen, shotsFilter]);
+
+    const handleApplyFilter = () => {
+        setShotsFilter(localShotsFilter);
+        setIsOpen(false);
+    };
+
+    const handleClearFilter = () => {
+        setLocalShotsFilter([0, Infinity]);
+        setShotsFilter([0, Infinity]);
+        setIsOpen(false);
+    };
+
     return (
-        <Dialog>
+        <Dialog open={isOpen} onOpenChange={setIsOpen}>
             <DialogTrigger asChild>
                 <Button variant="ghost" className={commonStyles.triggerButton}>
                     <Crosshair className={commonStyles.icon} />
                     TC {shotsFilter?.[0] === 0 && shotsFilter?.[1] === Infinity
                         ? ''
-                        : `${shotsFilter?.[0] === 0 ? 'Min' : shotsFilter?.[0] ?? ''} ${shotsFilter?.[1] === Infinity ? 'Max' : shotsFilter?.[1] ?? ''}`}
+                        : `${shotsFilter?.[0] === 0 ? 'Min' : localShotsFilter?.[0] ?? ''} ${shotsFilter?.[1] === Infinity ? 'Max' : localShotsFilter?.[1] ?? ''}`}
                 </Button>
             </DialogTrigger>
             <DialogContent className={commonStyles.dialogContent}>
@@ -47,31 +69,34 @@ export function AthletesFiltersShotsDialog({
                         <Input
                             type="number"
                             placeholder="Min"
-                            value={shotsFilter?.[0] === 0 ? '' : String(shotsFilter?.[0] || '')}
-                            onChange={(e) => handleRangeChange(setShotsFilter, 0, e, shotsFilter)}
+                            value={localShotsFilter?.[0] === 0 ? '' : String(localShotsFilter?.[0] || '')}
+                            onChange={(e) => handleRangeChange(setLocalShotsFilter, 0, e, localShotsFilter)}
                             className={commonStyles.inputHalf}
                         />
                         <Input
                             type="number"
                             placeholder="Max"
-                            value={shotsFilter?.[1] === Infinity ? '' : String(shotsFilter?.[1] || '')}
-                            onChange={(e) => handleRangeChange(setShotsFilter, 1, e, shotsFilter)}
+                            value={localShotsFilter?.[1] === Infinity ? '' : String(localShotsFilter?.[1] || '')}
+                            onChange={(e) => handleRangeChange(setLocalShotsFilter, 1, e, localShotsFilter)}
                             className={commonStyles.inputHalf}
                         />
                     </div>
                     <Button
                         variant="ghost"
-                        onClick={() => setShotsFilter([0, Infinity])}
+                        onClick={handleClearFilter}
                         className={commonStyles.fullWidthButton}
                     >
-                        Tentativas de Cruzamento
+                        Todas as Tentativas de Cruzamento
                     </Button>
                 </div>
-                <DialogClose asChild>
-                    <Button type="button" variant="secondary">
+                <DialogFooter>
+                    <Button type="button" variant="secondary" onClick={() => setIsOpen(false)}>
                         Fechar
                     </Button>
-                </DialogClose>
+                    <Button type="button" onClick={handleApplyFilter}>
+                        Aplicar Filtro
+                    </Button>
+                </DialogFooter>
             </DialogContent>
         </Dialog>
     );

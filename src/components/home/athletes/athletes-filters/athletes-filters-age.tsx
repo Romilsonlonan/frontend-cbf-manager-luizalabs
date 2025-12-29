@@ -8,11 +8,12 @@ import {
     DialogTitle,
     DialogTrigger,
     DialogClose,
+    DialogFooter,
 } from '@/components/ui/dialog';
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { CalendarDays } from 'lucide-react';
 import commonStyles from './athletes-filters-common.module.css';
 import { AthletesFiltersAgeInput } from './athletes-filters-age-input';
-import { AthletesFiltersAgeButton } from './athletes-filters-age-button';
 
 type AthletesFiltersAgeProps = {
     ageFilter: [number, number];
@@ -30,13 +31,38 @@ export function AthletesFiltersAge({
     setAgeFilter,
     handleRangeChange,
 }: AthletesFiltersAgeProps) {
+    const [isOpen, setIsOpen] = useState(false);
+    const [localAgeFilter, setLocalAgeFilter] = useState(ageFilter);
+
+    useEffect(() => {
+        if (!isOpen) {
+            setLocalAgeFilter(ageFilter);
+        }
+    }, [isOpen, ageFilter]);
+
+    const handleApplyFilter = () => {
+        setAgeFilter(localAgeFilter);
+        setIsOpen(false);
+    };
+
+    const handleClearFilter = () => {
+        setLocalAgeFilter([0, Infinity]);
+        setAgeFilter([0, Infinity]);
+        setIsOpen(false);
+    };
+
     return (
-        <Dialog>
+        <Dialog open={isOpen} onOpenChange={setIsOpen}>
             <DialogTrigger asChild>
-                <AthletesFiltersAgeButton
-                    ageFilter={ageFilter}
-                    setAgeFilter={setAgeFilter}
-                />
+                <Button
+                    variant="ghost"
+                    className={commonStyles.triggerButton}
+                >
+                    <CalendarDays className={commonStyles.icon} />
+                    Idade {ageFilter?.[0] === 0 && ageFilter?.[1] === Infinity
+                        ? ''
+                        : `${ageFilter?.[0] === 0 ? 'Min' : localAgeFilter?.[0] ?? ''}  ${ageFilter?.[1] === Infinity ? 'Max' : localAgeFilter?.[1] ?? ''}`}
+                </Button>
             </DialogTrigger>
             <DialogContent className={commonStyles.dialogContent}>
                 <DialogHeader>
@@ -44,23 +70,26 @@ export function AthletesFiltersAge({
                 </DialogHeader>
                 <div className={commonStyles.filterGrid}>
                     <AthletesFiltersAgeInput
-                        ageFilter={ageFilter}
-                        setAgeFilter={setAgeFilter}
+                        ageFilter={localAgeFilter}
+                        setAgeFilter={setLocalAgeFilter}
                         handleRangeChange={handleRangeChange}
                     />
                     <Button
                         variant="ghost"
-                        onClick={() => setAgeFilter([0, Infinity])}
+                        onClick={handleClearFilter}
                         className={commonStyles.fullWidthButton}
                     >
                         Todas as Idades
                     </Button>
                 </div>
-                <DialogClose asChild>
-                    <Button type="button" variant="secondary">
+                <DialogFooter>
+                    <Button type="button" variant="secondary" onClick={() => setIsOpen(false)}>
                         Fechar
                     </Button>
-                </DialogClose>
+                    <Button type="button" onClick={handleApplyFilter}>
+                        Aplicar Filtro
+                    </Button>
+                </DialogFooter>
             </DialogContent>
         </Dialog>
     );

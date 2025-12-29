@@ -24,33 +24,37 @@ interface AddPlayerModalProps {
 export function AddPlayerModal({ open, onOpenChange, onPlayerAdded }: AddPlayerModalProps) {
     const [formData, setFormData] = useState({
         name: '',
-        position: '',
+        position: '', // 'Goleiro', 'Defensor', 'Meio-campista', 'Atacante'
         club_id: '',
         age: '',
-        goals_2025: '0',
-        salary: '',
-        injuries_count: '0',
-        yellow_cards: '0',
-        red_cards: '0',
-        wrong_passes: '0',
-        correct_passes: '0'
-    })
-    const [clubs, setClubs] = useState<Club[]>([])
-    const [loading, setLoading] = useState(false)
-    const [error, setError] = useState('')
+        height: '',
+        weight: '',
+        nationality: '',
+        games: '',
+        substitutions: '',
+        assists: '',
+        fouls_committed: '',
+        fouls_suffered: '',
+        yellow_cards: '',
+        red_cards: '',
+        // Specific for Goalkeeper
+        saves: '',
+        goals_conceded: '',
+        // Specific for Field Player
+        goals: '',
+        total_shots: '',
+        shots_on_goal: '',
+    });
+    const [clubs, setClubs] = useState<Club[]>([]);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState('');
 
     const positions = [
-        'Goleiro',
-        'Zagueiro',
-        'Lateral Direito',
-        'Lateral Esquerdo',
-        'Volante',
-        'Meio-campo',
-        'Atacante',
-        'Ponta Direita',
-        'Ponta Esquerda',
-        'Centroavante'
-    ]
+        { label: 'Goleiro', value: 'Goleiro' },
+        { label: 'Defensor', value: 'Defensor' },
+        { label: 'Meio-campista', value: 'Meio-campista' },
+        { label: 'Atacante', value: 'Atacante' },
+    ];
 
     const fetchClubs = async () => {
         try {
@@ -74,31 +78,53 @@ export function AddPlayerModal({ open, onOpenChange, onPlayerAdded }: AddPlayerM
         setError('')
 
         try {
-            const playerData = {
+            let endpoint = '';
+            let playerData: any = {
                 name: formData.name,
                 position: formData.position,
                 club_id: parseInt(formData.club_id),
                 age: parseInt(formData.age),
-                goals_2025: parseInt(formData.goals_2025),
-                salary: parseFloat(formData.salary),
-                injuries_count: parseInt(formData.injuries_count),
+                height: parseFloat(formData.height),
+                weight: parseFloat(formData.weight),
+                nationality: formData.nationality,
+                games: parseInt(formData.games),
+                substitutions: parseInt(formData.substitutions),
+                assists: parseInt(formData.assists),
+                fouls_committed: parseInt(formData.fouls_committed),
+                fouls_suffered: parseInt(formData.fouls_suffered),
                 yellow_cards: parseInt(formData.yellow_cards),
                 red_cards: parseInt(formData.red_cards),
-                wrong_passes: parseInt(formData.wrong_passes),
-                correct_passes: parseInt(formData.correct_passes)
+            };
+
+            if (formData.position === 'Goleiro') {
+                endpoint = 'http://localhost:8000/goalkeepers/';
+                playerData = {
+                    ...playerData,
+                    saves: parseInt(formData.saves),
+                    goals_conceded: parseInt(formData.goals_conceded),
+                };
+            } else {
+                endpoint = 'http://localhost:8000/field_players/';
+                playerData = {
+                    ...playerData,
+                    goals: parseInt(formData.goals),
+                    total_shots: parseInt(formData.total_shots),
+                    shots_on_goal: parseInt(formData.shots_on_goal),
+                };
             }
 
-            const response = await fetch('http://localhost:8000/players/', {
+            const response = await fetch(endpoint, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${localStorage.getItem('token')}`
                 },
                 body: JSON.stringify(playerData)
-            })
+            });
 
             if (!response.ok) {
-                throw new Error('Erro ao adicionar jogador')
+                const errorData = await response.json();
+                throw new Error(errorData.detail || 'Erro ao adicionar jogador');
             }
 
             // Limpar formulário
@@ -107,24 +133,32 @@ export function AddPlayerModal({ open, onOpenChange, onPlayerAdded }: AddPlayerM
                 position: '',
                 club_id: '',
                 age: '',
-                goals_2025: '0',
-                salary: '',
-                injuries_count: '0',
-                yellow_cards: '0',
-                red_cards: '0',
-                wrong_passes: '0',
-                correct_passes: '0'
-            })
+                height: '',
+                weight: '',
+                nationality: '',
+                games: '',
+                substitutions: '',
+                assists: '',
+                fouls_committed: '',
+                fouls_suffered: '',
+                yellow_cards: '',
+                red_cards: '',
+                saves: '',
+                goals_conceded: '',
+                goals: '',
+                total_shots: '',
+                shots_on_goal: '',
+            });
 
             // Fechar modal e notificar
-            onOpenChange(false)
-            onPlayerAdded()
-        } catch (err) {
-            setError('Erro ao adicionar jogador. Tente novamente.')
+            onOpenChange(false);
+            onPlayerAdded();
+        } catch (err: any) {
+            setError(err.message || 'Erro ao adicionar jogador. Tente novamente.');
         } finally {
-            setLoading(false)
+            setLoading(false);
         }
-    }
+    };
 
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
@@ -157,7 +191,7 @@ export function AddPlayerModal({ open, onOpenChange, onPlayerAdded }: AddPlayerM
                                 label="Posição"
                                 value={formData.position}
                                 onValueChange={(value) => setFormData({ ...formData, position: value })}
-                                options={positions.map(p => ({ value: p, label: p }))}
+                                options={positions}
                                 required
                                 placeholder="Selecione a posição"
                             />
@@ -185,40 +219,88 @@ export function AddPlayerModal({ open, onOpenChange, onPlayerAdded }: AddPlayerM
                                 max="50"
                                 placeholder="Idade"
                             />
-
                             <AddPlayerModalInput
-                                id="salary"
-                                label="Salário (R$)"
+                                id="height"
+                                label="Altura (m)"
                                 type="number"
                                 step="0.01"
-                                value={formData.salary}
-                                onChange={(e) => setFormData({ ...formData, salary: e.target.value })}
-                                required
-                                placeholder="Salário"
+                                value={formData.height}
+                                onChange={(e) => setFormData({ ...formData, height: e.target.value })}
+                                placeholder="Altura"
                             />
                         </div>
 
-                        <AddPlayerModalInput
-                            id="goals_2025"
-                            label="Gols em 2025"
-                            type="number"
-                            value={formData.goals_2025}
-                            onChange={(e) => setFormData({ ...formData, goals_2025: e.target.value })}
-                            min="0"
-                            placeholder="Gols em 2025"
-                        />
+                        <div className="grid grid-cols-2 gap-4">
+                            <AddPlayerModalInput
+                                id="weight"
+                                label="Peso (kg)"
+                                type="number"
+                                step="0.01"
+                                value={formData.weight}
+                                onChange={(e) => setFormData({ ...formData, weight: e.target.value })}
+                                placeholder="Peso"
+                            />
+                            <AddPlayerModalInput
+                                id="nationality"
+                                label="Nacionalidade"
+                                value={formData.nationality}
+                                onChange={(e) => setFormData({ ...formData, nationality: e.target.value })}
+                                placeholder="Nacionalidade"
+                            />
+                        </div>
 
                         <div className="grid grid-cols-2 gap-4">
                             <AddPlayerModalInput
-                                id="injuries_count"
-                                label="Quantidade de Lesões"
+                                id="games"
+                                label="Jogos"
                                 type="number"
-                                value={formData.injuries_count}
-                                onChange={(e) => setFormData({ ...formData, injuries_count: e.target.value })}
+                                value={formData.games}
+                                onChange={(e) => setFormData({ ...formData, games: e.target.value })}
                                 min="0"
-                                placeholder="Lesões"
+                                placeholder="Jogos"
                             />
+                            <AddPlayerModalInput
+                                id="substitutions"
+                                label="Substituições"
+                                type="number"
+                                value={formData.substitutions}
+                                onChange={(e) => setFormData({ ...formData, substitutions: e.target.value })}
+                                min="0"
+                                placeholder="Substituições"
+                            />
+                        </div>
 
+                        <div className="grid grid-cols-2 gap-4">
+                            <AddPlayerModalInput
+                                id="assists"
+                                label="Assistências"
+                                type="number"
+                                value={formData.assists}
+                                onChange={(e) => setFormData({ ...formData, assists: e.target.value })}
+                                min="0"
+                                placeholder="Assistências"
+                            />
+                            <AddPlayerModalInput
+                                id="fouls_committed"
+                                label="Faltas Cometidas"
+                                type="number"
+                                value={formData.fouls_committed}
+                                onChange={(e) => setFormData({ ...formData, fouls_committed: e.target.value })}
+                                min="0"
+                                placeholder="Faltas Cometidas"
+                            />
+                        </div>
+
+                        <div className="grid grid-cols-2 gap-4">
+                            <AddPlayerModalInput
+                                id="fouls_suffered"
+                                label="Faltas Sofridas"
+                                type="number"
+                                value={formData.fouls_suffered}
+                                onChange={(e) => setFormData({ ...formData, fouls_suffered: e.target.value })}
+                                min="0"
+                                placeholder="Faltas Sofridas"
+                            />
                             <AddPlayerModalInput
                                 id="yellow_cards"
                                 label="Cartões Amarelos"
@@ -240,27 +322,64 @@ export function AddPlayerModal({ open, onOpenChange, onPlayerAdded }: AddPlayerM
                             placeholder="Vermelhos"
                         />
 
-                        <div className="grid grid-cols-2 gap-4">
-                            <AddPlayerModalInput
-                                id="wrong_passes"
-                                label="Passes Errados"
-                                type="number"
-                                value={formData.wrong_passes}
-                                onChange={(e) => setFormData({ ...formData, wrong_passes: e.target.value })}
-                                min="0"
-                                placeholder="Passes errados"
-                            />
+                        {formData.position === 'Goleiro' && (
+                            <>
+                                <div className="grid grid-cols-2 gap-4">
+                                    <AddPlayerModalInput
+                                        id="saves"
+                                        label="Defesas"
+                                        type="number"
+                                        value={formData.saves}
+                                        onChange={(e) => setFormData({ ...formData, saves: e.target.value })}
+                                        min="0"
+                                        placeholder="Defesas"
+                                    />
+                                    <AddPlayerModalInput
+                                        id="goals_conceded"
+                                        label="Gols Sofridos"
+                                        type="number"
+                                        value={formData.goals_conceded}
+                                        onChange={(e) => setFormData({ ...formData, goals_conceded: e.target.value })}
+                                        min="0"
+                                        placeholder="Gols Sofridos"
+                                    />
+                                </div>
+                            </>
+                        )}
 
-                            <AddPlayerModalInput
-                                id="correct_passes"
-                                label="Passes Certos"
-                                type="number"
-                                value={formData.correct_passes}
-                                onChange={(e) => setFormData({ ...formData, correct_passes: e.target.value })}
-                                min="0"
-                                placeholder="Passes certos"
-                            />
-                        </div>
+                        {formData.position !== 'Goleiro' && (
+                            <>
+                                <div className="grid grid-cols-2 gap-4">
+                                    <AddPlayerModalInput
+                                        id="goals"
+                                        label="Gols"
+                                        type="number"
+                                        value={formData.goals}
+                                        onChange={(e) => setFormData({ ...formData, goals: e.target.value })}
+                                        min="0"
+                                        placeholder="Gols"
+                                    />
+                                    <AddPlayerModalInput
+                                        id="total_shots"
+                                        label="Chutes Totais"
+                                        type="number"
+                                        value={formData.total_shots}
+                                        onChange={(e) => setFormData({ ...formData, total_shots: e.target.value })}
+                                        min="0"
+                                        placeholder="Chutes Totais"
+                                    />
+                                </div>
+                                <AddPlayerModalInput
+                                    id="shots_on_goal"
+                                    label="Chutes a Gol"
+                                    type="number"
+                                    value={formData.shots_on_goal}
+                                    onChange={(e) => setFormData({ ...formData, shots_on_goal: e.target.value })}
+                                    min="0"
+                                    placeholder="Chutes a Gol"
+                                />
+                            </>
+                        )}
 
                         {error && (
                             <p className="text-sm text-red-500">{error}</p>

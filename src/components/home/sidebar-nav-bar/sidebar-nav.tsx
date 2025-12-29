@@ -17,6 +17,7 @@ import {
   LayoutGrid,
   UsersRound,
   BarChartHorizontal,
+  Building2,
 } from "lucide-react";
 import { SidebarLogo } from "./sidebar-logo/sidebar-logo";
 import styles from "./sidebar-nav.module.css";
@@ -27,7 +28,7 @@ export function SidebarNav() {
   // Removed logout from useAuth as logout button is moved
 
   return (
-    <Sidebar>
+    <Sidebar className={styles.sidebar}>
       <SidebarHeader className={styles.sidebarHeader}>
         <SidebarLogo />
       </SidebarHeader>
@@ -74,6 +75,17 @@ export function SidebarNav() {
               <Link href="/home/statistics">
                 <BarChartHorizontal />
                 <span>Estatísticas</span>
+              </Link>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+          <SidebarMenuItem>
+            <SidebarMenuButton
+              asChild
+              isActive={pathname.startsWith("/home/training-centers")}
+            >
+              <Link href="/home/training-centers">
+                <Building2 />
+                <span>Gerenciar CT</span>
               </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>

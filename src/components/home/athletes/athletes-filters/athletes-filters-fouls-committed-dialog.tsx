@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import {
     Dialog,
@@ -7,6 +7,7 @@ import {
     DialogTitle,
     DialogTrigger,
     DialogClose,
+    DialogFooter,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Gavel } from "lucide-react";
@@ -28,14 +29,35 @@ export function AthletesFiltersFoulsCommittedDialog({
     setFoulsCommittedFilter,
     handleRangeChange,
 }: AthletesFiltersFoulsCommittedDialogProps) {
+    const [isOpen, setIsOpen] = useState(false);
+    const [localFoulsCommittedFilter, setLocalFoulsCommittedFilter] = useState(foulsCommittedFilter);
+
+    useEffect(() => {
+        if (!isOpen) {
+            // When the dialog closes, reset local input to the current applied filter
+            setLocalFoulsCommittedFilter(foulsCommittedFilter);
+        }
+    }, [isOpen, foulsCommittedFilter]);
+
+    const handleApplyFilter = () => {
+        setFoulsCommittedFilter(localFoulsCommittedFilter);
+        setIsOpen(false);
+    };
+
+    const handleClearFilter = () => {
+        setLocalFoulsCommittedFilter([0, Infinity]);
+        setFoulsCommittedFilter([0, Infinity]);
+        setIsOpen(false);
+    };
+
     return (
-        <Dialog>
+        <Dialog open={isOpen} onOpenChange={setIsOpen}>
             <DialogTrigger asChild>
                 <Button variant="ghost" className={commonStyles.triggerButton}>
                     <Gavel className={commonStyles.icon} />
                     FC {foulsCommittedFilter?.[0] === 0 && foulsCommittedFilter?.[1] === Infinity
                         ? ''
-                        : `${foulsCommittedFilter?.[0] === 0 ? 'Min' : foulsCommittedFilter?.[0] ?? ''} ${foulsCommittedFilter?.[1] === Infinity ? 'Max' : foulsCommittedFilter?.[1] ?? ''}`}
+                        : `${foulsCommittedFilter?.[0] === 0 ? 'Min' : localFoulsCommittedFilter?.[0] ?? ''} ${foulsCommittedFilter?.[1] === Infinity ? 'Max' : localFoulsCommittedFilter?.[1] ?? ''}`}
                 </Button>
             </DialogTrigger>
             <DialogContent className={commonStyles.dialogContent}>
@@ -47,31 +69,34 @@ export function AthletesFiltersFoulsCommittedDialog({
                         <Input
                             type="number"
                             placeholder="Min"
-                            value={foulsCommittedFilter?.[0] === 0 ? '' : String(foulsCommittedFilter?.[0] || '')}
-                            onChange={(e) => handleRangeChange(setFoulsCommittedFilter, 0, e, foulsCommittedFilter)}
+                            value={localFoulsCommittedFilter?.[0] === 0 ? '' : String(localFoulsCommittedFilter?.[0] || '')}
+                            onChange={(e) => handleRangeChange(setLocalFoulsCommittedFilter, 0, e, localFoulsCommittedFilter)}
                             className={commonStyles.inputHalf}
                         />
                         <Input
                             type="number"
                             placeholder="Max"
-                            value={foulsCommittedFilter?.[1] === Infinity ? '' : String(foulsCommittedFilter?.[1] || '')}
-                            onChange={(e) => handleRangeChange(setFoulsCommittedFilter, 1, e, foulsCommittedFilter)}
+                            value={localFoulsCommittedFilter?.[1] === Infinity ? '' : String(localFoulsCommittedFilter?.[1] || '')}
+                            onChange={(e) => handleRangeChange(setLocalFoulsCommittedFilter, 1, e, localFoulsCommittedFilter)}
                             className={commonStyles.inputHalf}
                         />
                     </div>
                     <Button
                         variant="ghost"
-                        onClick={() => setFoulsCommittedFilter([0, Infinity])}
+                        onClick={handleClearFilter}
                         className={commonStyles.fullWidthButton}
                     >
-                        Faltas Cometidas
+                        Todas as Faltas Cometidas
                     </Button>
                 </div>
-                <DialogClose asChild>
-                    <Button type="button" variant="secondary">
+                <DialogFooter>
+                    <Button type="button" variant="secondary" onClick={() => setIsOpen(false)}>
                         Fechar
                     </Button>
-                </DialogClose>
+                    <Button type="button" onClick={handleApplyFilter}>
+                        Aplicar Filtro
+                    </Button>
+                </DialogFooter>
             </DialogContent>
         </Dialog>
     );

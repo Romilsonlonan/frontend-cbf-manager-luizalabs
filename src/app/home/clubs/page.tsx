@@ -4,12 +4,13 @@ import { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { AddClubModal } from '@/components/home/clubs/add-club-modal/add-club-modal'
-import { Plus, Users, Calendar, Trophy, Building, Search } from 'lucide-react'
+import { EditClubModal } from '@/components/home/clubs/edit-club-modal/edit-club-modal' // Import EditClubModal
+import { Plus, Users, Calendar, Trophy, Building, Search, Building2, Pencil, Trash2 } from 'lucide-react'
 import { AddAthleteModal } from '@/components/home/clubs/add-athlete-modal/add-athlete-modal'
 import { scrapeClubPlayers, getClubs } from '@/lib/api' // Import specific functions
 import { useToast } from '@/hooks/use-toast'
 import { useAuth } from '@/context/AuthContext'
-import { PlayerResponse, ClubSimpleResponse } from '@/lib/types' // Importa as interfaces PlayerResponse e ClubSimpleResponse
+import { ClubSimpleResponse, GoalkeeperResponse, FieldPlayerResponse } from '@/lib/types' // Importa as interfaces ClubSimpleResponse, GoalkeeperResponse e FieldPlayerResponse
 import { useRouter } from 'next/navigation';
 
 // Usar ClubSimpleResponse diretamente para consistência com a API
@@ -20,6 +21,9 @@ export default function ClubsPage() {
   const [loading, setLoading] = useState(true)
   const [clubModalOpen, setClubModalOpen] = useState(false)
   const [athleteModalOpen, setAthleteModalOpen] = useState(false)
+  const [editModalOpen, setEditModalOpen] = useState(false) // State for edit modal
+  const [clubToEdit, setClubToEdit] = useState<Club | null>(null) // State for club being edited
+  const [isDeleting, setIsDeleting] = useState(false); // State for delete loading
   const { toast } = useToast()
   const { token, logout } = useAuth()
   const router = useRouter();
@@ -40,6 +44,55 @@ export default function ClubsPage() {
       setLoading(false)
     }
   }
+
+  const handleDeleteClub = async (clubId: number, clubName: string) => {
+    if (!token) {
+      toast({
+        title: "Erro de Autenticação",
+        description: "Você precisa estar logado para excluir clubes.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (!window.confirm(`Tem certeza que deseja excluir o clube ${clubName}? Esta ação é irreversível.`)) {
+      return;
+    }
+
+    setIsDeleting(true);
+    try {
+      const response = await fetch(`http://localhost:8000/clubs/${clubId}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        if (response.status === 401) {
+          logout();
+          router.push('/login');
+        }
+        throw new Error('Erro ao excluir clube');
+      }
+
+      toast({
+        title: "Sucesso!",
+        description: `Clube ${clubName} excluído com sucesso!`,
+        variant: "success",
+      });
+      fetchClubs(); // Refresh the list after deletion
+    } catch (error: any) {
+      console.error(`Erro ao excluir clube ${clubName}:`, error);
+      toast({
+        title: "Erro na Exclusão",
+        description: error.message || `Falha ao excluir clube ${clubName}.`,
+        variant: "destructive",
+      });
+    } finally {
+      setIsDeleting(false);
+    }
+  };
 
   const handleScrapePlayers = async (clubId: number, clubName: string) => {
     if (!token) {
@@ -67,11 +120,13 @@ export default function ClubsPage() {
     };
 
     try {
-      const players: PlayerResponse[] = await scrapeClubPlayers(clubId, token, handleAuthError); // Use the exported scrapeClubPlayers function
-      const playerNames = players.map(p => p.name).join(', ');
+      // The actual return type of scrapeClubPlayers needs to be verified from the backend.
+      // Assuming it returns a mix of GoalkeeperResponse and FieldPlayerResponse.
+      const scrapedData: (GoalkeeperResponse | FieldPlayerResponse)[] = await scrapeClubPlayers(clubId, token, handleAuthError);
+      const playerNames = scrapedData.map(p => p.name).join(', ');
       toast({
         title: "Sucesso!",
-        description: `${players.length} jogadores de ${clubName} foram adicionados/atualizados: ${playerNames}.`,
+        description: `${scrapedData.length} jogadores de ${clubName} foram adicionados/atualizados: ${playerNames}.`,
         variant: "success",
         duration: 9000, // Aumenta a duração para que o usuário possa ler os nomes
       });
@@ -140,10 +195,30 @@ export default function ClubsPage() {
                       <Users className="h-8 w-8 text-gray-400" />
                     </div>
                   )}
-                  <div>
+                  <div className="flex items-center justify-between w-full">
                     <h3 className="font-semibold text-lg">{club.name}</h3>
-                    <p className="text-sm text-gray-500">{club.initials}</p>
+                    <div className="flex gap-1">
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={() => {
+                          setClubToEdit(club);
+                          setEditModalOpen(true);
+                        }}
+                      >
+                        <Pencil className="h-4 w-4" />
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={() => handleDeleteClub(club.id, club.name)}
+                        disabled={isDeleting}
+                      >
+                        <Trash2 className="h-4 w-4 text-red-500" />
+                      </Button>
+                    </div>
                   </div>
+                  <p className="text-sm text-gray-500">{club.initials}</p>
                 </div>
 
                 <div className="space-y-2 text-sm">
@@ -164,6 +239,12 @@ export default function ClubsPage() {
                     <Trophy className="h-4 w-4 text-gray-400" />
                     <span>{club.br_titles} títulos brasileiros</span>
                   </div>
+                  {club.training_center && (
+                    <div className="flex items-center gap-2">
+                      <Building2 className="h-4 w-4 text-gray-400" />
+                      <span>{club.training_center}</span>
+                    </div>
+                  )}
                 </div>
                 <div className="mt-4 pt-4 border-t">
                   <Button
@@ -191,8 +272,24 @@ export default function ClubsPage() {
       />
 
       <AddAthleteModal
-        open={athleteModalOpen}
-        onOpenChange={setAthleteModalOpen}
+        clubs={clubs} // Pass clubs to the modal
+        onAddAthlete={(formData) => {
+          console.log("New athlete data:", formData);
+          // Here you would typically call an API to add the athlete
+          toast({
+            title: "Atleta Adicionado (Simulado)",
+            description: `Atleta ${formData.name} adicionado com sucesso!`,
+            variant: "success",
+          });
+          fetchClubs(); // Refresh clubs after adding an athlete
+        }}
+      />
+
+      <EditClubModal
+        open={editModalOpen}
+        onOpenChange={setEditModalOpen}
+        clubToEdit={clubToEdit}
+        onClubUpdated={fetchClubs}
       />
     </div>
   )

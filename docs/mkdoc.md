@@ -326,6 +326,27 @@ Este módulo lida com o cadastro, visualização, filtragem e gerenciamento de c
     4.  **Resposta Backend -> Frontend**: O backend retorna o objeto do clube recém-criado ou uma mensagem de erro.
     5.  **Ações no Frontend**: O modal é fechado e a lista de clubes é atualizada para exibir o novo clube.
 
+### **Atualizações Recentes no Frontend:**
+
+*   **Página "Gerenciar CT" (`src/app/home/training-centers/page.tsx`):**
+    *   Foi criada uma nova página dedicada ao gerenciamento de Centros de Treinamento.
+    *   Esta página busca todos os clubes do backend e filtra aqueles que possuem um `training_center` definido, exibindo-os em cards.
+    *   Um link "Gerenciar CT" foi adicionado à barra lateral (`src/components/home/sidebar-nav-bar/sidebar-nav.tsx`) para acesso direto a esta página.
+
+*   **Exibição de CT na Página "Clubes" (`src/app/home/clubs/page.tsx`):**
+    *   As informações do `training_center` de cada clube agora são exibidas diretamente nos cards da página "Clubes", abaixo dos títulos brasileiros.
+
+*   **Funcionalidade de Edição de Clubes (`src/components/home/clubs/edit-club-modal/edit-club-modal.tsx`):**
+    *   Um ícone de edição (lápis) foi adicionado a cada card de clube na página "Clubes".
+    *   Ao clicar no ícone, um modal de edição (`EditClubModal`) é aberto, preenchido com os dados atuais do clube.
+    *   Este modal permite a atualização de campos como `name`, `initials`, `city`, `foundation_date`, `br_titles`, `training_center` e `espn_url`.
+    *   A atualização é feita através de uma requisição `PATCH` autenticada para o backend, garantindo que as alterações sejam salvas.
+
+*   **Funcionalidade de Exclusão de Clubes (`src/app/home/clubs/page.tsx`):**
+    *   Um ícone de exclusão (lixeira) foi adicionado a cada card de clube na página "Clubes".
+    *   Ao clicar no ícone, uma confirmação é solicitada ao usuário antes de enviar uma requisição `DELETE` autenticada para o endpoint `/clubs/{club_id}` no backend.
+    *   Após a exclusão bem-sucedida, a lista de clubes é atualizada.
+
 ### Filtragem de Clubes com Dados Raspados (Scraping)
 
 A aplicação utiliza um processo de scraping para coletar dados detalhados de clubes e jogadores de fontes externas (como a ESPN). Esses dados são então integrados ao sistema para enriquecer as informações dos clubes e permitir filtragens avançadas.

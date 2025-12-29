@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import {
     Dialog,
@@ -7,6 +7,7 @@ import {
     DialogTitle,
     DialogTrigger,
     DialogClose,
+    DialogFooter,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Shirt } from "lucide-react";
@@ -28,14 +29,35 @@ export function AthletesFiltersGamesDialog({
     setGamesFilter,
     handleRangeChange,
 }: AthletesFiltersGamesDialogProps) {
+    const [isOpen, setIsOpen] = useState(false);
+    const [localGamesFilter, setLocalGamesFilter] = useState(gamesFilter);
+
+    useEffect(() => {
+        if (!isOpen) {
+            // When the dialog closes, reset local input to the current applied filter
+            setLocalGamesFilter(gamesFilter);
+        }
+    }, [isOpen, gamesFilter]);
+
+    const handleApplyFilter = () => {
+        setGamesFilter(localGamesFilter);
+        setIsOpen(false);
+    };
+
+    const handleClearFilter = () => {
+        setLocalGamesFilter([0, Infinity]);
+        setGamesFilter([0, Infinity]);
+        setIsOpen(false);
+    };
+
     return (
-        <Dialog>
+        <Dialog open={isOpen} onOpenChange={setIsOpen}>
             <DialogTrigger asChild>
                 <Button variant="ghost-transparent" className={commonStyles.triggerButton}>
                     <Shirt className={commonStyles.icon} />
                     J{gamesFilter?.[0] === 0 && gamesFilter?.[1] === Infinity
                         ? ''
-                        : `${gamesFilter?.[0] === 0 ? 'Min' : gamesFilter?.[0] ?? ''} ${gamesFilter?.[1] === Infinity ? 'Max' : gamesFilter?.[1] ?? ''}`}
+                        : `${gamesFilter?.[0] === 0 ? 'Min' : localGamesFilter?.[0] ?? ''} ${gamesFilter?.[1] === Infinity ? 'Max' : localGamesFilter?.[1] ?? ''}`}
                 </Button>
             </DialogTrigger>
             <DialogContent className={commonStyles.dialogContent}>
@@ -47,31 +69,34 @@ export function AthletesFiltersGamesDialog({
                         <Input
                             type="number"
                             placeholder="Min"
-                            value={gamesFilter?.[0] === 0 ? '' : String(gamesFilter?.[0] || '')}
-                            onChange={(e) => handleRangeChange(setGamesFilter, 0, e, gamesFilter)}
+                            value={localGamesFilter?.[0] === 0 ? '' : String(localGamesFilter?.[0] || '')}
+                            onChange={(e) => handleRangeChange(setLocalGamesFilter, 0, e, localGamesFilter)}
                             className={commonStyles.inputHalf}
                         />
                         <Input
                             type="number"
                             placeholder="Max"
-                            value={gamesFilter?.[1] === Infinity ? '' : String(gamesFilter?.[1] || '')}
-                            onChange={(e) => handleRangeChange(setGamesFilter, 1, e, gamesFilter)}
+                            value={localGamesFilter?.[1] === Infinity ? '' : String(localGamesFilter?.[1] || '')}
+                            onChange={(e) => handleRangeChange(setLocalGamesFilter, 1, e, localGamesFilter)}
                             className={commonStyles.inputHalf}
                         />
                     </div>
                     <Button
                         variant="ghost"
-                        onClick={() => setGamesFilter([0, Infinity])}
+                        onClick={handleClearFilter}
                         className={commonStyles.fullWidthButton}
                     >
-                        Jogos
+                        Todos os Jogos
                     </Button>
                 </div>
-                <DialogClose asChild>
-                    <Button type="button" variant="secondary">
+                <DialogFooter>
+                    <Button type="button" variant="secondary" onClick={() => setIsOpen(false)}>
                         Fechar
                     </Button>
-                </DialogClose>
+                    <Button type="button" onClick={handleApplyFilter}>
+                        Aplicar Filtro
+                    </Button>
+                </DialogFooter>
             </DialogContent>
         </Dialog>
     );

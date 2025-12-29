@@ -8,8 +8,10 @@ import {
     DialogTitle,
     DialogTrigger,
     DialogClose,
+    DialogFooter,
 } from '@/components/ui/dialog';
 import { Users } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
 import { Position } from '@/lib/types';
 import commonStyles from './athletes-filters-common.module.css';
 import { AthletesFiltersPositionInput } from './athletes-filters-position-input';
@@ -33,8 +35,29 @@ export function AthletesFiltersPosition({
     positionFilter,
     setPositionFilter,
 }: AthletesFiltersPositionProps) {
+    const [isOpen, setIsOpen] = useState(false);
+    const [localPositionFilter, setLocalPositionFilter] = useState(positionFilter);
+
+    useEffect(() => {
+        if (!isOpen) {
+            // When the dialog closes, reset local input to the current applied filter
+            setLocalPositionFilter(positionFilter);
+        }
+    }, [isOpen, positionFilter]);
+
+    const handleApplyFilter = () => {
+        setPositionFilter(localPositionFilter);
+        setIsOpen(false);
+    };
+
+    const handleClearFilter = () => {
+        setLocalPositionFilter(['all']);
+        setPositionFilter(['all']);
+        setIsOpen(false);
+    };
+
     return (
-        <Dialog>
+        <Dialog open={isOpen} onOpenChange={setIsOpen}>
             <DialogTrigger asChild>
                 <Button variant="ghost" className={commonStyles.triggerButton}>
                     <Users className={commonStyles.icon} />
@@ -47,15 +70,25 @@ export function AthletesFiltersPosition({
                 </DialogHeader>
                 <div className={commonStyles.filterGrid}>
                     <AthletesFiltersPositionInput
-                        positionFilter={positionFilter}
-                        setPositionFilter={setPositionFilter}
+                        positionFilter={localPositionFilter}
+                        setPositionFilter={setLocalPositionFilter}
                     />
+                    <Button
+                        variant="ghost"
+                        onClick={handleClearFilter}
+                        className={commonStyles.fullWidthButton}
+                    >
+                        Todas as Posições
+                    </Button>
                 </div>
-                <DialogClose asChild>
-                    <Button type="button" variant="secondary">
+                <DialogFooter>
+                    <Button type="button" variant="secondary" onClick={() => setIsOpen(false)}>
                         Fechar
                     </Button>
-                </DialogClose>
+                    <Button type="button" onClick={handleApplyFilter}>
+                        Aplicar Filtro
+                    </Button>
+                </DialogFooter>
             </DialogContent>
         </Dialog>
     );

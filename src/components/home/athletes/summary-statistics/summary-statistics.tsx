@@ -1,13 +1,6 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Users, User, Goal } from "lucide-react";
-import { PlayerResponse } from "@/lib/types";
-
-interface Athlete extends PlayerResponse {
-    club_id: number | null;
-    clubName?: string;
-    player_type?: string;
-    updated_at?: string;
-}
+import { Athlete } from "@/lib/types";
 
 interface SummaryStatisticsProps {
     filteredAthletes: Athlete[];

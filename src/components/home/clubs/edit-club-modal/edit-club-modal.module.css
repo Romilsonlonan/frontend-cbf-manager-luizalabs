@@ -1,0 +1,29 @@
+.dialogContent {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.formContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.formField {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.errorMessage {
+    color: red;
+    font-size: 0.875em;
+}
+
+.actionsContainer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+}

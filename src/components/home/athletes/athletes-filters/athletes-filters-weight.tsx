@@ -7,11 +7,12 @@ import {
     DialogTitle,
     DialogTrigger,
     DialogClose,
+    DialogFooter,
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import React from 'react';
-import { AthletesFiltersWeightButton } from './athletes-filters-weight-button';
+import React, { useState, useEffect } from 'react';
+import { Weight } from 'lucide-react';
 import commonStyles from './athletes-filters-common.module.css';
 
 type AthletesFiltersWeightProps = {
@@ -30,10 +31,35 @@ export function AthletesFiltersWeight({
     setWeightFilter,
     handleRangeChange,
 }: AthletesFiltersWeightProps) {
+    const [isOpen, setIsOpen] = useState(false);
+    const [localWeightFilter, setLocalWeightFilter] = useState(weightFilter);
+
+    useEffect(() => {
+        if (!isOpen) {
+            setLocalWeightFilter(weightFilter);
+        }
+    }, [isOpen, weightFilter]);
+
+    const handleApplyFilter = () => {
+        setWeightFilter(localWeightFilter);
+        setIsOpen(false);
+    };
+
+    const handleClearFilter = () => {
+        setLocalWeightFilter([0, Infinity]);
+        setWeightFilter([0, Infinity]);
+        setIsOpen(false);
+    };
+
     return (
-        <Dialog>
+        <Dialog open={isOpen} onOpenChange={setIsOpen}>
             <DialogTrigger asChild>
-                <AthletesFiltersWeightButton weightFilter={weightFilter} />
+                <Button variant="ghost-transparent" className={commonStyles.triggerButton}>
+                    <Weight className={commonStyles.icon} />
+                    P {weightFilter?.[0] === 0 && weightFilter?.[1] === Infinity
+                        ? ''
+                        : `${weightFilter?.[0] === 0 ? 'Min' : localWeightFilter?.[0] ?? ''} ${weightFilter?.[1] === Infinity ? 'Max' : localWeightFilter?.[1] ?? ''}`}
+                </Button>
             </DialogTrigger>
             <DialogContent className={commonStyles.dialogContent}>
                 <DialogHeader>
@@ -44,31 +70,34 @@ export function AthletesFiltersWeight({
                         <Input
                             type="number"
                             placeholder="Min"
-                            value={weightFilter?.[0] === 0 ? '' : String(weightFilter?.[0] || '')}
-                            onChange={(e) => handleRangeChange(setWeightFilter, 0, e, weightFilter)}
+                            value={localWeightFilter?.[0] === 0 ? '' : String(localWeightFilter?.[0] || '')}
+                            onChange={(e) => handleRangeChange(setLocalWeightFilter, 0, e, localWeightFilter)}
                             className={commonStyles.inputHalf}
                         />
                         <Input
                             type="number"
                             placeholder="Max"
-                            value={weightFilter?.[1] === Infinity ? '' : String(weightFilter?.[1] || '')}
-                            onChange={(e) => handleRangeChange(setWeightFilter, 1, e, weightFilter)}
+                            value={localWeightFilter?.[1] === Infinity ? '' : String(localWeightFilter?.[1] || '')}
+                            onChange={(e) => handleRangeChange(setLocalWeightFilter, 1, e, localWeightFilter)}
                             className={commonStyles.inputHalf}
                         />
                     </div>
                     <Button
                         variant="ghost"
-                        onClick={() => setWeightFilter([0, Infinity])}
+                        onClick={handleClearFilter}
                         className={commonStyles.fullWidthButton}
                     >
                         Todos os Pesos
                     </Button>
                 </div>
-                <DialogClose asChild>
-                    <Button type="button" variant="secondary">
+                <DialogFooter>
+                    <Button type="button" variant="secondary" onClick={() => setIsOpen(false)}>
                         Fechar
                     </Button>
-                </DialogClose>
+                    <Button type="button" onClick={handleApplyFilter}>
+                        Aplicar Filtro
+                    </Button>
+                </DialogFooter>
             </DialogContent>
         </Dialog>
     );

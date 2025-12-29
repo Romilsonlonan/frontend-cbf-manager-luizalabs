@@ -2,10 +2,12 @@
 
 import React from 'react';
 import styles from './PlayerTable.module.css';
-import { PlayerResponse } from '@/lib/types'; // Import PlayerResponse type
+import { GoalkeeperResponse, FieldPlayerResponse } from '@/lib/types'; // Import PlayerResponse type
+
+type PlayerType = GoalkeeperResponse | FieldPlayerResponse;
 
 interface PlayerTableProps {
-    players: PlayerResponse[];
+    players: PlayerType[];
     isLoading: boolean;
     error: string | null;
 }
@@ -76,17 +78,34 @@ export function PlayerTable({ players, isLoading, error }: PlayerTableProps) {
                                 <td>{player.weight || 0}</td>
                                 <td>{player.nationality || 'N/A'}</td>
                                 <td>{player.games || 0}</td>
-                                <td>{player.substitute_appearances || 0}</td>
-                                <td>{player.goals || 0}</td>
-                                <td>{player.assists || 0}</td>
-                                <td>{player.shots || 0}</td>
-                                <td>{player.shots_on_goal || 0}</td>
-                                <td>{player.fouls_committed || 0}</td>
-                                <td>{player.fouls_suffered || 0}</td>
-                                <td>{player.yellow_cards || 0}</td>
-                                <td>{player.red_cards || 0}</td>
-                                <td>{player.defenses || 0}</td>
-                                <td>{player.goals_conceded || 0}</td>
+                                <td>{player.substitutions || 0}</td>
+                                {player.player_type === 'field_player' ? (
+                                    <>
+                                        <td>{player.goals || 0}</td>
+                                        <td>{player.assists || 0}</td>
+                                        <td>{player.total_shots || 0}</td>
+                                        <td>{player.shots_on_goal || 0}</td>
+                                        <td>{player.fouls_committed || 0}</td>
+                                        <td>{player.fouls_suffered || 0}</td>
+                                        <td>{player.yellow_cards || 0}</td>
+                                        <td>{player.red_cards || 0}</td>
+                                        <td>{'N/A'}</td> {/* Defenses for field player */}
+                                        <td>{'N/A'}</td> {/* Goals Conceded for field player */}
+                                    </>
+                                ) : (
+                                    <>
+                                        <td>{'N/A'}</td> {/* Goals for goalkeeper */}
+                                        <td>{player.assists || 0}</td>
+                                        <td>{'N/A'}</td> {/* Total Shots for goalkeeper */}
+                                        <td>{'N/A'}</td> {/* Shots on Goal for goalkeeper */}
+                                        <td>{player.fouls_committed || 0}</td>
+                                        <td>{player.fouls_suffered || 0}</td>
+                                        <td>{player.yellow_cards || 0}</td>
+                                        <td>{player.red_cards || 0}</td>
+                                        <td>{player.saves || 0}</td>
+                                        <td>{player.goals_conceded || 0}</td>
+                                    </>
+                                )}
                             </tr>
                         ))}
                     </tbody>

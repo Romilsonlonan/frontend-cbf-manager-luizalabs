@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import {
     Dialog,
@@ -7,6 +7,7 @@ import {
     DialogTitle,
     DialogTrigger,
     DialogClose,
+    DialogFooter,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { SquareSlash } from "lucide-react";
@@ -28,14 +29,35 @@ export function AthletesFiltersRedCardsDialog({
     setRedCardsFilter,
     handleRangeChange,
 }: AthletesFiltersRedCardsDialogProps) {
+    const [isOpen, setIsOpen] = useState(false);
+    const [localRedCardsFilter, setLocalRedCardsFilter] = useState(redCardsFilter);
+
+    useEffect(() => {
+        if (!isOpen) {
+            // When the dialog closes, reset local input to the current applied filter
+            setLocalRedCardsFilter(redCardsFilter);
+        }
+    }, [isOpen, redCardsFilter]);
+
+    const handleApplyFilter = () => {
+        setRedCardsFilter(localRedCardsFilter);
+        setIsOpen(false);
+    };
+
+    const handleClearFilter = () => {
+        setLocalRedCardsFilter([0, Infinity]);
+        setRedCardsFilter([0, Infinity]);
+        setIsOpen(false);
+    };
+
     return (
-        <Dialog>
+        <Dialog open={isOpen} onOpenChange={setIsOpen}>
             <DialogTrigger asChild>
                 <Button variant="outline" className={commonStyles.triggerButton}>
                     <SquareSlash className={commonStyles.icon} />
                     CV {redCardsFilter?.[0] === 0 && redCardsFilter?.[1] === Infinity
                         ? ''
-                        : `${redCardsFilter?.[0] === 0 ? 'Min' : redCardsFilter?.[0] ?? ''} ${redCardsFilter?.[1] === Infinity ? 'Max' : redCardsFilter?.[1] ?? ''}`}
+                        : `${redCardsFilter?.[0] === 0 ? 'Min' : localRedCardsFilter?.[0] ?? ''} ${redCardsFilter?.[1] === Infinity ? 'Max' : localRedCardsFilter?.[1] ?? ''}`}
                 </Button>
             </DialogTrigger>
             <DialogContent className={commonStyles.dialogContent}>
@@ -47,31 +69,34 @@ export function AthletesFiltersRedCardsDialog({
                         <Input
                             type="number"
                             placeholder="Min"
-                            value={redCardsFilter?.[0] === 0 ? '' : String(redCardsFilter?.[0] || '')}
-                            onChange={(e) => handleRangeChange(setRedCardsFilter, 0, e, redCardsFilter)}
+                            value={localRedCardsFilter?.[0] === 0 ? '' : String(localRedCardsFilter?.[0] || '')}
+                            onChange={(e) => handleRangeChange(setLocalRedCardsFilter, 0, e, localRedCardsFilter)}
                             className={commonStyles.inputHalf}
                         />
                         <Input
                             type="number"
                             placeholder="Max"
-                            value={redCardsFilter?.[1] === Infinity ? '' : String(redCardsFilter?.[1] || '')}
-                            onChange={(e) => handleRangeChange(setRedCardsFilter, 1, e, redCardsFilter)}
+                            value={localRedCardsFilter?.[1] === Infinity ? '' : String(localRedCardsFilter?.[1] || '')}
+                            onChange={(e) => handleRangeChange(setLocalRedCardsFilter, 1, e, localRedCardsFilter)}
                             className={commonStyles.inputHalf}
                         />
                     </div>
                     <Button
-                        variant={(redCardsFilter?.[0] === 0 && redCardsFilter?.[1] === Infinity) ? 'default' : 'outline'}
-                        onClick={() => setRedCardsFilter([0, Infinity])}
+                        variant="ghost"
+                        onClick={handleClearFilter}
                         className={commonStyles.fullWidthButton}
                     >
-                        Cartões Vermelhos
+                        Todos os Cartões Vermelhos
                     </Button>
                 </div>
-                <DialogClose asChild>
-                    <Button type="button" variant="secondary">
+                <DialogFooter>
+                    <Button type="button" variant="secondary" onClick={() => setIsOpen(false)}>
                         Fechar
                     </Button>
-                </DialogClose>
+                    <Button type="button" onClick={handleApplyFilter}>
+                        Aplicar Filtro
+                    </Button>
+                </DialogFooter>
             </DialogContent>
         </Dialog>
     );

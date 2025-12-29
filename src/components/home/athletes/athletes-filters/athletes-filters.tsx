@@ -34,11 +34,9 @@ import {
   SquareSlash, // Cartões Vermelhos
   ShieldAlert, // Defesas
 } from 'lucide-react';
-import React, { useState, useEffect } from 'react'; // Import React and hooks
-import { Position, PlayerResponse } from '@/lib/types'; // Import types
+import React from 'react'; // Import React and hooks
+import { Position } from '@/lib/types'; // Import types
 import { AthletesFiltersPosition } from './athletes-filters-position';
-import { getPlayers } from '@/lib/api'; // Import API function
-import { useAuth } from '@/context/AuthContext'; // Import AuthContext
 import { AthletesFiltersHeight } from './athletes-filters-height';
 import { AthletesFiltersWeight } from './athletes-filters-weight';
 import { AthletesFiltersGames } from './athletes-filters-games';
@@ -59,7 +57,6 @@ import { AthletesFiltersFoulsCommittedDialog } from './athletes-filters-fouls-co
 import { AthletesFiltersFoulsSufferedDialog } from './athletes-filters-fouls-suffered-dialog';
 import { AthletesFiltersYellowCardsDialog } from './athletes-filters-yellow-cards-dialog';
 import { AthletesFiltersRedCardsDialog } from './athletes-filters-red-cards-dialog';
-import { PlayerTable } from '../player-table/PlayerTable';
 import Image from 'next/image'; // Import next/image
 import styles from './athletes-filters.module.css'; // Import the CSS module
 import commonStyles from './athletes-filters-common.module.css';
@@ -166,38 +163,6 @@ export function AthletesFilters({
   goalsConcededFilter,
   setGoalsConcededFilter,
 }: AthletesFiltersProps) {
-  const { token, isAuthenticated, loadingUser } = useAuth(); // Get token, isAuthenticated, and loadingUser from AuthContext
-  const [players, setPlayers] = useState<PlayerResponse[]>([]);
-  const [isLoadingPlayers, setIsLoadingPlayers] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    const fetchPlayers = async () => {
-      setIsLoadingPlayers(true);
-      setError(null);
-      try {
-        if (loadingUser) { // Wait for authentication to finish loading
-          return;
-        }
-
-        if (isAuthenticated && token) { // Only fetch if authenticated and token is available
-          const fetchedPlayers = await getPlayers(token);
-          setPlayers(fetchedPlayers);
-        } else {
-          setError('Token de autenticação não disponível ou sessão expirada. Faça login novamente.');
-          setPlayers([]); // Clear players if not authenticated
-        }
-      } catch (err: any) {
-        console.error('Failed to fetch players:', err);
-        setError(err.message || 'Erro ao buscar jogadores.');
-      } finally {
-        setIsLoadingPlayers(false);
-      }
-    };
-
-    fetchPlayers();
-  }, [token, isAuthenticated, loadingUser]); // Refetch when token, isAuthenticated, or loadingUser changes
-
   const handleRangeChange: (
     setter: (value: [number, number]) => void,
     index: 0 | 1,
@@ -344,8 +309,6 @@ export function AthletesFilters({
           </div>
         </div>
       </section>
-      {/* New container for player tables */}
-      <PlayerTable players={players} isLoading={isLoadingPlayers} error={error} />
     </div>
   );
 }

@@ -8,9 +8,10 @@ import {
     DialogTitle,
     DialogTrigger,
     DialogClose,
+    DialogFooter,
 } from '@/components/ui/dialog';
 import { Ruler } from 'lucide-react';
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { AthletesFiltersHeightInput } from './athletes-filters-height-input';
 import commonStyles from './athletes-filters-common.module.css';
 
@@ -30,14 +31,35 @@ export function AthletesFiltersHeight({
     setHeightFilter,
     handleRangeChange,
 }: AthletesFiltersHeightProps) {
+    const [isOpen, setIsOpen] = useState(false);
+    const [localHeightFilter, setLocalHeightFilter] = useState(heightFilter);
+
+    useEffect(() => {
+        if (!isOpen) {
+            // When the dialog closes, reset local input to the current applied filter
+            setLocalHeightFilter(heightFilter);
+        }
+    }, [isOpen, heightFilter]);
+
+    const handleApplyFilter = () => {
+        setHeightFilter(localHeightFilter);
+        setIsOpen(false);
+    };
+
+    const handleClearFilter = () => {
+        setLocalHeightFilter([0, Infinity]);
+        setHeightFilter([0, Infinity]);
+        setIsOpen(false);
+    };
+
     return (
-        <Dialog>
+        <Dialog open={isOpen} onOpenChange={setIsOpen}>
             <DialogTrigger asChild>
                 <Button variant="ghost-transparent" className={commonStyles.triggerButton}>
                     <Ruler className={commonStyles.icon} />
                     Alt {heightFilter?.[0] === 0 && heightFilter?.[1] === Infinity
                         ? ''
-                        : `${heightFilter?.[0] === 0 ? 'Min' : heightFilter?.[0] ?? ''}  ${heightFilter?.[1] === Infinity ? 'Max' : heightFilter?.[1] ?? ''}`}
+                        : `${heightFilter?.[0] === 0 ? 'Min' : localHeightFilter?.[0] ?? ''}  ${heightFilter?.[1] === Infinity ? 'Max' : localHeightFilter?.[1] ?? ''}`}
                 </Button>
             </DialogTrigger>
             <DialogContent className={commonStyles.dialogContent}>
@@ -46,23 +68,26 @@ export function AthletesFiltersHeight({
                 </DialogHeader>
                 <div className={commonStyles.filterGrid}>
                     <AthletesFiltersHeightInput
-                        heightFilter={heightFilter}
-                        setHeightFilter={setHeightFilter}
+                        heightFilter={localHeightFilter}
+                        setHeightFilter={setLocalHeightFilter}
                         handleRangeChange={handleRangeChange}
                     />
                     <Button
                         variant="ghost"
-                        onClick={() => setHeightFilter([0, Infinity])}
+                        onClick={handleClearFilter}
                         className={commonStyles.fullWidthButton}
                     >
                         Todas as Alturas
                     </Button>
                 </div>
-                <DialogClose asChild>
-                    <Button type="button" variant="secondary">
+                <DialogFooter>
+                    <Button type="button" variant="secondary" onClick={() => setIsOpen(false)}>
                         Fechar
                     </Button>
-                </DialogClose>
+                    <Button type="button" onClick={handleApplyFilter}>
+                        Aplicar Filtro
+                    </Button>
+                </DialogFooter>
             </DialogContent>
         </Dialog>
     );

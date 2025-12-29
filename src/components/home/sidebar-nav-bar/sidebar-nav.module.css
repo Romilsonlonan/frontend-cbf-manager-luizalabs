@@ -5,3 +5,12 @@
 .sidebarContent {
     @apply flex-1 p-2;
 }
+
+.sidebar {
+    background-color: var(--sidebar-bg);
+    color: var(--sidebar-text-color);
+}
+
+.sidebarMenuItem button {
+    color: var(--sidebar-text-color);
+}

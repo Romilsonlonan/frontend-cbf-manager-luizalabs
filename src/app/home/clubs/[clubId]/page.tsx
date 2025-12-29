@@ -22,7 +22,7 @@ import {
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
-import { PlusCircle, Webhook } from 'lucide-react';
+import { PlusCircle, Webhook, CalendarDays } from 'lucide-react';
 import { clubs } from '@/lib/mock-data'; // Manter para mock de clubes, mas atletas virão da API
 import { EntityFormDialog } from '@/components/home/shared/entity-form-dialog/entity-form-dialog';
 import { api, clubsApi } from '@/lib/api'; // Importar api e clubsApi
@@ -30,6 +30,7 @@ import { useAuth } from '@/context/AuthContext'; // Para obter o token
 import { useLoading } from '@/context/LoadingContext'; // Para gerenciar o loading
 import { useToast } from '@/hooks/use-toast'; // Para exibir notificações
 import { Input } from '@/components/ui/input'; // Para o campo de URL
+import Link from 'next/link';
 
 const userAvatar = PlaceHolderImages.find((img) => img.id === 'user-avatar');
 
@@ -186,6 +187,12 @@ export default function ClubDetailsPage() {
               Scrapear Atletas
             </Button>
           </div>
+          <Link href={`/home/clubs/${clubId}/training-routines?action=add-routine`}>
+            <Button className="w-full">
+              <CalendarDays className="mr-2 h-4 w-4" />
+              Adicionar Rotina de Treinamento
+            </Button>
+          </Link>
           <Button onClick={() => setIsAddPlayerDialogOpen(true)}>
             <PlusCircle className="mr-2 h-4 w-4" />
             Adicionar Jogador

@@ -1,6 +1,6 @@
-import { PlayerResponse } from "@/lib/types";
+import { Athlete as BaseAthlete } from "@/lib/types";
 
-export interface Athlete extends PlayerResponse {
+export interface Athlete extends BaseAthlete {
     club_id: number | null;
     clubName?: string;
     player_type?: string;

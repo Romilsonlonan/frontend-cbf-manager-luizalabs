@@ -1,5 +1,5 @@
 // /home/romilson/Projetos/luizalabs/frontend/cbf_manager/src/lib/api.ts
-import { ClubSimpleResponse, PlayerResponse } from './types'; // Import types
+import { ClubSimpleResponse, GoalkeeperResponse, FieldPlayerResponse } from './types'; // Import types
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
 
@@ -225,41 +225,80 @@ export const getClubs = async (): Promise<ClubSimpleResponse[]> => {
   return response.json();
 };
 
-export const getPlayers = async (token: string | null = null, clubId: number | null = null, onAuthError?: () => void): Promise<PlayerResponse[]> => {
-  let url = `${API_URL}/players/`;
+export const getGoalkeepers = async (token: string | null = null, clubId: number | null = null, nameFilter: string = '', onAuthError?: () => void): Promise<GoalkeeperResponse[]> => {
+  let url = new URL(`${API_URL}/goalkeepers/`);
   const headers: HeadersInit = {
     'Content-Type': 'application/json',
   };
 
   if (clubId) {
-    url += `?club_id=${clubId}`;
+    url.searchParams.append('club_id', clubId.toString());
+  }
+
+  if (nameFilter) {
+    url.searchParams.append('name', nameFilter);
   }
 
   if (token) {
     headers['Authorization'] = `Bearer ${token}`;
   }
 
-  const response = await fetch(url, { headers });
+  const response = await fetch(url.toString(), { headers });
   if (!response.ok) {
     if (response.status === 401) {
       onAuthError?.();
       throw new Error('Token inválido ou expirado. Por favor, faça login novamente.');
     }
     const errorBody = await response.json().catch(() => ({ detail: 'Erro desconhecido' }));
-    console.error('API Response not OK for getPlayers:', response.status, errorBody);
-    throw new Error(errorBody.detail || 'Erro ao buscar jogadores');
+    console.error('API Response not OK for getGoalkeepers:', response.status, errorBody);
+    throw new Error(errorBody.detail || 'Erro ao buscar goleiros');
   }
   return response.json();
 };
 
-export const createPlayer = async (playerData: any, token: string, onAuthError?: () => void) => {
-  const response = await fetch(`${API_URL}/players/`, {
+export const getFieldPlayers = async (token: string | null = null, clubId: number | null = null, nameFilter: string = '', positionFilter: string = '', onAuthError?: () => void): Promise<FieldPlayerResponse[]> => {
+  let url = new URL(`${API_URL}/field_players/`);
+  const headers: HeadersInit = {
+    'Content-Type': 'application/json',
+  };
+
+  if (clubId) {
+    url.searchParams.append('club_id', clubId.toString());
+  }
+
+  if (nameFilter) {
+    url.searchParams.append('name', nameFilter);
+  }
+
+  if (positionFilter) {
+    url.searchParams.append('position', positionFilter);
+  }
+
+  if (token) {
+    headers['Authorization'] = `Bearer ${token}`;
+  }
+
+  const response = await fetch(url.toString(), { headers });
+  if (!response.ok) {
+    if (response.status === 401) {
+      onAuthError?.();
+      throw new Error('Token inválido ou expirado. Por favor, faça login novamente.');
+    }
+    const errorBody = await response.json().catch(() => ({ detail: 'Erro desconhecido' }));
+    console.error('API Response not OK for getFieldPlayers:', response.status, errorBody);
+    throw new Error(errorBody.detail || 'Erro ao buscar jogadores de campo');
+  }
+  return response.json();
+};
+
+export const createGoalkeeper = async (goalkeeperData: any, token: string, clubId: number, onAuthError?: () => void) => {
+  const response = await fetch(`${API_URL}/goalkeepers/?club_id=${clubId}`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${token}`,
     },
-    body: JSON.stringify(playerData),
+    body: JSON.stringify(goalkeeperData),
   });
 
   if (!response.ok) {
@@ -268,8 +307,31 @@ export const createPlayer = async (playerData: any, token: string, onAuthError?:
       throw new Error('Token inválido ou expirado');
     }
     const errorBody = await response.json().catch(() => ({ detail: 'Erro desconhecido' }));
-    console.error('API Response not OK for createPlayer:', response.status, errorBody);
-    throw new Error(errorBody.detail || 'Falha ao criar jogador');
+    console.error('API Response not OK for createGoalkeeper:', response.status, errorBody);
+    throw new Error(errorBody.detail || 'Falha ao criar goleiro');
+  }
+
+  return response.json();
+};
+
+export const createFieldPlayer = async (fieldPlayerData: any, token: string, clubId: number, onAuthError?: () => void) => {
+  const response = await fetch(`${API_URL}/field_players/?club_id=${clubId}`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+    body: JSON.stringify(fieldPlayerData),
+  });
+
+  if (!response.ok) {
+    if (response.status === 401) {
+      onAuthError?.();
+      throw new Error('Token inválido ou expirado');
+    }
+    const errorBody = await response.json().catch(() => ({ detail: 'Erro desconhecido' }));
+    console.error('API Response not OK for createFieldPlayer:', response.status, errorBody);
+    throw new Error(errorBody.detail || 'Falha ao criar jogador de campo');
   }
 
   return response.json();
@@ -317,4 +379,91 @@ export const scrapeClubPlayers = async (clubId: number, token: string, onAuthErr
   }
 
   return response.json();
+};
+
+export const getClubDetails = async (clubId: number): Promise<ClubSimpleResponse> => {
+  const token = localStorage.getItem('access_token');
+  const headers: HeadersInit = {
+    'Content-Type': 'application/json',
+  };
+
+  if (token) {
+    headers['Authorization'] = `Bearer ${token}`;
+  }
+
+  const response = await fetch(`${API_URL}/clubs/${clubId}`, { headers });
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => ({}));
+    console.error('API Response not OK for getClubDetails:', response.status, 'Error Data:', errorData);
+    throw new Error(errorData.detail || `Erro ao buscar clube com ID ${clubId}: ${response.status}`);
+  }
+  return response.json();
+};
+
+export const addTrainingRoutine = async (clubId: number, routineData: { name: string; description: string }) => {
+  const token = localStorage.getItem('access_token');
+  const headers: HeadersInit = {
+    'Content-Type': 'application/json',
+  };
+
+  if (token) {
+    headers['Authorization'] = `Bearer ${token}`;
+  }
+
+  const response = await fetch(`${API_URL}/clubs/${clubId}/training_routines`, {
+    method: 'POST',
+    headers,
+    body: JSON.stringify(routineData),
+  });
+
+  if (!response.ok) {
+    const errorBody = await response.json().catch(() => ({ detail: 'Erro desconhecido' }));
+    console.error('API Response not OK for addTrainingRoutine:', response.status, errorBody);
+    throw new Error(errorBody.detail || 'Falha ao adicionar rotina de treinamento');
+  }
+
+  return response.json();
+};
+
+export const deleteClub = async (clubId: number, token: string, onAuthError?: () => void) => {
+  const response = await fetch(`${API_URL}/clubs/${clubId}`, {
+    method: 'DELETE',
+    headers: {
+      'Authorization': `Bearer ${token}`,
+    },
+  });
+
+  if (!response.ok) {
+    if (response.status === 401) {
+      onAuthError?.();
+      throw new Error('Token inválido ou expirado');
+    }
+    const errorBody = await response.json().catch(() => ({ detail: 'Erro desconhecido' }));
+    console.error('API Response not OK for deleteClub:', response.status, errorBody);
+    throw new Error(errorBody.detail || 'Falha ao excluir clube');
+  }
+  return true;
+};
+
+export const api = {
+  login,
+  getCurrentUser,
+  updateUserProfile,
+  changePassword,
+  deleteAccount,
+  uploadProfileImage,
+  createClub,
+  getClubs,
+  getClubDetails,
+  getGoalkeepers,
+  getFieldPlayers,
+  createGoalkeeper,
+  createFieldPlayer,
+  addTrainingRoutine,
+  deleteClub,
+};
+
+export const clubsApi = {
+  scrapeAthletes,
+  scrapeClubPlayers,
 };

@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { Upload, X, Image as ImageIcon } from 'lucide-react'
@@ -7,13 +7,18 @@ interface ImageUploadProps {
     onImageSelect: (file: File | null) => void
     preview?: string | null
     maxSizeMB?: number
+    initialImageUrl?: string // Add initialImageUrl prop
 }
 
-export function ImageUpload({ onImageSelect, preview, maxSizeMB = 5 }: ImageUploadProps) {
+export function ImageUpload({ onImageSelect, preview, maxSizeMB = 5, initialImageUrl }: ImageUploadProps) {
     const [selectedImage, setSelectedImage] = useState<File | null>(null)
-    const [previewUrl, setPreviewUrl] = useState<string | null>(preview || null)
+    const [previewUrl, setPreviewUrl] = useState<string | null>(preview || initialImageUrl || null) // Use initialImageUrl
     const [error, setError] = useState<string>('')
     const fileInputRef = useRef<HTMLInputElement>(null)
+
+    useEffect(() => {
+        setPreviewUrl(preview || initialImageUrl || null);
+    }, [preview, initialImageUrl]);
 
     const handleImageSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0]

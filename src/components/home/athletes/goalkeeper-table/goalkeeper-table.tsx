@@ -49,8 +49,6 @@ export function GoalkeeperTable({ goalkeepers }: GoalkeeperTableProps) {
                         <TableHead className={styles.tableHeadCellWithIcon}><Flag className={styles.icon} />NAC</TableHead>
                         <TableHead className={styles.tableHeadCellWithIcon}><Shirt className={styles.icon} />J</TableHead>
                         <TableHead className={styles.tableHeadCellWithIcon}><ArrowRightLeft className={styles.icon} />SUB</TableHead>
-                        <TableHead className={styles.tableHeadCellWithIcon}><User className={styles.icon} />C</TableHead>{/* Camisa */}
-                        <TableHead className={styles.tableHeadCellWithIcon}><Goal className={styles.icon} />G</TableHead>{/* Gols */}
                         <TableHead className={styles.tableHeadCellWithIcon}><ShieldAlert className={styles.icon} />D</TableHead>
                         <TableHead className={styles.tableHeadCellWithIcon}><Goal className={styles.icon} />GS</TableHead>
                         <TableHead className={styles.tableHeadCellWithIcon}><Handshake className={styles.icon} />A</TableHead>
@@ -71,8 +69,6 @@ export function GoalkeeperTable({ goalkeepers }: GoalkeeperTableProps) {
                             <TableCell className={styles.tableBodyCell}>{player.nationality ?? 'N/A'}</TableCell>
                             <TableCell className={styles.tableBodyCell}>{player.games ?? 0}</TableCell>
                             <TableCell className={styles.tableBodyCell}>{player.substitute_appearances ?? 0}</TableCell>
-                            <TableCell className={styles.tableBodyCell}>{player.jersey_number ?? 'N/A'}</TableCell>{/* Camisa */}
-                            <TableCell className={styles.tableBodyCell}>{player.goals ?? 0}</TableCell>{/* Gols */}
                             <TableCell className={styles.tableBodyCell}>{player.defenses ?? 0}</TableCell>
                             <TableCell className={styles.tableBodyCell}>{player.goals_conceded ?? 0}</TableCell>
                             <TableCell className={styles.tableBodyCell}>{player.assists ?? 0}</TableCell>

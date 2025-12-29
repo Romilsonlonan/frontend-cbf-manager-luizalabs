@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import {
     Dialog,
@@ -7,6 +7,7 @@ import {
     DialogTitle,
     DialogTrigger,
     DialogClose,
+    DialogFooter,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Scale } from "lucide-react";
@@ -28,14 +29,35 @@ export function AthletesFiltersFoulsSufferedDialog({
     setFoulsSufferedFilter,
     handleRangeChange,
 }: AthletesFiltersFoulsSufferedDialogProps) {
+    const [isOpen, setIsOpen] = useState(false);
+    const [localFoulsSufferedFilter, setLocalFoulsSufferedFilter] = useState(foulsSufferedFilter);
+
+    useEffect(() => {
+        if (!isOpen) {
+            // When the dialog closes, reset local input to the current applied filter
+            setLocalFoulsSufferedFilter(foulsSufferedFilter);
+        }
+    }, [isOpen, foulsSufferedFilter]);
+
+    const handleApplyFilter = () => {
+        setFoulsSufferedFilter(localFoulsSufferedFilter);
+        setIsOpen(false);
+    };
+
+    const handleClearFilter = () => {
+        setLocalFoulsSufferedFilter([0, Infinity]);
+        setFoulsSufferedFilter([0, Infinity]);
+        setIsOpen(false);
+    };
+
     return (
-        <Dialog>
+        <Dialog open={isOpen} onOpenChange={setIsOpen}>
             <DialogTrigger asChild>
                 <Button variant="ghost" className={commonStyles.triggerButton}>
                     <Scale className={commonStyles.icon} />
                     FS {foulsSufferedFilter?.[0] === 0 && foulsSufferedFilter?.[1] === Infinity
                         ? ''
-                        : `${foulsSufferedFilter?.[0] === 0 ? 'Min' : foulsSufferedFilter?.[0] ?? ''}  ${foulsSufferedFilter?.[1] === Infinity ? 'Max' : foulsSufferedFilter?.[1] ?? ''}`}
+                        : `${foulsSufferedFilter?.[0] === 0 ? 'Min' : localFoulsSufferedFilter?.[0] ?? ''}  ${foulsSufferedFilter?.[1] === Infinity ? 'Max' : localFoulsSufferedFilter?.[1] ?? ''}`}
                 </Button>
             </DialogTrigger>
             <DialogContent className={commonStyles.dialogContent}>
@@ -47,31 +69,34 @@ export function AthletesFiltersFoulsSufferedDialog({
                         <Input
                             type="number"
                             placeholder="Min"
-                            value={foulsSufferedFilter?.[0] === 0 ? '' : String(foulsSufferedFilter?.[0] || '')}
-                            onChange={(e) => handleRangeChange(setFoulsSufferedFilter, 0, e, foulsSufferedFilter)}
+                            value={localFoulsSufferedFilter?.[0] === 0 ? '' : String(localFoulsSufferedFilter?.[0] || '')}
+                            onChange={(e) => handleRangeChange(setLocalFoulsSufferedFilter, 0, e, localFoulsSufferedFilter)}
                             className={commonStyles.inputHalf}
                         />
                         <Input
                             type="number"
                             placeholder="Max"
-                            value={foulsSufferedFilter?.[1] === Infinity ? '' : String(foulsSufferedFilter?.[1] || '')}
-                            onChange={(e) => handleRangeChange(setFoulsSufferedFilter, 1, e, foulsSufferedFilter)}
+                            value={localFoulsSufferedFilter?.[1] === Infinity ? '' : String(localFoulsSufferedFilter?.[1] || '')}
+                            onChange={(e) => handleRangeChange(setLocalFoulsSufferedFilter, 1, e, localFoulsSufferedFilter)}
                             className={commonStyles.inputHalf}
                         />
                     </div>
                     <Button
                         variant="ghost"
-                        onClick={() => setFoulsSufferedFilter([0, Infinity])}
+                        onClick={handleClearFilter}
                         className={commonStyles.fullWidthButton}
                     >
-                        Faltas Sofridas
+                        Todas as Faltas Sofridas
                     </Button>
                 </div>
-                <DialogClose asChild>
-                    <Button type="button" variant="secondary">
+                <DialogFooter>
+                    <Button type="button" variant="secondary" onClick={() => setIsOpen(false)}>
                         Fechar
                     </Button>
-                </DialogClose>
+                    <Button type="button" onClick={handleApplyFilter}>
+                        Aplicar Filtro
+                    </Button>
+                </DialogFooter>
             </DialogContent>
         </Dialog>
     );

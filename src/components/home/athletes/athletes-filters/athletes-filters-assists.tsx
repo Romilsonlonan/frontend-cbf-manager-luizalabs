@@ -8,11 +8,12 @@ import {
     DialogTitle,
     DialogTrigger,
     DialogClose,
+    DialogFooter,
 } from '@/components/ui/dialog';
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { Handshake } from 'lucide-react';
 import commonStyles from './athletes-filters-common.module.css';
 import { AthletesFiltersAssistsInput } from './athletes-filters-assists-input';
-import { AthletesFiltersAssistsButton } from './athletes-filters-assists-button';
 
 type AthletesFiltersAssistsProps = {
     assistsFilter: [number, number];
@@ -30,13 +31,38 @@ export function AthletesFiltersAssists({
     setAssistsFilter,
     handleRangeChange,
 }: AthletesFiltersAssistsProps) {
+    const [isOpen, setIsOpen] = useState(false);
+    const [localAssistsFilter, setLocalAssistsFilter] = useState(assistsFilter);
+
+    useEffect(() => {
+        if (!isOpen) {
+            setLocalAssistsFilter(assistsFilter);
+        }
+    }, [isOpen, assistsFilter]);
+
+    const handleApplyFilter = () => {
+        setAssistsFilter(localAssistsFilter);
+        setIsOpen(false);
+    };
+
+    const handleClearFilter = () => {
+        setLocalAssistsFilter([0, Infinity]);
+        setAssistsFilter([0, Infinity]);
+        setIsOpen(false);
+    };
+
     return (
-        <Dialog>
+        <Dialog open={isOpen} onOpenChange={setIsOpen}>
             <DialogTrigger asChild>
-                <AthletesFiltersAssistsButton
-                    assistsFilter={assistsFilter}
-                    setAssistsFilter={setAssistsFilter}
-                />
+                <Button
+                    variant="ghost"
+                    className={commonStyles.triggerButton}
+                >
+                    <Handshake className={commonStyles.icon} />
+                    A {assistsFilter?.[0] === 0 && assistsFilter?.[1] === Infinity
+                        ? ''
+                        : `${assistsFilter?.[0] === 0 ? 'Min' : localAssistsFilter?.[0] ?? ''} ${assistsFilter?.[1] === Infinity ? 'Max' : localAssistsFilter?.[1] ?? ''}`}
+                </Button>
             </DialogTrigger>
             <DialogContent className={commonStyles.dialogContent}>
                 <DialogHeader>
@@ -44,23 +70,26 @@ export function AthletesFiltersAssists({
                 </DialogHeader>
                 <div className={commonStyles.filterGrid}>
                     <AthletesFiltersAssistsInput
-                        assistsFilter={assistsFilter}
-                        setAssistsFilter={setAssistsFilter}
+                        assistsFilter={localAssistsFilter}
+                        setAssistsFilter={setLocalAssistsFilter}
                         handleRangeChange={handleRangeChange}
                     />
                     <Button
                         variant="ghost"
-                        onClick={() => setAssistsFilter([0, Infinity])}
+                        onClick={handleClearFilter}
                         className={commonStyles.fullWidthButton}
                     >
                         Todas as Assistências
                     </Button>
                 </div>
-                <DialogClose asChild>
-                    <Button type="button" variant="secondary">
+                <DialogFooter>
+                    <Button type="button" variant="secondary" onClick={() => setIsOpen(false)}>
                         Fechar
                     </Button>
-                </DialogClose>
+                    <Button type="button" onClick={handleApplyFilter}>
+                        Aplicar Filtro
+                    </Button>
+                </DialogFooter>
             </DialogContent>
         </Dialog>
     );

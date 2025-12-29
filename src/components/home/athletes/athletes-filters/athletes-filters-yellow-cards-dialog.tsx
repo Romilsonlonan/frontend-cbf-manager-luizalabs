@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import {
     Dialog,
@@ -7,6 +7,7 @@ import {
     DialogTitle,
     DialogTrigger,
     DialogClose,
+    DialogFooter,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { CreditCard } from "lucide-react";
@@ -28,14 +29,35 @@ export function AthletesFiltersYellowCardsDialog({
     setYellowCardsFilter,
     handleRangeChange,
 }: AthletesFiltersYellowCardsDialogProps) {
+    const [isOpen, setIsOpen] = useState(false);
+    const [localYellowCardsFilter, setLocalYellowCardsFilter] = useState(yellowCardsFilter);
+
+    useEffect(() => {
+        if (!isOpen) {
+            // When the dialog closes, reset local input to the current applied filter
+            setLocalYellowCardsFilter(yellowCardsFilter);
+        }
+    }, [isOpen, yellowCardsFilter]);
+
+    const handleApplyFilter = () => {
+        setYellowCardsFilter(localYellowCardsFilter);
+        setIsOpen(false);
+    };
+
+    const handleClearFilter = () => {
+        setLocalYellowCardsFilter([0, Infinity]);
+        setYellowCardsFilter([0, Infinity]);
+        setIsOpen(false);
+    };
+
     return (
-        <Dialog>
+        <Dialog open={isOpen} onOpenChange={setIsOpen}>
             <DialogTrigger asChild>
                 <Button variant="outline" className={commonStyles.triggerButton}>
                     <CreditCard className={commonStyles.icon} />
                     CA {yellowCardsFilter?.[0] === 0 && yellowCardsFilter?.[1] === Infinity
                         ? ''
-                        : `${yellowCardsFilter?.[0] === 0 ? 'Min' : yellowCardsFilter?.[0] ?? ''}  ${yellowCardsFilter?.[1] === Infinity ? 'Max' : yellowCardsFilter?.[1] ?? ''}`}
+                        : `${yellowCardsFilter?.[0] === 0 ? 'Min' : localYellowCardsFilter?.[0] ?? ''}  ${yellowCardsFilter?.[1] === Infinity ? 'Max' : localYellowCardsFilter?.[1] ?? ''}`}
                 </Button>
             </DialogTrigger>
             <DialogContent className={commonStyles.dialogContent}>
@@ -47,31 +69,34 @@ export function AthletesFiltersYellowCardsDialog({
                         <Input
                             type="number"
                             placeholder="Min"
-                            value={yellowCardsFilter?.[0] === 0 ? '' : String(yellowCardsFilter?.[0] || '')}
-                            onChange={(e) => handleRangeChange(setYellowCardsFilter, 0, e, yellowCardsFilter)}
+                            value={localYellowCardsFilter?.[0] === 0 ? '' : String(localYellowCardsFilter?.[0] || '')}
+                            onChange={(e) => handleRangeChange(setLocalYellowCardsFilter, 0, e, localYellowCardsFilter)}
                             className={commonStyles.inputHalf}
                         />
                         <Input
                             type="number"
                             placeholder="Max"
-                            value={yellowCardsFilter?.[1] === Infinity ? '' : String(yellowCardsFilter?.[1] || '')}
-                            onChange={(e) => handleRangeChange(setYellowCardsFilter, 1, e, yellowCardsFilter)}
+                            value={localYellowCardsFilter?.[1] === Infinity ? '' : String(localYellowCardsFilter?.[1] || '')}
+                            onChange={(e) => handleRangeChange(setLocalYellowCardsFilter, 1, e, localYellowCardsFilter)}
                             className={commonStyles.inputHalf}
                         />
                     </div>
                     <Button
-                        variant={(yellowCardsFilter?.[0] === 0 && yellowCardsFilter?.[1] === Infinity) ? 'default' : 'outline'}
-                        onClick={() => setYellowCardsFilter([0, Infinity])}
+                        variant="ghost"
+                        onClick={handleClearFilter}
                         className={commonStyles.fullWidthButton}
                     >
-                        Cartões Amarelos
+                        Todos os Cartões Amarelos
                     </Button>
                 </div>
-                <DialogClose asChild>
-                    <Button type="button" variant="secondary">
+                <DialogFooter>
+                    <Button type="button" variant="secondary" onClick={() => setIsOpen(false)}>
                         Fechar
                     </Button>
-                </DialogClose>
+                    <Button type="button" onClick={handleApplyFilter}>
+                        Aplicar Filtro
+                    </Button>
+                </DialogFooter>
             </DialogContent>
         </Dialog>
     );

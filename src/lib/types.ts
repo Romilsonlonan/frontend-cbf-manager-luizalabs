@@ -60,32 +60,55 @@ export interface ClubSimpleResponse {
     foundation_date?: string; // Assuming string format for date from backend
     br_titles: number;
     espn_url?: string;
+    training_center?: string; // Adicionado para centro de treinamento
 }
 
+export interface ClubDetailsResponse extends ClubSimpleResponse {}
 
-export interface PlayerResponse {
+
+export interface GoalkeeperResponse {
     id: number;
     name: string;
-    jersey_number?: number;
-    position: Position;
+    position: string;
     age: number;
     height?: number;
     weight?: number;
     nationality?: string;
     games?: number;
-    substitute_appearances?: number;
+    substitutions?: number;
+    saves?: number;
+    goals_conceded?: number;
+    assists?: number;
+    fouls_committed?: number;
+    fouls_suffered?: number;
+    yellow_cards?: number;
+    red_cards?: number;
+    club_id: number;
+    club: ClubSimpleResponse | null; // Added club property, explicitly nullable
+    jersey_number: number | null; // Added jersey_number for goalkeepers, explicitly nullable
+    player_type: 'goalkeeper'; // Added player_type
+}
+
+export interface FieldPlayerResponse {
+    id: number;
+    name: string;
+    position: string;
+    age: number;
+    height?: number;
+    weight?: number;
+    nationality?: string;
+    games?: number;
+    substitutions?: number;
     goals?: number;
     assists?: number;
-    shots?: number;
+    total_shots?: number;
     shots_on_goal?: number;
     fouls_committed?: number;
     fouls_suffered?: number;
     yellow_cards?: number;
     red_cards?: number;
-    defenses?: number;
-    goals_conceded?: number;
-    club_id: number | null; // Made nullable
-    club?: ClubSimpleResponse;
-    player_type?: string; // Added player_type
-    updated_at?: string; // Added updated_at
+    club_id: number;
+    club: ClubSimpleResponse | null; // Added club property, explicitly nullable
+    jersey_number: number | null; // Added jersey_number for field players, explicitly nullable
+    player_type: 'field_player'; // Added player_type
 }

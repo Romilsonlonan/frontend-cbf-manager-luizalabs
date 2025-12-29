@@ -51,10 +51,8 @@ export function FieldPlayerTable({ fieldPlayers }: FieldPlayerTableProps) {
                         <TableHead className={styles.tableHeadCellWithIcon}><Flag className={styles.icon} />NAC</TableHead>
                         <TableHead className={styles.tableHeadCellWithIcon}><Shirt className={styles.icon} />J</TableHead>
                         <TableHead className={styles.tableHeadCellWithIcon}><ArrowRightLeft className={styles.icon} />SUB</TableHead>
-                        <TableHead className={styles.tableHeadCellWithIcon}><User className={styles.icon} />C</TableHead>{/* Camisa */}
                         <TableHead className={styles.tableHeadCellWithIcon}><Goal className={styles.icon} />G</TableHead>
                         <TableHead className={styles.tableHeadCellWithIcon}><Handshake className={styles.icon} />A</TableHead>
-                        <TableHead className={styles.tableHeadCellWithIcon}><ShieldAlert className={styles.icon} />D</TableHead>{/* Defesas */}
                         <TableHead className={styles.tableHeadCellWithIcon}><Crosshair className={styles.icon} />TC</TableHead>
                         <TableHead className={styles.tableHeadCellWithIcon}><Target className={styles.icon} />CG</TableHead>
                         <TableHead className={styles.tableHeadCellWithIcon}><Gavel className={styles.icon} />FC</TableHead>
@@ -74,10 +72,8 @@ export function FieldPlayerTable({ fieldPlayers }: FieldPlayerTableProps) {
                             <TableCell className={styles.tableBodyCell}>{player.nationality ?? 'N/A'}</TableCell>
                             <TableCell className={styles.tableBodyCell}>{player.games ?? 0}</TableCell>
                             <TableCell className={styles.tableBodyCell}>{player.substitute_appearances ?? 0}</TableCell>
-                            <TableCell className={styles.tableBodyCell}>{player.jersey_number ?? 'N/A'}</TableCell>{/* Camisa */}
                             <TableCell className={styles.tableBodyCell}>{player.goals ?? 0}</TableCell>
                             <TableCell className={styles.tableBodyCell}>{player.assists ?? 0}</TableCell>
-                            <TableCell className={styles.tableBodyCell}>{player.defenses ?? 0}</TableCell>{/* Defesas */}
                             <TableCell className={styles.tableBodyCell}>{player.shots ?? 0}</TableCell>
                             <TableCell className={styles.tableBodyCell}>{player.shots_on_goal ?? 0}</TableCell>
                             <TableCell className={styles.tableBodyCell}>{player.fouls_committed ?? 0}</TableCell>

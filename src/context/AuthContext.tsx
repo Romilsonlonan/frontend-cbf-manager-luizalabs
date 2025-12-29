@@ -2,7 +2,7 @@
 
 import React, { createContext, useState, useContext, useEffect, ReactNode } from 'react';
 import { useRouter } from 'next/navigation';
-import { getCurrentUser, getPlayers, updateUserProfile, changePassword, deleteAccount, uploadProfileImage, createPlayer, scrapeAthletes, scrapeClubPlayers } from '@/lib/api';
+import { getCurrentUser, updateUserProfile, changePassword, deleteAccount, uploadProfileImage, scrapeAthletes, scrapeClubPlayers } from '@/lib/api';
 import { useLoading } from './LoadingContext';
 
 interface User {
@@ -22,6 +22,7 @@ interface AuthContextType {
   login: (token: string) => void;
   logout: () => void;
   updateUser: (userData: Partial<User>) => void;
+  onAuthError: () => void; // Adicionado
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -112,7 +113,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   return (
-    <AuthContext.Provider value={{ user, isAuthenticated, token, loadingUser, login, logout, updateUser }}>
+    <AuthContext.Provider value={{ user, isAuthenticated, token, loadingUser, login, logout, updateUser, onAuthError: handleAuthError }}>
       {children}
     </AuthContext.Provider>
   );
