@@ -31,6 +31,32 @@ export type Athlete = {
     updated_at?: string; // Added updated_at
 };
 
+export type Player = {
+    id: number;
+    name: string;
+    jerseyNumber?: number | null;
+    position: string;
+    age: number;
+    height?: number;
+    weight?: number;
+    nationality?: string;
+    games?: number;
+    substitutions?: number;
+    saves?: number;
+    goalsConceded?: number;
+    cleanSheets?: number;
+    goals?: number;
+    assists?: number;
+    tackles?: number;
+    chancesCreated?: number;
+    foulsCommitted?: number;
+    foulsSuffered?: number;
+    yellowCards?: number;
+    redCards?: number;
+    club_id?: number | null;
+    player_type?: string;
+};
+
 export type Club = {
     id: number; // Changed from string to number to match backend ClubSimpleResponse
     name: string;
@@ -40,6 +66,7 @@ export type Club = {
     foundation_date?: string; // Changed from foundationDate to foundation_date
     br_titles: number; // Changed from brTitles to br_titles
     espn_url?: string; // Added espn_url
+    banner_image_url?: string; // Added banner_image_url
 };
 
 export type AthleteInClub = {
@@ -56,11 +83,13 @@ export interface ClubSimpleResponse {
     name: string;
     initials: string;
     city: string;
+    country: string; // Added country property
     shield_image_url?: string;
     foundation_date?: string; // Assuming string format for date from backend
     br_titles: number;
     espn_url?: string;
     training_center?: string; // Adicionado para centro de treinamento
+    banner_image_url?: string; // Adicionado para URL do banner
 }
 
 export interface ClubDetailsResponse extends ClubSimpleResponse {}

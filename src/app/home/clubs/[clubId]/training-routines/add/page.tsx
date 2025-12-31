@@ -10,7 +10,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { getClubDetails, addTrainingRoutine } from "@/lib/api";
 import { ClubDetailsResponse } from "@/lib/types";
 import Image from 'next/image';
-import { toast } from "@/components/ui/use-toast";
+import { useToast } from "@/components/ui/use-toast";
 
 export default function AddTrainingRoutinePage() {
   const router = useRouter();
@@ -23,6 +23,7 @@ export default function AddTrainingRoutinePage() {
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const { toast } = useToast(); // Correctly use the hook
 
   useEffect(() => {
     const fetchClub = async () => {

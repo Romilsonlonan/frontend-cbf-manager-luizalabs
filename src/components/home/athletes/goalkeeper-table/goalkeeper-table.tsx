@@ -1,4 +1,5 @@
 import * as React from "react";
+import Image from "next/image";
 import {
     Table,
     TableBody,
@@ -23,59 +24,70 @@ import {
     CreditCard, // Cartões Amarelos
     SquareSlash, // Cartões Vermelhos
 } from "lucide-react";
-import { PlayerResponse, Position } from "@/lib/types";
+import { GoalkeeperResponse } from "@/lib/types";
+import { PlayerStatsColumn } from "@/lib/definitions"; // Import PlayerStatsColumn
 import styles from "./goalkeeper-table.module.css";
 
-interface Player extends PlayerResponse {
-    player_type?: string; // Made optional
-    updated_at?: string; // Made optional
-}
-
 interface GoalkeeperTableProps {
-    goalkeepers: Player[];
+    goalkeepers: GoalkeeperResponse[];
+    columns: PlayerStatsColumn[]; // Add columns prop
 }
 
-export function GoalkeeperTable({ goalkeepers }: GoalkeeperTableProps) {
+export function GoalkeeperTable({ goalkeepers, columns }: GoalkeeperTableProps) {
+    const getCellValue = (player: GoalkeeperResponse, columnKey: string) => {
+        switch (columnKey) {
+            case 'height':
+                return `${player.height ?? 0}m`;
+            case 'weight':
+                return `${player.weight ?? 0}kg`;
+            case 'nationality':
+                return player.nationality ?? 'N/A';
+            case 'games':
+                return player.games ?? 0;
+            case 'substitutions':
+                return player.substitutions ?? 0;
+            case 'saves':
+                return player.saves ?? 0;
+            case 'goals_conceded':
+                return player.goals_conceded ?? 0;
+            case 'assists':
+                return player.assists ?? 0;
+            case 'fouls_committed':
+                return player.fouls_committed ?? 0;
+            case 'fouls_suffered':
+                return player.fouls_suffered ?? 0;
+            case 'yellow_cards':
+                return player.yellow_cards ?? 0;
+            case 'red_cards':
+                return player.red_cards ?? 0;
+            case 'club_id':
+                return player.club?.name ?? ''; // Display club name or empty string
+            default:
+                const value = player[columnKey as keyof GoalkeeperResponse];
+                return typeof value === 'object' && value !== null ? JSON.stringify(value) : value;
+        }
+    };
+
     return (
         <div className={styles.tableContainer}>
             <Table>
                 <TableHeader>
                     <TableRow>
-                        <TableHead className={styles.tableHeadCell}>Nome</TableHead>
-                        <TableHead className={styles.tableHeadCellWithIcon}><Compass className={styles.icon} />POS</TableHead>
-                        <TableHead className={styles.tableHeadCell}>Idade</TableHead>
-                        <TableHead className={styles.tableHeadCellWithIcon}><Ruler className={styles.icon} />Alt</TableHead>
-                        <TableHead className={styles.tableHeadCellWithIcon}><Weight className={styles.icon} />P</TableHead>
-                        <TableHead className={styles.tableHeadCellWithIcon}><Flag className={styles.icon} />NAC</TableHead>
-                        <TableHead className={styles.tableHeadCellWithIcon}><Shirt className={styles.icon} />J</TableHead>
-                        <TableHead className={styles.tableHeadCellWithIcon}><ArrowRightLeft className={styles.icon} />SUB</TableHead>
-                        <TableHead className={styles.tableHeadCellWithIcon}><ShieldAlert className={styles.icon} />D</TableHead>
-                        <TableHead className={styles.tableHeadCellWithIcon}><Goal className={styles.icon} />GS</TableHead>
-                        <TableHead className={styles.tableHeadCellWithIcon}><Handshake className={styles.icon} />A</TableHead>
-                        <TableHead className={styles.tableHeadCellWithIcon}><Gavel className={styles.icon} />FC</TableHead>
-                        <TableHead className={styles.tableHeadCellWithIcon}><Scale className={styles.icon} />FS</TableHead>
-                        <TableHead className={styles.tableHeadCellWithIcon}><CreditCard className={styles.icon} />CA</TableHead>
-                        <TableHead className={styles.tableHeadCellWithIcon}><SquareSlash className={styles.icon} />CV</TableHead>
+                        {columns.map((column) => (
+                            <TableHead key={column.key} className={styles.tableHeadCell}>
+                                {column.name}
+                            </TableHead>
+                        ))}
                     </TableRow>
                 </TableHeader>
                 <TableBody>
                     {goalkeepers.map((player) => (
                         <TableRow key={player.id}>
-                            <TableCell className={styles.tableBodyCell}>{player.name}</TableCell>
-                            <TableCell className={styles.tableBodyCell}>{player.position}</TableCell>
-                            <TableCell className={styles.tableBodyCell}>{player.age}</TableCell>
-                            <TableCell className={styles.tableBodyCell}>{player.height ?? 0}m</TableCell>
-                            <TableCell className={styles.tableBodyCell}>{player.weight ?? 0}kg</TableCell>
-                            <TableCell className={styles.tableBodyCell}>{player.nationality ?? 'N/A'}</TableCell>
-                            <TableCell className={styles.tableBodyCell}>{player.games ?? 0}</TableCell>
-                            <TableCell className={styles.tableBodyCell}>{player.substitute_appearances ?? 0}</TableCell>
-                            <TableCell className={styles.tableBodyCell}>{player.defenses ?? 0}</TableCell>
-                            <TableCell className={styles.tableBodyCell}>{player.goals_conceded ?? 0}</TableCell>
-                            <TableCell className={styles.tableBodyCell}>{player.assists ?? 0}</TableCell>
-                            <TableCell className={styles.tableBodyCell}>{player.fouls_committed ?? 0}</TableCell>
-                            <TableCell className={styles.tableBodyCell}>{player.fouls_suffered ?? 0}</TableCell>
-                            <TableCell className={styles.tableBodyCell}>{player.yellow_cards ?? 0}</TableCell>
-                            <TableCell className={styles.tableBodyCell}>{player.red_cards ?? 0}</TableCell>
+                            {columns.map((column) => (
+                                <TableCell key={`${player.id}-${column.key}`} className={styles.tableBodyCell}>
+                                    {getCellValue(player, column.key)}
+                                </TableCell>
+                            ))}
                         </TableRow>
                     ))}
                 </TableBody>

@@ -3,7 +3,7 @@ export type Category = 'Todos' | 'Goleiros' | 'Defensores' | 'Meio-campistas' | 
 export type Player = {
   id: number;
   name: string;
-  jerseyNumber?: number;
+  jerseyNumber?: number | null;
   position: string;
   age: number;
   height?: number; // Made optional
@@ -22,7 +22,6 @@ export type Player = {
   foulsSuffered?: number; // Made optional
   yellowCards?: number; // Made optional
   redCards?: number; // Made optional
-  imageUrl?: string;
   club_id?: number | null; // Made optional and nullable
 };
 
@@ -31,3 +30,17 @@ export type PlayerStatsColumn = {
   name: string;
   isSortable: boolean;
 };
+
+export interface Club {
+  id: number;
+  name: string;
+  country: string;
+  initials?: string;
+  city?: string;
+  shield_image_url?: string;
+  foundation_date?: string;
+  br_titles?: number;
+  espn_url?: string;
+  training_center?: string;
+  banner_image_url?: string;
+}

@@ -217,10 +217,21 @@ export const createClub = async (formData: FormData) => {
   return response.json();
 };
 
-export const getClubs = async (): Promise<ClubSimpleResponse[]> => {
-  const response = await fetch(`${API_URL}/clubs/`);
+export const getClubs = async (token: string, onAuthError?: () => void): Promise<ClubSimpleResponse[]> => {
+  const headers: HeadersInit = {
+    'Content-Type': 'application/json',
+    'Authorization': `Bearer ${token}`,
+  };
+
+  const response = await fetch(`${API_URL}/clubs/`, { headers });
   if (!response.ok) {
-    throw new Error('Erro ao buscar clubes');
+    if (response.status === 401) {
+      onAuthError?.();
+      throw new Error('Token inválido ou expirado. Por favor, faça login novamente.');
+    }
+    const errorBody = await response.json().catch(() => ({ detail: 'Erro desconhecido' }));
+    console.error('API Response not OK for getClubs:', response.status, errorBody);
+    throw new Error(errorBody.detail || 'Erro ao buscar clubes');
   }
   return response.json();
 };
@@ -445,6 +456,134 @@ export const deleteClub = async (clubId: number, token: string, onAuthError?: ()
   return true;
 };
 
+export const getTopGoalScorers = async (token: string, position?: string, clubId?: number, onAuthError?: () => void): Promise<FieldPlayerResponse[]> => {
+  let url = new URL(`${API_URL}/statistics/top_goal_scorers/`);
+  if (position) {
+    url.searchParams.append('position', position);
+  }
+  if (clubId) {
+    url.searchParams.append('club_id', clubId.toString());
+  }
+
+  const response = await fetch(url.toString(), {
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+  });
+
+  if (!response.ok) {
+    if (response.status === 401) {
+      onAuthError?.();
+      throw new Error('Token inválido ou expirado');
+    }
+    const errorBody = await response.json().catch(() => ({ detail: 'Erro desconhecido' }));
+    console.error('API Response not OK for getTopGoalScorers:', response.status, errorBody);
+    throw new Error(errorBody.detail || 'Falha ao buscar artilheiros');
+  }
+  return response.json();
+};
+
+export const getTopPlayersByStatistic = async (token: string, statistic: string, clubId?: number, onAuthError?: () => void): Promise<(FieldPlayerResponse | GoalkeeperResponse)[]> => {
+  let url = new URL(`${API_URL}/statistics/top_players_by_statistic/`);
+  if (statistic) {
+    url.searchParams.append('statistic', statistic);
+  }
+  if (clubId) {
+    url.searchParams.append('club_id', clubId.toString());
+  }
+
+  const response = await fetch(url.toString(), {
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+  });
+
+  if (!response.ok) {
+    if (response.status === 401) {
+      onAuthError?.();
+      throw new Error('Token inválido ou expirado');
+    }
+    const errorBody = await response.json().catch(() => ({ detail: 'Erro desconhecido' }));
+    console.error('API Response not OK for getTopPlayersByStatistic:', response.status, errorBody);
+    throw new Error(errorBody.detail || 'Falha ao buscar estatísticas de jogadores');
+  }
+  return response.json();
+};
+
+export const getTopPlayersByAge = async (token: string, ageFilter: 'oldest' | 'youngest', clubId?: number, onAuthError?: () => void): Promise<(FieldPlayerResponse | GoalkeeperResponse)[]> => {
+  let url = new URL(`${API_URL}/statistics/top_players_by_age/`);
+  if (ageFilter) {
+    url.searchParams.append('age_filter', ageFilter);
+  }
+  if (clubId) {
+    url.searchParams.append('club_id', clubId.toString());
+  }
+
+  const response = await fetch(url.toString(), {
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+  });
+
+  if (!response.ok) {
+    if (response.status === 401) {
+      onAuthError?.();
+      throw new Error('Token inválido ou expirado');
+    }
+    const errorBody = await response.json().catch(() => ({ detail: 'Erro desconhecido' }));
+    console.error('API Response not OK for getTopPlayersByAge:', response.status, errorBody);
+    throw new Error(errorBody.detail || 'Falha ao buscar jogadores por idade');
+  }
+  return response.json();
+};
+
+export const getTotalAthletesCount = async (token: string, onAuthError?: () => void): Promise<number> => {
+  const url = new URL(`${API_URL}/statistics/total_athletes_count/`);
+  const response = await fetch(url.toString(), {
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+  });
+
+  if (!response.ok) {
+    if (response.status === 401) {
+      onAuthError?.();
+      throw new Error('Token inválido ou expirado');
+    }
+    const errorBody = await response.json().catch(() => ({ detail: 'Erro desconhecido' }));
+    console.error('API Response not OK for getTotalAthletesCount:', response.status, errorBody);
+    throw new Error(errorBody.detail || 'Falha ao buscar total de atletas');
+  }
+  const data = await response.json();
+  return data.total_count;
+};
+
+export const getTotalClubsCount = async (token: string, onAuthError?: () => void): Promise<number> => {
+  const url = new URL(`${API_URL}/statistics/total_clubs_count/`);
+  const response = await fetch(url.toString(), {
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+  });
+
+  if (!response.ok) {
+    if (response.status === 401) {
+      onAuthError?.();
+      throw new Error('Token inválido ou expirado');
+    }
+    const errorBody = await response.json().catch(() => ({ detail: 'Erro desconhecido' }));
+    console.error('API Response not OK for getTotalClubsCount:', response.status, errorBody);
+    throw new Error(errorBody.detail || 'Falha ao buscar total de clubes');
+  }
+  const data = await response.json();
+  return data.total_count;
+};
+
 export const api = {
   login,
   getCurrentUser,
@@ -461,6 +600,11 @@ export const api = {
   createFieldPlayer,
   addTrainingRoutine,
   deleteClub,
+  getTopGoalScorers,
+  getTopPlayersByStatistic,
+  getTopPlayersByAge,
+  getTotalAthletesCount,
+  getTotalClubsCount,
 };
 
 export const clubsApi = {

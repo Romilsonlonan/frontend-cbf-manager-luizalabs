@@ -7,6 +7,7 @@
 }
 
 .sidebar {
+    width: 180px; /* Reduced width */
     background-color: var(--sidebar-bg);
     color: var(--sidebar-text-color);
 }

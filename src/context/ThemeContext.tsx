@@ -45,6 +45,8 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
       'lilac': '#c7d2fe',
       'purple': '#8b5cf6',
       'blue': '#3b82f6', // Added blue color
+      'green': '#22c55e', // Added green color
+      'dark-green': '#101f0d', // Updated dark green color
     };
 
     document.documentElement.style.setProperty('--navbar-bg', colorMap[navbarColor] || colorMap['default']);

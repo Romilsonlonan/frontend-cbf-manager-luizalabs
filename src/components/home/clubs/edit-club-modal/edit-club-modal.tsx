@@ -29,6 +29,7 @@ export function EditClubModal({ open, onOpenChange, clubToEdit, onClubUpdated }:
         espn_url: ''
     });
     const [selectedImage, setSelectedImage] = useState<File | null>(null);
+    const [selectedBannerImage, setSelectedBannerImage] = useState<File | null>(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
 
@@ -41,9 +42,10 @@ export function EditClubModal({ open, onOpenChange, clubToEdit, onClubUpdated }:
                 foundation_date: clubToEdit.foundation_date || '',
                 br_titles: clubToEdit.br_titles.toString(),
                 training_center: clubToEdit.training_center || '',
-                espn_url: clubToEdit.espn_url || ''
+                espn_url: clubToEdit.espn_url || '',
             });
             setSelectedImage(null); // Clear selected image on new club selection
+            setSelectedBannerImage(null); // Clear selected banner image on new club selection
         }
     }, [clubToEdit]);
 
@@ -88,6 +90,16 @@ export function EditClubModal({ open, onOpenChange, clubToEdit, onClubUpdated }:
 
             if (selectedImage) {
                 formDataToSend.append('shield_image', selectedImage);
+            }
+
+            if (selectedBannerImage) {
+                formDataToSend.append('banner_image', selectedBannerImage);
+            } else if (clubToEdit?.banner_image_url && !selectedBannerImage) {
+                // If there was an existing banner and no new one is selected,
+                // but the user might want to clear it, send an empty string.
+                // This assumes the backend handles an empty string as a signal to clear.
+                // If the backend expects a specific flag, this needs adjustment.
+                formDataToSend.append('banner_image', '');
             }
 
             if (!token) {
@@ -147,6 +159,15 @@ export function EditClubModal({ open, onOpenChange, clubToEdit, onClubUpdated }:
                             onImageSelect={setSelectedImage}
                             maxSizeMB={5}
                             initialImageUrl={clubToEdit?.shield_image_url ? `http://localhost:8000${clubToEdit.shield_image_url}` : undefined}
+                        />
+                    </div>
+
+                    <div className={styles.formField}>
+                        <Label htmlFor="banner">Banner (Opcional)</Label>
+                        <ImageUpload
+                            onImageSelect={setSelectedBannerImage}
+                            maxSizeMB={5}
+                            initialImageUrl={clubToEdit?.banner_image_url ? `http://localhost:8000${clubToEdit.banner_image_url}` : undefined}
                         />
                     </div>
 

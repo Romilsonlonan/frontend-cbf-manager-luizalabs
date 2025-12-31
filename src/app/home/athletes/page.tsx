@@ -2,33 +2,94 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { allStatsColumns, categories, playerCategoryMap, baseColumnKeys, baseColumnKeysSet, goalkeeperStatKeys, fieldPlayerStatKeys } from '@/lib/roster-data';
-import type { Category, Player } from '@/lib/definitions';
+import { allStatsColumns, categories, fieldPlayerStatKeys } from '@/lib/roster-data';
 import { PlayerTable } from '@/components/roster/player-table';
 import { CategoryFilter } from '@/components/roster/category-filter';
 import { ColumnSelector } from '@/components/roster/column-selector';
+import { ClubFilter } from '@/components/roster/club-filter';
+import { PlayerStatsColumn } from '@/lib/definitions';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Goal, Shield, Trophy, Users } from 'lucide-react';
 import Image from 'next/image';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { useAuth } from '@/context/AuthContext';
-import { api } from '@/lib/api'; // Import the api service
-import { GoalkeeperResponse, FieldPlayerResponse } from '@/lib/types'; // Import new types
+import { api } from '@/lib/api';
+import { GoalkeeperResponse, FieldPlayerResponse, Player, Club } from '@/lib/types';
+
+// ======================================================
+// 🔒 ORDEM OFICIAL ESPN — GOLEIROS (FONTE DA VERDADE)
+// ======================================================
+const GOALKEEPER_ESPN_ORDER = [
+  'name', 'position', 'age', 'height', 'weight', 'nationality',
+  'games', 'substitutions', 'saves', 'goals_conceded', 'assists',
+  'fouls_committed', 'fouls_suffered', 'yellow_cards', 'red_cards',
+] as const;
+
+// ======================================================
+// 🔒 ORDEM OFICIAL ESPN — JOGADORES DE CAMPO (FONTE DA VERDADE)
+// ======================================================
+const FIELD_PLAYER_ESPN_ORDER = [
+  'name', 'position', 'age', 'height', 'weight', 'nationality',
+  'games', 'substitutions', 'goals', 'assists',
+  'total_shots', 'shots_on_goal', 'fouls_committed', 'fouls_suffered',
+  'yellow_cards', 'red_cards',
+] as const;
+
+// ======================================================
+// 🧠 Função utilitária — preserva a ordem SEMPRE
+// ======================================================
+const getColumnsByOrder = (keys: readonly string[]): PlayerStatsColumn[] => {
+  return keys
+    .map(key => allStatsColumns.find(col => col.key === key))
+    .filter((col): col is PlayerStatsColumn => Boolean(col));
+};
+
+// ======================================================
+// 🧠 Função de mapeamento GoalkeeperResponse → Player
+// ======================================================
+const mapGoalkeeperResponseToPlayer = (goalkeeper: GoalkeeperResponse): Player => ({
+  id: goalkeeper.id,
+  name: goalkeeper.name,
+  position: goalkeeper.position,
+  age: goalkeeper.age,
+  height: goalkeeper.height,
+  weight: goalkeeper.weight,
+  nationality: goalkeeper.nationality,
+  games: goalkeeper.games,
+  substitutions: goalkeeper.substitutions,
+  saves: goalkeeper.saves,
+  goalsConceded: goalkeeper.goals_conceded,
+  assists: goalkeeper.assists,
+  foulsCommitted: goalkeeper.fouls_committed,
+  foulsSuffered: goalkeeper.fouls_suffered,
+  yellowCards: goalkeeper.yellow_cards,
+  redCards: goalkeeper.red_cards,
+  club_id: goalkeeper.club_id,
+  jerseyNumber: goalkeeper.jersey_number,
+  player_type: goalkeeper.player_type,
+});
 
 export default function Home() {
   const searchParams = useSearchParams();
-  const { token, onAuthError } = useAuth(); // Get token and onAuthError from AuthContext
+  const { token, onAuthError } = useAuth();
+
   const [goalkeepers, setGoalkeepers] = useState<GoalkeeperResponse[]>([]);
   const [fieldPlayers, setFieldPlayers] = useState<FieldPlayerResponse[]>([]);
+  const [clubs, setClubs] = useState<Club[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   const currentCategory = searchParams.get('category') || 'Todos';
   const selectedStatColKeys = searchParams.get('columns')?.split(',') || [];
+  const selectedClubIdString = searchParams.get('clubId');
+  const selectedClubId = selectedClubIdString && selectedClubIdString !== 'all' ? parseInt(selectedClubIdString) : null;
 
+  // ======================================================
+  // 📡 Fetch de dados
+  // ======================================================
   const fetchPlayers = useCallback(async () => {
     if (!token) {
-      setError('Authentication token not found. Please log in.');
+      setError('Authentication token not found.');
       setLoading(false);
       return;
     }
@@ -38,73 +99,88 @@ export default function Home() {
 
     try {
       if (currentCategory === 'Goleiros') {
-        const data = await api.getGoalkeepers(token, null, '', onAuthError);
+        const data = await api.getGoalkeepers(token, selectedClubId, '', onAuthError);
         setGoalkeepers(data);
-        setFieldPlayers([]); // Clear field players if viewing goalkeepers
+        setFieldPlayers([]);
       } else if (currentCategory === 'Todos') {
-        const gks = await api.getGoalkeepers(token, null, '', onAuthError);
-        const fps = await api.getFieldPlayers(token, null, '', '', onAuthError);
+        const [gks, fps] = await Promise.all([
+          api.getGoalkeepers(token, selectedClubId, '', onAuthError),
+          api.getFieldPlayers(token, selectedClubId, '', '', onAuthError),
+        ]);
         setGoalkeepers(gks);
         setFieldPlayers(fps);
       } else {
-        // For 'Defensores', 'Meio-Campistas', 'Atacantes'
-        const backendPositionMap: { [key: string]: string } = {
+        const backendPositionMap: Record<string, string> = {
           'Defensores': 'Defensor',
           'Meio-Campistas': 'Meio-Campista',
           'Atacantes': 'Atacante',
         };
         const positionFilter = backendPositionMap[currentCategory] || '';
-        const data = await api.getFieldPlayers(token, null, '', positionFilter, onAuthError);
+        const data = await api.getFieldPlayers(token, selectedClubId, '', positionFilter, onAuthError);
         setFieldPlayers(data);
-        setGoalkeepers([]); // Clear goalkeepers if viewing field players
+        setGoalkeepers([]);
       }
     } catch (err) {
+      console.error(err);
       setError('Failed to fetch players.');
-      console.error('Error fetching players:', err);
     } finally {
       setLoading(false);
     }
-  }, [token, currentCategory, onAuthError]);
+  }, [token, currentCategory, selectedClubId, onAuthError]);
+
+  // ======================================================
+  // 📡 Fetch de clubes
+  // ======================================================
+  const fetchClubs = useCallback(async () => {
+    if (!token) return;
+
+    try {
+      const data = await api.getClubs(token, onAuthError);
+      setClubs(data);
+    } catch (err) {
+      console.error('Erro ao buscar clubes:', err);
+    }
+  }, [token, onAuthError]);
 
   useEffect(() => {
     fetchPlayers();
   }, [fetchPlayers]);
 
-  const stadiumImage = PlaceHolderImages.find(img => img.id === 'stadium-hero') || { imageUrl: "https://picsum.photos/seed/vasco-stadium/1200/400", imageHint: "soccer stadium"};
-  
-  const getColumns = (keys: readonly string[]) => {
-    return allStatsColumns.filter(c => keys.includes(c.key));
-  }
-  
-  const baseColumns = getColumns(baseColumnKeys);
-  // const goalkeepers = players.filter(p => p.position === 'Goleiro'); // No longer needed, state is already separated
-  // const fieldPlayers = players.filter(p => p.position !== 'Goleiro'); // No longer needed, state is already separated
+  useEffect(() => {
+    fetchClubs();
+  }, [fetchClubs]);
 
-  const goalkeeperColumns = [...baseColumns, ...getColumns(goalkeeperStatKeys)];
-  const fieldPlayerColumns = [...baseColumns, ...getColumns(fieldPlayerStatKeys)];
+  // ======================================================
+  // 🏟️ Hero image
+  // ======================================================
+  const selectedClub = clubs.find(club => club.id === selectedClubId);
+  const bannerImageUrl = selectedClub?.banner_image_url ? `http://localhost:8000${selectedClub.banner_image_url}` : (PlaceHolderImages.find(img => img.id === 'stadium-hero')?.imageUrl ?? 'https://i.ibb.co/5gRwYCCV/torcidas.png');
+  const bannerImageHint = selectedClub?.name ? `Banner do clube ${selectedClub.name}` : 'soccer stadium';
 
-  let selectableColumns = allStatsColumns;
-  
-  if (currentCategory === 'Goleiros') {
-    selectableColumns = getColumns(goalkeeperStatKeys);
-  } else if (currentCategory === 'Todos') {
-    selectableColumns = allStatsColumns.filter(c => !baseColumnKeysSet.has(c.key));
-  }
-  else {
-    selectableColumns = getColumns(fieldPlayerStatKeys);
-  }
+  // ======================================================
+  // 📊 COLUNAS
+  // ======================================================
+  const goalkeeperColumns = getColumnsByOrder(
+    selectedStatColKeys.length > 0 && (currentCategory === 'Goleiros' || currentCategory === 'Todos')
+      ? selectedStatColKeys
+      : GOALKEEPER_ESPN_ORDER
+  );
 
-  // The local filtering is no longer needed as the backend handles it.
-  // The 'players' state will already contain the filtered list from the API.
-  // const displayedPlayers = players; // No longer a single 'players' array
+  const fieldPlayerColumns = getColumnsByOrder(
+    selectedStatColKeys.length > 0 && (currentCategory === 'Defensores' || currentCategory === 'Meio-Campistas' || currentCategory === 'Atacantes' || currentCategory === 'Todos')
+      ? selectedStatColKeys
+      : FIELD_PLAYER_ESPN_ORDER
+  );
 
-  // Adjust filtering logic for displaying goalkeepers and field players
-  // const displayedGoalkeepers = displayedPlayers.filter(p => p.position === 'Goleiro'); // No longer needed
-  // const displayedFieldPlayers = displayedPlayers.filter(p => p.position !== 'Goleiro'); // No longer needed
+  const selectableGoalkeeperColumns = getColumnsByOrder(GOALKEEPER_ESPN_ORDER);
+  const selectableFieldPlayerColumns = getColumnsByOrder(FIELD_PLAYER_ESPN_ORDER);
 
+  // ======================================================
+  // ⏳ Loading & Error States
+  // ======================================================
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-background text-foreground">
+      <div className="min-h-screen flex items-center justify-center">
         <p>Carregando jogadores...</p>
       </div>
     );
@@ -112,46 +188,58 @@ export default function Home() {
 
   if (error) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-background text-foreground">
+      <div className="min-h-screen flex items-center justify-center">
         <p className="text-red-500">{error}</p>
       </div>
     );
   }
 
+  // ======================================================
+  // 🧩 RENDER
+  // ======================================================
   return (
     <div className="min-h-screen bg-background text-foreground">
       <header className="relative h-48 md:h-64 w-full">
         <Image
-          src={stadiumImage.imageUrl}
-          alt="Estádio São Januário"
+          src={bannerImageUrl}
+          alt={bannerImageHint}
           fill
-          style={{objectFit:"cover"}}
-          className="opacity-20"
-          data-ai-hint={stadiumImage.imageHint}
+          style={{ objectFit: 'cover' }}
+          data-ai-hint={bannerImageHint}
           priority
         />
-        <div className="absolute inset-0 flex flex-col items-center justify-center bg-gradient-to-t from-background via-background/80 to-transparent">
-          <div className="text-center">
-            <Trophy className="mx-auto h-12 w-12 text-primary" />
-            <h1 className="font-headline text-4xl md:text-6xl font-bold text-primary mt-2">
-              Vasco da Gama
-            </h1>
-            <p className="text-lg md:text-xl text-muted-foreground font-body">Elenco Principal 2024</p>
+        <div className="absolute inset-0 flex flex-col items-center justify-center">
+          <div className="text-center p-4 bg-black/50 rounded-lg">
+            <Trophy className="mx-auto h-12 w-12 text-white" />
+            <h1 className="font-headline text-4xl md:text-6xl font-bold text-white mt-2">Aqui o maior campeão é você!</h1>
+            <p className="text-lg md:text-xl text-white font-body">Atualização toda a semana!</p>
           </div>
         </div>
       </header>
-      
+
       <main className="container mx-auto px-4 py-8">
         <Card className="shadow-lg border-none">
           <CardHeader>
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
               <CardTitle className="font-headline text-2xl flex items-center gap-2">
-                <Users className="h-6 w-6"/>
+                <Users className="h-6 w-6" />
                 Jogadores
               </CardTitle>
               <div className="flex flex-col sm:flex-row gap-2 w-full md:w-auto">
-                 <CategoryFilter categories={['Todos', ...categories]} currentCategory={currentCategory} />
-                 <ColumnSelector allColumns={selectableColumns} selectedColumns={selectedStatColKeys} />
+                <ClubFilter clubs={clubs} selectedClubId={selectedClubIdString} />
+                <CategoryFilter categories={['Todos', ...categories]} currentCategory={currentCategory} />
+                {(currentCategory === 'Goleiros' || currentCategory === 'Todos') && (
+                  <ColumnSelector 
+                    allColumns={selectableGoalkeeperColumns} 
+                    selectedColumns={selectedStatColKeys} 
+                  />
+                )}
+                {(currentCategory === 'Defensores' || currentCategory === 'Meio-Campistas' || currentCategory === 'Atacantes' || currentCategory === 'Todos') && (
+                  <ColumnSelector 
+                    allColumns={selectableFieldPlayerColumns} 
+                    selectedColumns={selectedStatColKeys} 
+                  />
+                )}
               </div>
             </div>
           </CardHeader>
@@ -160,26 +248,32 @@ export default function Home() {
               <>
                 {goalkeepers.length > 0 && (
                   <div>
-                    <h3 className="font-headline text-xl flex items-center gap-2 mb-4"><Shield className="h-5 w-5 text-primary" />Goleiros</h3>
-                    <PlayerTable players={goalkeepers} columns={goalkeeperColumns} />
+                    <h3 className="font-headline text-xl flex items-center gap-2 mb-4">
+                      <Shield className="h-5 w-5 text-primary" />
+                      Goleiros
+                    </h3>
+                    <PlayerTable players={goalkeepers.map(mapGoalkeeperResponseToPlayer)} columns={goalkeeperColumns} />
                   </div>
                 )}
                 {fieldPlayers.length > 0 && (
                   <div>
-                    <h3 className="font-headline text-xl flex items-center gap-2 mb-4"><Goal className="h-5 w-5 text-primary" />Jogadores de Campo</h3>
+                    <h3 className="font-headline text-xl flex items-center gap-2 mb-4">
+                      <Goal className="h-5 w-5 text-primary" />
+                      Jogadores de Campo
+                    </h3>
                     <PlayerTable players={fieldPlayers} columns={fieldPlayerColumns} />
                   </div>
                 )}
               </>
             ) : currentCategory === 'Goleiros' ? (
-              <PlayerTable players={goalkeepers} columns={[...baseColumns, ...getColumns(selectedStatColKeys.length > 0 ? selectedStatColKeys : goalkeeperStatKeys)]} />
+              <PlayerTable players={goalkeepers.map(mapGoalkeeperResponseToPlayer)} columns={goalkeeperColumns} />
             ) : (
-              <PlayerTable players={fieldPlayers} columns={[...baseColumns, ...getColumns(selectedStatColKeys.length > 0 ? selectedStatColKeys : fieldPlayerStatKeys)]} />
+              <PlayerTable players={fieldPlayers} columns={fieldPlayerColumns} />
             )}
           </CardContent>
         </Card>
       </main>
-      
+
       <footer className="text-center py-6 text-sm text-muted-foreground">
         <p>Desenvolvido com paixão pelo Gigante da Colina.</p>
       </footer>

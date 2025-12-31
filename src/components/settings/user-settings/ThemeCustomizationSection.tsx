@@ -30,6 +30,8 @@ const ThemeCustomizationSection: React.FC<ThemeCustomizationSectionProps> = ({
         { value: 'lilac', label: 'Lilás' },
         { value: 'purple', label: 'Roxo' },
         { value: 'blue', label: 'Azul' },
+        { value: 'green', label: 'Verde' },
+        { value: 'dark-green', label: 'Verde Escuro' },
     ];
 
     const handleThemeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {

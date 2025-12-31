@@ -11,7 +11,7 @@ export const playerCategoryMap: Record<string, Category> = {
 
 export const baseColumnKeys = ['name', 'position', 'age', 'height', 'weight', 'nationality', 'games', 'substitutions', 'yellowCards', 'redCards'] as const;
 export const baseColumnKeysSet: Set<Exclude<keyof Player, 'id' | 'imageUrl'>> = new Set(baseColumnKeys);
-export const goalkeeperStatKeys = ['saves', 'goalsConceded', 'cleanSheets'] as const;
+export const goalkeeperStatKeys = ['saves', 'goalsConceded', 'assists', 'foulsCommitted', 'foulsSuffered'] as const;
 export const fieldPlayerStatKeys = ['goals', 'assists', 'tackles', 'chancesCreated', 'foulsCommitted', 'foulsSuffered'] as const;
 
 export const allStatsColumns: PlayerStatsColumn[] = [
@@ -25,9 +25,8 @@ export const allStatsColumns: PlayerStatsColumn[] = [
   { key: 'substitutions', name: 'SUB', isSortable: true },
   { key: 'saves', name: 'D', isSortable: true },
   { key: 'goalsConceded', name: 'GS', isSortable: true },
-  { key: 'cleanSheets', name: 'JSG', isSortable: true }, // For Goalkeepers, 'JSG' means Clean Sheets
   { key: 'goals', name: 'G', isSortable: true },
-  { key: 'assists', name: 'ASS', isSortable: true }, // For Field Players, 'ASS' means Assists
+  { key: 'assists', name: 'A', isSortable: true }, // For Field Players, 'ASS' means Assists
   { key: 'tackles', name: 'TC', isSortable: true },
   { key: 'chancesCreated', name: 'CG', isSortable: true },
   { key: 'foulsCommitted', name: 'FC', isSortable: true },

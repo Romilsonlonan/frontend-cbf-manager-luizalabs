@@ -48,7 +48,6 @@ export function PlayerTable({ players, columns }: PlayerTableProps) {
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead className="w-[60px]">Foto</TableHead>
             {columns.map((column) => (
               <TableHead key={column.key}>
                 {column.isSortable ? (
@@ -70,15 +69,6 @@ export function PlayerTable({ players, columns }: PlayerTableProps) {
         <TableBody>
           {sortedPlayers.map((player) => (
             <TableRow key={player.id}>
-              <TableCell>
-                <Image
-                  src={player.imageUrl || '/placeholder-avatar.jpg'}
-                  alt={player.name}
-                  width={40}
-                  height={40}
-                  className="rounded-full object-cover"
-                />
-              </TableCell>
               {columns.map((column) => (
                 <TableCell key={`${player.id}-${column.key}`}>
                   {player[column.key as keyof Player]}

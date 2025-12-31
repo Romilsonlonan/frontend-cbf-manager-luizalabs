@@ -8,9 +8,11 @@ interface ImageUploadProps {
     preview?: string | null
     maxSizeMB?: number
     initialImageUrl?: string // Add initialImageUrl prop
+    id: string // Add id prop
+    labelText: string // Add labelText prop
 }
 
-export function ImageUpload({ onImageSelect, preview, maxSizeMB = 5, initialImageUrl }: ImageUploadProps) {
+export function ImageUpload({ onImageSelect, preview, maxSizeMB = 5, initialImageUrl, id, labelText }: ImageUploadProps) {
     const [selectedImage, setSelectedImage] = useState<File | null>(null)
     const [previewUrl, setPreviewUrl] = useState<string | null>(preview || initialImageUrl || null) // Use initialImageUrl
     const [error, setError] = useState<string>('')
@@ -65,17 +67,17 @@ export function ImageUpload({ onImageSelect, preview, maxSizeMB = 5, initialImag
                 accept="image/*"
                 onChange={handleImageSelect}
                 className="hidden"
-                id="shield-upload"
+                id={id}
             />
 
-            <label htmlFor="shield-upload">
+            <label htmlFor={id}>
                 <Card className="border-2 border-dashed border-gray-300 hover:border-gray-400 transition-colors cursor-pointer">
                     <div className="p-6 text-center">
                         {previewUrl ? (
                             <div className="space-y-2">
                                 <img
                                     src={previewUrl}
-                                    alt="Preview do escudo"
+                                    alt={`Preview do ${labelText.toLowerCase()}`}
                                     className="w-24 h-24 object-cover rounded-lg mx-auto"
                                 />
                                 <p className="text-sm text-gray-600">Clique para alterar</p>
@@ -83,7 +85,7 @@ export function ImageUpload({ onImageSelect, preview, maxSizeMB = 5, initialImag
                         ) : (
                             <div className="space-y-2">
                                 <ImageIcon className="w-12 h-12 mx-auto text-gray-400" />
-                                <p className="text-sm text-gray-600">Clique para adicionar escudo</p>
+                                <p className="text-sm text-gray-600">Clique para adicionar {labelText.toLowerCase()}</p>
                             </div>
                         )}
                     </div>

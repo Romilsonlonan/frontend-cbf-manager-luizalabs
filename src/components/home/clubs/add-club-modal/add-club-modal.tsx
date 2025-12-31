@@ -25,6 +25,7 @@ export function AddClubModal({ open, onOpenChange, onClubAdded }: AddClubModalPr
         espn_url: '' // Adicionado
     })
     const [selectedImage, setSelectedImage] = useState<File | null>(null)
+    const [selectedBannerImage, setSelectedBannerImage] = useState<File | null>(null)
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState('')
 
@@ -61,6 +62,10 @@ export function AddClubModal({ open, onOpenChange, onClubAdded }: AddClubModalPr
                 formDataToSend.append('shield_image', selectedImage)
             }
 
+            if (selectedBannerImage) {
+                formDataToSend.append('banner_image', selectedBannerImage)
+            }
+
             const response = await fetch('http://localhost:8000/clubs/', {
                 method: 'POST',
                 body: formDataToSend,
@@ -78,9 +83,10 @@ export function AddClubModal({ open, onOpenChange, onClubAdded }: AddClubModalPr
                 foundation_date: '',
                 br_titles: '0',
                 training_center: '',
-                espn_url: '' // Adicionado
+                espn_url: ''
             })
             setSelectedImage(null)
+            setSelectedBannerImage(null)
 
             // Fechar modal e notificar
             onOpenChange(false)
@@ -101,9 +107,21 @@ export function AddClubModal({ open, onOpenChange, onClubAdded }: AddClubModalPr
 
                 <form onSubmit={handleSubmit} className={styles.formContainer}>
                     <div className={styles.formField}>
-                        <Label htmlFor="shield">Escudo</Label>
+                        <Label htmlFor="shield-upload">Escudo</Label>
                         <ImageUpload
+                            id="shield-upload"
+                            labelText="escudo"
                             onImageSelect={setSelectedImage}
+                            maxSizeMB={5}
+                        />
+                    </div>
+
+                    <div className={styles.formField}>
+                        <Label htmlFor="banner-upload">Banner (Opcional)</Label>
+                        <ImageUpload
+                            id="banner-upload"
+                            labelText="banner"
+                            onImageSelect={setSelectedBannerImage}
                             maxSizeMB={5}
                         />
                     </div>

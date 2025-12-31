@@ -147,9 +147,9 @@ export function useToast() {
 
   return {
     ...state,
-    toast: React.useCallback((props: ToasterToast) => {
+    toast: React.useCallback((props: ToastProps) => {
       const id = genId()
-      const update = (props: ToasterToast) =>
+      const update = (props: Partial<ToastProps>) =>
         dispatch({
           type: actionTypes.UPDATE_TOAST,
           toast: { ...props, id },
