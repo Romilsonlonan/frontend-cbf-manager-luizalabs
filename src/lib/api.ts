@@ -584,6 +584,29 @@ export const getTotalClubsCount = async (token: string, onAuthError?: () => void
   return data.total_count;
 };
 
+export const scrapeBrasileiraoLeaderboard = async (token: string, onAuthError?: () => void): Promise<any[]> => {
+  const url = new URL(`${API_URL}/api/scraper/brasileirao-leaderboard`);
+  const response = await fetch(url.toString(), {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+  });
+
+  if (!response.ok) {
+    if (response.status === 401) {
+      onAuthError?.();
+      throw new Error('Token inválido ou expirado');
+    }
+    const errorBody = await response.json().catch(() => ({ detail: 'Erro desconhecido' }));
+    console.error('API Response not OK for scrapeBrasileiraoLeaderboard:', response.status, errorBody);
+    throw new Error(errorBody.detail || 'Falha ao raspar dados do Brasileirão Leaderboard');
+  }
+  const data = await response.json();
+  return data.data;
+};
+
 export const api = {
   login,
   getCurrentUser,
@@ -605,6 +628,7 @@ export const api = {
   getTopPlayersByAge,
   getTotalAthletesCount,
   getTotalClubsCount,
+  scrapeBrasileiraoLeaderboard,
 };
 
 export const clubsApi = {

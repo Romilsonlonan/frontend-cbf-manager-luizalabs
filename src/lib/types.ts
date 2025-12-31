@@ -141,3 +141,17 @@ export interface FieldPlayerResponse {
     jersey_number: number | null; // Added jersey_number for field players, explicitly nullable
     player_type: 'field_player'; // Added player_type
 }
+
+export type TeamStats = {
+  name: string;
+  p: number; // Pontos
+  j: number; // Jogos
+  v: number; // Vitórias
+  e: number; // Empates
+  d: number; // Derrotas
+  gp: number; // Gols Pró
+  gc: number; // Gols Contra
+  sg: number; // Saldo de Gols
+};
+
+export type SortKey = keyof Omit<TeamStats, 'name'>;
