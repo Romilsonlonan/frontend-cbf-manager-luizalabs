@@ -11,9 +11,12 @@ import { ThemeProvider } from '@/context/ThemeContext';
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' })
 
 export const metadata: Metadata = {
-  title: 'CBF Manager',
-  description: 'Gestão de Atletas, Clubes e Estatísticas Esportivas',
+  title: "CBF Manager",
+  description: "Sistema de Gestão da CBF",
 };
+
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
 
 export default function RootLayout({
   children,

@@ -99,7 +99,7 @@ export default function DashboardWithLeaderboardPage() {
     direction: 'desc',
   });
   const [isScraping, setIsScraping] = useState(false); // New state for scraping loading
-  const [leaderboardData, setLeaderboardData] = useState<TeamStats[]>(initialTeamData); // State for leaderboard data
+  const [leaderboardData, setLeaderboardData] = useState<TeamStats[]>([]); // Inicializa vazio para evitar dados estáticos
 
   const fetchLeaderboardData = useCallback(async () => {
     if (!token) {
@@ -162,20 +162,22 @@ export default function DashboardWithLeaderboardPage() {
   };
 
   const sortedAndFilteredTeams = useMemo(() => {
-    const filtered = leaderboardData.filter(team =>
-      team.name.toLowerCase().includes(searchQuery.toLowerCase())
+    const filtered = [...leaderboardData].filter(team =>
+      (team.name || '').toLowerCase().includes(searchQuery.toLowerCase())
     );
 
     filtered.sort((a, b) => {
+      // Prioriza a ordenação baseada no sortConfig se necessário, 
+      // mas aqui mantemos a lógica padrão de classificação de futebol
       if (b.p !== a.p) return b.p - a.p;
       if (b.v !== a.v) return b.v - a.v;
       if (b.sg !== a.sg) return b.sg - a.sg;
       if (b.gp !== a.gp) return b.gp - a.gp;
-      return a.name.localeCompare(b.name);
+      return (a.name || '').localeCompare(b.name || '');
     });
 
     return filtered;
-  }, [searchQuery]);
+  }, [searchQuery, leaderboardData, sortConfig]);
 
   const getPositionClass = (index: number) => {
     const total = sortedAndFilteredTeams.length;
@@ -315,7 +317,7 @@ export default function DashboardWithLeaderboardPage() {
 
                   <TableBody>
                     {sortedAndFilteredTeams.map((team, index) => (
-                      <TableRow key={team.name}>
+                      <TableRow key={team.name || `team-${index}`}>
                         <TableCell className={getPositionClass(index)}>{index + 1}</TableCell>
                         <TableCell className="flex items-center gap-3">
                           <TeamLogo teamName={team.name} className="h-6 w-6" />
@@ -333,6 +335,47 @@ export default function DashboardWithLeaderboardPage() {
                     ))}
                   </TableBody>
                 </Table>
+              </div>
+
+              {/* Glossário */}
+              <div className="mt-8 pt-6 border-t border-border">
+                <p className="text-xs font-semibold text-muted-foreground mb-4 uppercase tracking-wider">
+                  Glossário
+                </p>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-y-3 gap-x-4 text-sm text-muted-foreground">
+                  <div className="flex items-center gap-2">
+                    <span className="font-bold text-foreground min-w-[35px]">J:</span>
+                    <span>Jogos</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="font-bold text-foreground min-w-[35px]">V:</span>
+                    <span>Vitórias</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="font-bold text-foreground min-w-[35px]">E:</span>
+                    <span>Empate</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="font-bold text-foreground min-w-[35px]">D:</span>
+                    <span>Derrotas</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="font-bold text-foreground min-w-[35px]">GP:</span>
+                    <span>Gols pró</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="font-bold text-foreground min-w-[35px]">GC:</span>
+                    <span>Gols contra</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="font-bold text-foreground min-w-[35px]">SG:</span>
+                    <span>Saldo de gols</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="font-bold text-foreground min-w-[35px]">PTS:</span>
+                    <span>Pontos</span>
+                  </div>
+                </div>
               </div>
             </CardContent>
           </Card>

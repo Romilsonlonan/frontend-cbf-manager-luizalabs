@@ -270,6 +270,89 @@ export default function Home() {
             ) : (
               <PlayerTable players={fieldPlayers} columns={fieldPlayerColumns} />
             )}
+
+            {/* Glossário */}
+            <div className="mt-8 pt-6 border-t border-border">
+              <p className="text-xs font-semibold text-muted-foreground mb-4 uppercase tracking-wider">
+                Glossário
+              </p>
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-y-4 gap-x-4 text-xs text-muted-foreground">
+                <div className="flex flex-col gap-1">
+                  <span className="font-bold text-foreground">Nome:</span>
+                  <span>Nome</span>
+                </div>
+                <div className="flex flex-col gap-1">
+                  <span className="font-bold text-foreground">POS:</span>
+                  <span>Posição</span>
+                </div>
+                <div className="flex flex-col gap-1">
+                  <span className="font-bold text-foreground">Idade:</span>
+                  <span>Idade atual do jogador</span>
+                </div>
+                <div className="flex flex-col gap-1">
+                  <span className="font-bold text-foreground">Alt:</span>
+                  <span>Altura</span>
+                </div>
+                <div className="flex flex-col gap-1">
+                  <span className="font-bold text-foreground">P:</span>
+                  <span>Peso</span>
+                </div>
+                <div className="flex flex-col gap-1">
+                  <span className="font-bold text-foreground">NAC:</span>
+                  <span>Nacionalidade</span>
+                </div>
+
+                <div className="flex flex-col gap-1">
+                  <span className="font-bold text-foreground">J:</span>
+                  <span>Jogos</span>
+                </div>
+                <div className="flex flex-col gap-1">
+                  <span className="font-bold text-foreground">SUB:</span>
+                  <span>Substitute Appearances</span>
+                </div>
+                <div className="flex flex-col gap-1">
+                  <span className="font-bold text-foreground">G:</span>
+                  <span>Total de gols</span>
+                </div>
+                <div className="flex flex-col gap-1">
+                  <span className="font-bold text-foreground">A:</span>
+                  <span>Assistências</span>
+                </div>
+                <div className="flex flex-col gap-1">
+                  <span className="font-bold text-foreground">TC:</span>
+                  <span>Finalizações</span>
+                </div>
+                <div className="flex flex-col gap-1">
+                  <span className="font-bold text-foreground">CG:</span>
+                  <span>Chutes a gol</span>
+                </div>
+
+                <div className="flex flex-col gap-1">
+                  <span className="font-bold text-foreground">FC:</span>
+                  <span>Faltas cometidas</span>
+                </div>
+                <div className="flex flex-col gap-1">
+                  <span className="font-bold text-foreground">FS:</span>
+                  <span>Faltas sofridas</span>
+                </div>
+                <div className="flex flex-col gap-1">
+                  <span className="font-bold text-foreground">CA:</span>
+                  <span>Cartões amarelos</span>
+                </div>
+                <div className="flex flex-col gap-1">
+                  <span className="font-bold text-foreground">CV:</span>
+                  <span>Cartões vermelhos</span>
+                </div>
+                <div className="flex flex-col gap-1">
+                  <span className="font-bold text-foreground">D:</span>
+                  <span>Defesas</span>
+                </div>
+                <div className="flex flex-col gap-1">
+                  <span className="font-bold text-foreground">GS:</span>
+                  <span>Gols sofridos</span>
+                </div>
+              </div>
+            </div>
           </CardContent>
         </Card>
       </main>

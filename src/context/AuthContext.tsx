@@ -59,6 +59,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const storedToken = localStorage.getItem('token');
       console.log('AuthContext useEffect: Stored token found:', storedToken ? 'Yes' : 'No');
       if (storedToken) {
+        // Verificação básica de expiração de JWT para evitar flicker de "conectado" com token expirado
+        try {
+          const payloadBase64 = storedToken.split('.')[1];
+          if (payloadBase64) {
+            const payload = JSON.parse(window.atob(payloadBase64));
+            if (payload.exp && payload.exp * 1000 < Date.now()) {
+              console.log('AuthContext: Token expirado detectado proativamente.');
+              handleAuthError();
+              return;
+            }
+          }
+        } catch (e) {
+          console.error('Erro ao decodificar token:', e);
+        }
+
         setToken(storedToken);
         try {
           const currentUser: User = await getCurrentUser(storedToken, startLoading, stopLoading, handleAuthError);

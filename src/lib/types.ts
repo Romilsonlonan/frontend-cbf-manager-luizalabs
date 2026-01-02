@@ -62,6 +62,7 @@ export type Club = {
     name: string;
     initials: string;
     city: string;
+    country: string;
     shield_image_url?: string; // Changed from shieldId to shield_image_url
     foundation_date?: string; // Changed from foundationDate to foundation_date
     br_titles: number; // Changed from brTitles to br_titles

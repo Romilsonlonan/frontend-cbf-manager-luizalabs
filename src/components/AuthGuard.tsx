@@ -30,8 +30,20 @@ export function AuthGuard({ children }: AuthGuardProps) {
     }
   }, [isAuthenticated, isLoading, pathname, router]);
 
-  // Always render children. The AppContent component (which wraps AuthGuard's children)
-  // already handles the global loading state with a spinner.
-  // The redirection logic in useEffect will handle unauthorized access.
+  // Se estiver carregando, não renderiza nada (o AppContent já mostra o spinner)
+  if (isLoading) {
+    return null;
+  }
+
+  // Se não estiver autenticado e tentar acessar uma rota protegida, não renderiza os filhos
+  if (!isAuthenticated && !publicPaths.includes(pathname)) {
+    return null;
+  }
+
+  // Se estiver autenticado e tentar acessar login/register, não renderiza os filhos (será redirecionado)
+  if (isAuthenticated && publicPaths.includes(pathname)) {
+    return null;
+  }
+
   return <>{children}</>;
 }

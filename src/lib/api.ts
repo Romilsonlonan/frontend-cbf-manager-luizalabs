@@ -604,7 +604,23 @@ export const scrapeBrasileiraoLeaderboard = async (token: string, onAuthError?: 
     throw new Error(errorBody.detail || 'Falha ao raspar dados do Brasileirão Leaderboard');
   }
   const data = await response.json();
-  return data.data;
+  
+  // Mapeia os campos do backend para os campos esperados pelo frontend (TeamStats)
+  // Backend: posicao, clube_nome, clube_id, pontos, jogos, vitorias, empates, derrotas, saldo_gols
+  // Frontend: name, p, j, v, e, d, gp, gc, sg
+  const classificacao = data.classificacao || [];
+  
+  return classificacao.map((item: any) => ({
+    name: item.clube_nome,
+    p: item.pontos,
+    j: item.jogos,
+    v: item.vitorias,
+    e: item.empates,
+    d: item.derrotas,
+    gp: item.gols_pro || 0, // Adicionado fallback se o backend não retornar
+    gc: item.gols_contra || 0,
+    sg: item.saldo_gols
+  }));
 };
 
 export const api = {
