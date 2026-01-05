@@ -23,6 +23,13 @@ export type Player = {
   yellowCards?: number; // Made optional
   redCards?: number; // Made optional
   club_id?: number | null; // Made optional and nullable
+  goals_conceded?: number;
+  total_shots?: number;
+  shots_on_goal?: number;
+  fouls_committed?: number;
+  fouls_suffered?: number;
+  yellow_cards?: number;
+  red_cards?: number;
 };
 
 export type PlayerStatsColumn = {

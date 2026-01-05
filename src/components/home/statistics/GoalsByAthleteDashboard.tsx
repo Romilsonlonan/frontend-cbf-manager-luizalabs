@@ -14,10 +14,10 @@ import {
 } from 'recharts';
 import { useAuth } from '@/context/AuthContext';
 import { api } from '@/lib/api';
-import { FieldPlayerResponse, Club } from '@/lib/types';
+import { FieldPlayerResponse, GoalkeeperResponse, Club } from '@/lib/types';
 import { Goal } from 'lucide-react';
 
-type PositionFilter = 'Todos' | 'Atacante' | 'Meio-de-Campo' | 'Defensor';
+type StatisticFilter = 'goals' | 'assists' | 'total_shots' | 'shots_on_goal' | 'goals_conceded' | 'saves';
 
 interface GoalsByAthleteDashboardProps {
   selectedClub: string;
@@ -25,10 +25,10 @@ interface GoalsByAthleteDashboardProps {
 
 export function GoalsByAthleteDashboard({ selectedClub }: GoalsByAthleteDashboardProps) {
   const { token, onAuthError } = useAuth();
-  const [topGoalScorers, setTopGoalScorers] = useState<FieldPlayerResponse[]>([]);
+  const [topPlayers, setTopPlayers] = useState<(FieldPlayerResponse | GoalkeeperResponse)[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [positionFilter, setPositionFilter] = useState<PositionFilter>('Todos');
+  const [statisticFilter, setStatisticFilter] = useState<StatisticFilter>('goals');
   const [clubs, setClubs] = useState<Club[]>([]);
 
   useEffect(() => {
@@ -45,7 +45,7 @@ export function GoalsByAthleteDashboard({ selectedClub }: GoalsByAthleteDashboar
     }
   }, [token, onAuthError]);
 
-  const fetchTopGoalScorers = useCallback(async () => {
+  const fetchTopPlayers = useCallback(async () => {
     if (!token) {
       setError('Authentication token not found.');
       setLoading(false);
@@ -56,21 +56,20 @@ export function GoalsByAthleteDashboard({ selectedClub }: GoalsByAthleteDashboar
     setError(null);
 
     try {
-      const positionParam = positionFilter === 'Todos' ? undefined : positionFilter;
       const clubId = selectedClub === 'Todos' ? undefined : clubs.find(club => club.name === selectedClub)?.id;
-      const data = await api.getTopGoalScorers(token, positionParam, clubId, onAuthError);
-      setTopGoalScorers(data);
+      const data = await api.getTopPlayersByStatistic(token, statisticFilter, clubId, onAuthError);
+      setTopPlayers(data);
     } catch (err) {
-      console.error('Failed to fetch top goal scorers:', err);
-      setError('Failed to load top goal scorers.');
+      console.error('Failed to fetch top players by statistic:', err);
+      setError('Failed to load top players.');
     } finally {
       setLoading(false);
     }
-  }, [token, positionFilter, selectedClub, clubs, onAuthError]);
+  }, [token, statisticFilter, selectedClub, clubs, onAuthError]);
 
   useEffect(() => {
-    fetchTopGoalScorers();
-  }, [fetchTopGoalScorers]);
+    fetchTopPlayers();
+  }, [fetchTopPlayers]);
 
   if (loading) {
     return (
@@ -78,11 +77,11 @@ export function GoalsByAthleteDashboard({ selectedClub }: GoalsByAthleteDashboar
         <CardHeader>
           <CardTitle className="font-headline text-2xl flex items-center gap-2">
             <Goal className="h-6 w-6" />
-            Gols por Atleta
+            Estatísticas por Atleta
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <p>Carregando artilheiros...</p>
+          <p>Carregando estatísticas...</p>
         </CardContent>
       </Card>
     );
@@ -94,7 +93,7 @@ export function GoalsByAthleteDashboard({ selectedClub }: GoalsByAthleteDashboar
         <CardHeader>
           <CardTitle className="font-headline text-2xl flex items-center gap-2">
             <Goal className="h-6 w-6" />
-            Gols por Atleta
+            Estatísticas por Atleta
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -104,35 +103,49 @@ export function GoalsByAthleteDashboard({ selectedClub }: GoalsByAthleteDashboar
     );
   }
 
+  const getStatLabel = (stat: StatisticFilter) => {
+    switch (stat) {
+      case 'goals': return 'Gols';
+      case 'assists': return 'Assistências';
+      case 'total_shots': return 'Finalizações';
+      case 'shots_on_goal': return 'Chutes a Gol';
+      case 'goals_conceded': return 'Gols Sofridos';
+      case 'saves': return 'Defesas';
+      default: return '';
+    }
+  };
+
   return (
     <Card className="shadow-lg border-none">
       <CardHeader>
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
           <CardTitle className="font-headline text-2xl flex items-center gap-2">
             <Goal className="h-6 w-6" />
-            Gols por Atleta
+            Estatísticas por Atleta
           </CardTitle>
-          <Select value={positionFilter} onValueChange={(value: PositionFilter) => setPositionFilter(value)}>
+          <Select value={statisticFilter} onValueChange={(value: StatisticFilter) => setStatisticFilter(value)}>
             <SelectTrigger className="w-[180px]">
-              <SelectValue placeholder="Filtrar por Posição" />
+              <SelectValue placeholder="Filtrar por Estatística" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="Todos">Todos</SelectItem>
-              <SelectItem value="Atacante">Atacantes</SelectItem>
-              <SelectItem value="Meio-de-Campo">Meias-de-Campo</SelectItem>
-              <SelectItem value="Defensor">Defensores</SelectItem>
+              <SelectItem value="goals">Total de Gols (G)</SelectItem>
+              <SelectItem value="assists">Assistências (A)</SelectItem>
+              <SelectItem value="total_shots">Finalizações (TC)</SelectItem>
+              <SelectItem value="shots_on_goal">Chutes a Gol (CG)</SelectItem>
+              <SelectItem value="goals_conceded">Gols Sofridos (GS)</SelectItem>
+              <SelectItem value="saves">Defesas (D)</SelectItem>
             </SelectContent>
           </Select>
         </div>
       </CardHeader>
       <CardContent>
-        {topGoalScorers.length === 0 ? (
-          <p>Nenhum artilheiro encontrado para a posição selecionada.</p>
+        {topPlayers.length === 0 ? (
+          <p>Nenhum atleta encontrado para a estatística selecionada.</p>
         ) : (
           <div style={{ width: '100%', height: 300 }}>
             <ResponsiveContainer width="100%" height="100%">
               <BarChart
-                data={topGoalScorers.slice(0, 7)}
+                data={topPlayers.slice(0, 7)}
                 layout="vertical"
                 margin={{
                   top: 5,
@@ -145,7 +158,7 @@ export function GoalsByAthleteDashboard({ selectedClub }: GoalsByAthleteDashboar
                 <XAxis type="number" />
                 <YAxis dataKey="name" type="category" width={100} />
                 <Tooltip />
-                <Bar dataKey="goals" fill="#8884d8" />
+                <Bar dataKey={statisticFilter} fill="#8884d8" name={getStatLabel(statisticFilter)} />
               </BarChart>
             </ResponsiveContainer>
           </div>

@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { allStatsColumns, categories, fieldPlayerStatKeys } from '@/lib/roster-data';
-import { PlayerTable } from '@/components/roster/player-table';
+import { PlayerTable } from '@/components/home/athletes/player-table/PlayerTable';
 import { CategoryFilter } from '@/components/roster/category-filter';
 import { ColumnSelector } from '@/components/roster/column-selector';
 import { ClubFilter } from '@/components/roster/club-filter';
@@ -43,31 +43,6 @@ const getColumnsByOrder = (keys: readonly string[]): PlayerStatsColumn[] => {
     .map(key => allStatsColumns.find(col => col.key === key))
     .filter((col): col is PlayerStatsColumn => Boolean(col));
 };
-
-// ======================================================
-// 🧠 Função de mapeamento GoalkeeperResponse → Player
-// ======================================================
-const mapGoalkeeperResponseToPlayer = (goalkeeper: GoalkeeperResponse): Player => ({
-  id: goalkeeper.id,
-  name: goalkeeper.name,
-  position: goalkeeper.position,
-  age: goalkeeper.age,
-  height: goalkeeper.height,
-  weight: goalkeeper.weight,
-  nationality: goalkeeper.nationality,
-  games: goalkeeper.games,
-  substitutions: goalkeeper.substitutions,
-  saves: goalkeeper.saves,
-  goalsConceded: goalkeeper.goals_conceded,
-  assists: goalkeeper.assists,
-  foulsCommitted: goalkeeper.fouls_committed,
-  foulsSuffered: goalkeeper.fouls_suffered,
-  yellowCards: goalkeeper.yellow_cards,
-  redCards: goalkeeper.red_cards,
-  club_id: goalkeeper.club_id,
-  jerseyNumber: goalkeeper.jersey_number,
-  player_type: goalkeeper.player_type,
-});
 
 export default function Home() {
   const searchParams = useSearchParams();
@@ -232,12 +207,14 @@ export default function Home() {
                   <ColumnSelector 
                     allColumns={selectableGoalkeeperColumns} 
                     selectedColumns={selectedStatColKeys} 
+                    label="Col Goleiro"
                   />
                 )}
                 {(currentCategory === 'Defensores' || currentCategory === 'Meio-Campistas' || currentCategory === 'Atacantes' || currentCategory === 'Todos') && (
                   <ColumnSelector 
                     allColumns={selectableFieldPlayerColumns} 
                     selectedColumns={selectedStatColKeys} 
+                    label="Col Jogadores"
                   />
                 )}
               </div>
@@ -252,7 +229,12 @@ export default function Home() {
                       <Shield className="h-5 w-5 text-primary" />
                       Goleiros
                     </h3>
-                    <PlayerTable players={goalkeepers.map(mapGoalkeeperResponseToPlayer)} columns={goalkeeperColumns} />
+                    <PlayerTable 
+                      players={goalkeepers} 
+                      isLoading={loading} 
+                      error={error} 
+                      columns={goalkeeperColumns}
+                    />
                   </div>
                 )}
                 {fieldPlayers.length > 0 && (
@@ -261,14 +243,29 @@ export default function Home() {
                       <Goal className="h-5 w-5 text-primary" />
                       Jogadores de Campo
                     </h3>
-                    <PlayerTable players={fieldPlayers} columns={fieldPlayerColumns} />
+                    <PlayerTable 
+                      players={fieldPlayers} 
+                      isLoading={loading} 
+                      error={error} 
+                      columns={fieldPlayerColumns}
+                    />
                   </div>
                 )}
               </>
             ) : currentCategory === 'Goleiros' ? (
-              <PlayerTable players={goalkeepers.map(mapGoalkeeperResponseToPlayer)} columns={goalkeeperColumns} />
+              <PlayerTable 
+                players={goalkeepers} 
+                isLoading={loading} 
+                error={error} 
+                columns={goalkeeperColumns}
+              />
             ) : (
-              <PlayerTable players={fieldPlayers} columns={fieldPlayerColumns} />
+              <PlayerTable 
+                players={fieldPlayers} 
+                isLoading={loading} 
+                error={error} 
+                columns={fieldPlayerColumns}
+              />
             )}
 
             {/* Glossário */}

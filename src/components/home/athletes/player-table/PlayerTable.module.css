@@ -11,8 +11,8 @@
 }
 
 .tableWrapper {
-    @apply overflow-x-auto;
-    /* Allows horizontal scrolling for wide tables */
+    @apply overflow-x-auto overflow-y-auto max-h-[600px];
+    /* Allows horizontal scrolling for wide tables and vertical scrolling with max height */
 }
 
 .playerTable {

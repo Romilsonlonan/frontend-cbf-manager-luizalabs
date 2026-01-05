@@ -2,13 +2,32 @@
 
 .containerLogin {
   @apply flex items-center justify-center min-h-screen;
-  background-image: url('https://i.ibb.co/TqqszbQy/campo-oficial.png');
+  background-image: url('https://i.ibb.co/GKC8d1Q/campo.webp');
   background-size: cover;
   background-position: center;
+  position: relative; /* permite sobreposição controlada */
+}
+
+.overlayEscuro {
+  position: fixed;      /* cobre toda a viewport */
+  inset: 0;             /* top/right/bottom/left: 0 */
+  background: rgba(0, 0, 0, 0.45); /* transparência do overlay (ajustável) */
+  pointer-events: none; /* não intercepta cliques */
+  z-index: 1;           /* abaixo do conteúdo */
+}
+
+.conteudoSobreposto {
+  position: relative;
+  z-index: 2;           /* acima do overlay */
+}
+
+.containerFormulario {
+  @apply flex items-center justify-center min-h-screen;
+  /* Sem imagem de fundo - fundo limpo */
 }
 
 .cardLogin {
-  @apply mx-auto max-w-sm bg-yellow-300/80 shadow-lg border;
+  @apply mx-auto w-full max-w-md bg-yellow-300/80 shadow-lg border p-4 rounded-md;
 }
 
 .logoContainer {

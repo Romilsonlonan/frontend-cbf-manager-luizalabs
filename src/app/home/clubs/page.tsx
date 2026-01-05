@@ -6,7 +6,6 @@ import { Card, CardContent } from '@/components/ui/card'
 import { AddClubModal } from '@/components/home/clubs/add-club-modal/add-club-modal'
 import { EditClubModal } from '@/components/home/clubs/edit-club-modal/edit-club-modal' // Import EditClubModal
 import { Plus, Users, Calendar, Trophy, Building, Search, Building2, Pencil, Trash2 } from 'lucide-react'
-import { AddAthleteModal } from '@/components/home/clubs/add-athlete-modal/add-athlete-modal'
 import { scrapeClubPlayers, getClubs } from '@/lib/api' // Import specific functions
 import { useToast } from '@/hooks/use-toast'
 import { useAuth } from '@/context/AuthContext'
@@ -20,7 +19,6 @@ export default function ClubsPage() {
   const [clubs, setClubs] = useState<Club[]>([])
   const [loading, setLoading] = useState(true)
   const [clubModalOpen, setClubModalOpen] = useState(false)
-  const [athleteModalOpen, setAthleteModalOpen] = useState(false)
   const [editModalOpen, setEditModalOpen] = useState(false) // State for edit modal
   const [clubToEdit, setClubToEdit] = useState<Club | null>(null) // State for club being edited
   const [isDeleting, setIsDeleting] = useState(false); // State for delete loading
@@ -29,9 +27,10 @@ export default function ClubsPage() {
   const router = useRouter();
 
   const fetchClubs = async () => {
+    if (!token) return;
     try {
       setLoading(true)
-      const data = await getClubs() // Use the exported getClubs function
+      const data = await getClubs(token) // Use the exported getClubs function
       setClubs(data)
     } catch (error) {
       console.error('Erro ao buscar clubes:', error)
@@ -150,15 +149,6 @@ export default function ClubsPage() {
       <div className="flex justify-between items-center">
         <h1 className="text-3xl font-bold">Clubes</h1>
         <div className="flex gap-2">
-          <Button
-            onClick={() => setAthleteModalOpen(true)}
-            variant="outline"
-            disabled={clubs.length === 0}
-            title={clubs.length === 0 ? "Cadastre um clube primeiro" : "Adicionar atleta"}
-          >
-            <Plus className="mr-2 h-4 w-4" />
-            Adicionar Atleta
-          </Button>
           <Button onClick={() => setClubModalOpen(true)}>
             <Plus className="mr-2 h-4 w-4" />
             Adicionar Clube
@@ -269,20 +259,6 @@ export default function ClubsPage() {
         open={clubModalOpen}
         onOpenChange={setClubModalOpen}
         onClubAdded={fetchClubs}
-      />
-
-      <AddAthleteModal
-        clubs={clubs} // Pass clubs to the modal
-        onAddAthlete={(formData) => {
-          console.log("New athlete data:", formData);
-          // Here you would typically call an API to add the athlete
-          toast({
-            title: "Atleta Adicionado (Simulado)",
-            description: `Atleta ${formData.name} adicionado com sucesso!`,
-            variant: "success",
-          });
-          fetchClubs(); // Refresh clubs after adding an athlete
-        }}
       />
 
       <EditClubModal

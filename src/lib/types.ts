@@ -14,7 +14,7 @@ export type Athlete = {
     red_cards?: number; // Changed to red_cards
     wrongPasses?: number;
     correctPasses?: number;
-    jersey_number?: number;
+    jersey_number?: number | null;
     height?: number;
     weight?: number;
     nationality?: string;
@@ -29,6 +29,20 @@ export type Athlete = {
     goals_conceded?: number;
     player_type?: string; // Added player_type
     updated_at?: string; // Added updated_at
+    bodyFat?: number;
+    muscle?: number;
+    labData?: {
+        hdl: number;
+        ldl: number;
+        totalCholesterol: number;
+        triglycerides: number;
+    };
+    progress?: Array<{
+        week: string;
+        weight: number;
+        bodyFat: number;
+        muscle: number;
+    }>;
 };
 
 export type Player = {

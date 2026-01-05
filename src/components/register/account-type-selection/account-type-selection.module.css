@@ -1,22 +1,18 @@
 .containerSelecao {
     @apply flex flex-col items-center justify-center min-h-screen p-4;
-    /* Changed to flex-col and added padding */
 }
 
-.containerSelecao h2 {
-    @apply text-black text-3xl font-bold mb-8;
-    /* Styled the title */
+.tituloSelecao {
+    @apply font-headline text-5xl font-bold mb-8 text-black;
     animation: blink-white 1.5s infinite alternate;
-    /* Add blinking animation */
 }
 
 @keyframes blink-white {
     0% {
         color: black;
     }
-
     100% {
-        color: white;
+        color: #fbbf24; /* amarelo claro */
     }
 }
 

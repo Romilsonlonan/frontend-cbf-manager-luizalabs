@@ -12,7 +12,7 @@ export function SidebarLogo() {
         height={40}
         alt="CBF Logo"
         className="shrink-0 rounded-full"
-        style={{ objectFit: 'contain' }}
+        style={{ objectFit: 'contain', width: 'auto', height: 'auto' }}
       />
       <h1 className={styles.logoTitle} style={{ color: 'var(--sidebar-text-color)' }}>CBF Manager</h1>
     </div>

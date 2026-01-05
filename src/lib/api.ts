@@ -623,6 +623,65 @@ export const scrapeBrasileiraoLeaderboard = async (token: string, onAuthError?: 
   }));
 };
 
+export const updateAthleteHealth = async (athleteId: number, isGoalkeeper: boolean, healthData: any, token: string) => {
+  const response = await fetch(`${API_URL}/athletes/${athleteId}/health?is_goalkeeper=${isGoalkeeper}`, {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+    body: JSON.stringify(healthData),
+  });
+  if (!response.ok) throw new Error('Erro ao atualizar saúde do atleta');
+  return response.json();
+};
+
+export const createAthleteProgress = async (progressData: any, token: string) => {
+  const response = await fetch(`${API_URL}/athletes/progress/`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+    body: JSON.stringify(progressData),
+  });
+  if (!response.ok) throw new Error('Erro ao criar progresso do atleta');
+  return response.json();
+};
+
+export const getAthleteProgress = async (athleteId: number, isGoalkeeper: boolean, token: string) => {
+  const response = await fetch(`${API_URL}/athletes/${athleteId}/progress?is_goalkeeper=${isGoalkeeper}`, {
+    headers: {
+      'Authorization': `Bearer ${token}`,
+    },
+  });
+  if (!response.ok) throw new Error('Erro ao buscar progresso do atleta');
+  return response.json();
+};
+
+export const createNutritionalPlan = async (planData: any, token: string) => {
+  const response = await fetch(`${API_URL}/athletes/nutritional_plans/`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+    body: JSON.stringify(planData),
+  });
+  if (!response.ok) throw new Error('Erro ao criar plano nutricional');
+  return response.json();
+};
+
+export const getNutritionalPlans = async (athleteId: number, isGoalkeeper: boolean, token: string) => {
+  const response = await fetch(`${API_URL}/athletes/${athleteId}/nutritional_plans?is_goalkeeper=${isGoalkeeper}`, {
+    headers: {
+      'Authorization': `Bearer ${token}`,
+    },
+  });
+  if (!response.ok) throw new Error('Erro ao buscar planos nutricionais');
+  return response.json();
+};
+
 export const api = {
   login,
   getCurrentUser,
@@ -645,6 +704,11 @@ export const api = {
   getTotalAthletesCount,
   getTotalClubsCount,
   scrapeBrasileiraoLeaderboard,
+  updateAthleteHealth,
+  createAthleteProgress,
+  getAthleteProgress,
+  createNutritionalPlan,
+  getNutritionalPlans,
 };
 
 export const clubsApi = {

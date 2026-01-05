@@ -12,26 +12,26 @@ interface AuthGuardProps {
 const publicPaths = ['/login', '/register']; // Paths that don't require authentication
 
 export function AuthGuard({ children }: AuthGuardProps) {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, loadingUser } = useAuth();
   const { isLoading } = useLoading();
   const router = useRouter();
   const pathname = usePathname();
 
   useEffect(() => {
-    if (!isLoading) { // Renamed from loading
+    if (!isLoading && !loadingUser) {
       // If not authenticated and trying to access a protected path, redirect to login
-      if (!isAuthenticated && !publicPaths.includes(pathname)) { // Renamed from isLoggedIn
+      if (!isAuthenticated && !publicPaths.includes(pathname)) {
         router.push('/login');
       }
       // If authenticated and trying to access login/register, redirect to home
-      if (isAuthenticated && publicPaths.includes(pathname)) { // Renamed from isLoggedIn
+      if (isAuthenticated && publicPaths.includes(pathname)) {
         router.push('/home');
       }
     }
-  }, [isAuthenticated, isLoading, pathname, router]);
+  }, [isAuthenticated, isLoading, loadingUser, pathname, router]);
 
-  // Se estiver carregando, não renderiza nada (o AppContent já mostra o spinner)
-  if (isLoading) {
+  // Se estiver carregando (global ou usuário), não renderiza nada
+  if (isLoading || loadingUser) {
     return null;
   }
 

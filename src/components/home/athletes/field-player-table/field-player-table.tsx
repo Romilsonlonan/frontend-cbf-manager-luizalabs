@@ -25,11 +25,11 @@ import {
     SquareSlash, // Cartões Vermelhos
     ShieldAlert, // Defesas (para consistência, embora não seja o foco principal)
 } from "lucide-react";
-import { PlayerResponse, Position } from "@/lib/types";
+import { FieldPlayerResponse, Position } from "@/lib/types";
 import styles from "./field-player-table.module.css";
 
-interface Player extends PlayerResponse {
-    player_type?: string; // Made optional
+interface Player extends FieldPlayerResponse {
+    player_type: 'field_player'; // Match FieldPlayerResponse
     updated_at?: string; // Made optional
 }
 
@@ -71,10 +71,10 @@ export function FieldPlayerTable({ fieldPlayers }: FieldPlayerTableProps) {
                             <TableCell className={styles.tableBodyCell}>{player.weight ?? 0}kg</TableCell>
                             <TableCell className={styles.tableBodyCell}>{player.nationality ?? 'N/A'}</TableCell>
                             <TableCell className={styles.tableBodyCell}>{player.games ?? 0}</TableCell>
-                            <TableCell className={styles.tableBodyCell}>{player.substitute_appearances ?? 0}</TableCell>
+                            <TableCell className={styles.tableBodyCell}>{player.substitutions ?? 0}</TableCell>
                             <TableCell className={styles.tableBodyCell}>{player.goals ?? 0}</TableCell>
                             <TableCell className={styles.tableBodyCell}>{player.assists ?? 0}</TableCell>
-                            <TableCell className={styles.tableBodyCell}>{player.shots ?? 0}</TableCell>
+                            <TableCell className={styles.tableBodyCell}>{player.total_shots ?? 0}</TableCell>
                             <TableCell className={styles.tableBodyCell}>{player.shots_on_goal ?? 0}</TableCell>
                             <TableCell className={styles.tableBodyCell}>{player.fouls_committed ?? 0}</TableCell>
                             <TableCell className={styles.tableBodyCell}>{player.fouls_suffered ?? 0}</TableCell>

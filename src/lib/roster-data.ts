@@ -24,15 +24,15 @@ export const allStatsColumns: PlayerStatsColumn[] = [
   { key: 'games', name: 'J', isSortable: true },
   { key: 'substitutions', name: 'SUB', isSortable: true },
   { key: 'saves', name: 'D', isSortable: true },
-  { key: 'goalsConceded', name: 'GS', isSortable: true },
+  { key: 'goals_conceded', name: 'GS', isSortable: true },
   { key: 'goals', name: 'G', isSortable: true },
-  { key: 'assists', name: 'A', isSortable: true }, // For Field Players, 'ASS' means Assists
-  { key: 'tackles', name: 'TC', isSortable: true },
-  { key: 'chancesCreated', name: 'CG', isSortable: true },
-  { key: 'foulsCommitted', name: 'FC', isSortable: true },
-  { key: 'foulsSuffered', name: 'FS', isSortable: true },
-  { key: 'yellowCards', name: 'CA', isSortable: true },
-  { key: 'redCards', name: 'CV', isSortable: true },
+  { key: 'assists', name: 'A', isSortable: true },
+  { key: 'total_shots', name: 'TC', isSortable: true },
+  { key: 'shots_on_goal', name: 'CG', isSortable: true },
+  { key: 'fouls_committed', name: 'FC', isSortable: true },
+  { key: 'fouls_suffered', name: 'FS', isSortable: true },
+  { key: 'yellow_cards', name: 'CA', isSortable: true },
+  { key: 'red_cards', name: 'CV', isSortable: true },
 ];
 
 export const players: Player[] = [];

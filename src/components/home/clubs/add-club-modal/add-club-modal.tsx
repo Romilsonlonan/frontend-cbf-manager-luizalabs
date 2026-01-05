@@ -109,8 +109,8 @@ export function AddClubModal({ open, onOpenChange, onClubAdded }: AddClubModalPr
                     <div className={styles.formField}>
                         <Label htmlFor="shield-upload">Escudo</Label>
                         <ImageUpload
-                            id="shield-upload"
-                            labelText="escudo"
+                            id="escudo-upload"
+                            labelText="Escudo do Clube"
                             onImageSelect={setSelectedImage}
                             maxSizeMB={5}
                         />
@@ -120,7 +120,7 @@ export function AddClubModal({ open, onOpenChange, onClubAdded }: AddClubModalPr
                         <Label htmlFor="banner-upload">Banner (Opcional)</Label>
                         <ImageUpload
                             id="banner-upload"
-                            labelText="banner"
+                            labelText="Banner do Clube"
                             onImageSelect={setSelectedBannerImage}
                             maxSizeMB={5}
                         />

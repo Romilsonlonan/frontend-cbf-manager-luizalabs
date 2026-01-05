@@ -80,7 +80,7 @@ const TrainingRoutinesPage: React.FC = () => {
 
   const fetchClubDetails = async (id: number) => {
     try {
-      const club = await api.getClubById(id);
+      const club = await api.getClubDetails(id);
       console.log('Fetched club details:', JSON.stringify(club, null, 2));
       setClubDetails(club);
     } catch (error: any) {

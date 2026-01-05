@@ -3,7 +3,6 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import Image from 'next/image'; // Import next/image
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -13,7 +12,7 @@ import {
 } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { login } from '@/lib/api'; // Import the login function directly
+import { login } from '@/lib/api';
 import { useAuth } from '@/context/AuthContext';
 import { useLoading } from '@/context/LoadingContext';
 import { EyeIcon, EyeOffIcon } from 'lucide-react';
@@ -35,7 +34,7 @@ export default function PaginaLogin() {
     setErro('');
 
     try {
-      const data = await login(email, senha, startLoading, stopLoading); // Use the imported login function
+      const data = await login(email, senha, startLoading, stopLoading);
       if (data && data.access_token) {
         authLogin(data.access_token);
         console.log('LoginPage: Attempting to redirect to /home');
@@ -55,13 +54,10 @@ export default function PaginaLogin() {
       <Card className={styles.cardLogin}>
         <CardHeader>
           <div className={styles.logoContainer}>
-            <Image
-              src="/cbf2.png" // Use local image path
+            <img
+              src="https://i.ibb.co/HTNLMqjX/cbf2.png"
               alt="Logo CBF"
-              width={124} // Set appropriate width
-              height={124} // Set appropriate height
               className={styles.logo}
-              priority // Prioritize loading for LCP
             />
           </div>
           <CardDescription className={styles.titulo}>

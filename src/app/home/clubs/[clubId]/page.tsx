@@ -22,9 +22,8 @@ import {
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
-import { PlusCircle, Webhook, CalendarDays } from 'lucide-react';
+import { Webhook, CalendarDays } from 'lucide-react';
 import { clubs } from '@/lib/mock-data'; // Manter para mock de clubes, mas atletas virão da API
-import { EntityFormDialog } from '@/components/home/shared/entity-form-dialog/entity-form-dialog';
 import { api, clubsApi } from '@/lib/api'; // Importar api e clubsApi
 import { useAuth } from '@/context/AuthContext'; // Para obter o token
 import { useLoading } from '@/context/LoadingContext'; // Para gerenciar o loading
@@ -68,7 +67,6 @@ export default function ClubDetailsPage() {
   const { startLoading, stopLoading } = useLoading();
   const { toast } = useToast();
 
-  const [isAddPlayerDialogOpen, setIsAddPlayerDialogOpen] = useState(false);
   const [scrapeUrl, setScrapeUrl] = useState(
     'https://www.espn.com.br/futebol/time/elenco/_/id/3454/ordenar/position/dir/desce/bra.cr_vasco_da_gama'
   );
@@ -112,13 +110,6 @@ export default function ClubDetailsPage() {
     return <div>Carregando detalhes do clube...</div>;
   }
 
-  const handleAddPlayer = (formData: Record<string, string>) => {
-    console.log('Novo jogador adicionado:', { ...formData, club: clubDetails.name });
-    // Lógica para adicionar o novo jogador via API
-    setIsAddPlayerDialogOpen(false);
-    fetchClubDetails(); // Recarregar dados após adicionar
-  };
-
   const handleScrapeAthletes = async () => {
     if (!token || !clubId || !scrapeUrl) {
       toast({
@@ -148,13 +139,6 @@ export default function ClubDetailsPage() {
       stopLoading();
     }
   };
-
-  const playerFormFields = [
-    { id: 'name', label: 'Nome', placeholder: 'Nome completo do atleta' },
-    { id: 'position', label: 'Posição', placeholder: 'Ex: Atacante' },
-    { id: 'age', label: 'Idade', type: 'number', placeholder: 'Ex: 25' },
-    // Adicionar outros campos conforme o schema PlayerCreate, se necessário para cadastro manual completo
-  ];
 
   return (
     <Card>
@@ -193,21 +177,6 @@ export default function ClubDetailsPage() {
               Adicionar Rotina de Treinamento
             </Button>
           </Link>
-          <Button onClick={() => setIsAddPlayerDialogOpen(true)}>
-            <PlusCircle className="mr-2 h-4 w-4" />
-            Adicionar Jogador
-          </Button>
-          <EntityFormDialog
-            isOpen={isAddPlayerDialogOpen}
-            onOpenChange={setIsAddPlayerDialogOpen}
-            dialogTitle={`Adicionar Novo Jogador ao ${clubDetails.name}`}
-            dialogDescription="Preencha as informações para adicionar um novo atleta ao elenco."
-            formFields={playerFormFields}
-            onSubmit={handleAddPlayer}
-            submitButtonText="Salvar Jogador"
-            initialValues={{ club: clubDetails.name }}
-            readOnlyFields={['club']}
-          />
         </div>
       </CardHeader>
       <CardContent>

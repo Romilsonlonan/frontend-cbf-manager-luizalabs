@@ -67,7 +67,10 @@ export default function PaginaRegistro() {
   if (!tipoConta) {
     return (
       <div className={styles.containerLogin}>
-        <AccountTypeSelection onSelectAccountType={handleSelecionarTipoConta} />
+        <div className={styles.overlayEscuro} />
+        <div className={styles.conteudoSobreposto}>
+          <AccountTypeSelection onSelectAccountType={handleSelecionarTipoConta} />
+        </div>
       </div>
     );
   }
@@ -75,89 +78,96 @@ export default function PaginaRegistro() {
   if (tipoConta === 'premium' && modalPagamentoAberto) {
     return (
       <div className={styles.containerLogin}>
-        <PaymentModal
-          isOpen={modalPagamentoAberto}
-          onClose={() => setModalPagamentoAberto(false)}
-          onPaymentSuccess={handlePaymentSuccess}
-        />
+        <div className={styles.overlayEscuro} />
+        <div className={styles.conteudoSobreposto}>
+          <PaymentModal
+            isOpen={modalPagamentoAberto}
+            onClose={() => setModalPagamentoAberto(false)}
+            onPaymentSuccess={handlePaymentSuccess}
+          />
+        </div>
       </div>
     );
   }
 
   return (
     <div className={styles.containerLogin}>
-      <RegisterContainer className={styles.containerLogin}>
-        <RegisterCard className={styles.cardLogin}>
-          <RegisterCardHeader
-            title={`Cadastro de Usuário (${tipoConta === 'basic' ? 'Básico' : 'Premium'})`}
-            logoSrc="https://i.ibb.co/HTNLMqjX/cbf2.png"
-            logoAlt="Logo CBF"
-            logoClassName={styles.logo}
-            logoContainerClassName={styles.logoContainer}
-            titleClassName={styles.titulo}
-          />
-          <CardContent>
-            <RegisterForm onSubmit={handleSubmitRegistro} className={styles.formulario}>
-              <div className={styles.campoFormulario}>
-                <Label htmlFor="nome-completo">Nome Completo</Label>
-                <Input
-                  id="nome-completo"
-                  name="full-name"
-                  placeholder="Seu nome completo"
-                  required
-                />
-              </div>
-              <div className={styles.campoFormulario}>
-                <Label htmlFor="email">Email</Label>
-                <Input
-                  id="email"
-                  name="email"
-                  type="email"
-                  placeholder="seu@email.com"
-                  required
-                />
-              </div>
-              <div className={styles.campoFormulario}>
-                <div className={styles.labelSenha}>
-                  <Label htmlFor="senha">Senha</Label>
+      <div className={styles.overlayEscuro} />
+      <div className={styles.conteudoSobreposto}>
+        {/* Mantém o conteúdo acima do overlay */}
+        <RegisterContainer className={styles.conteudoSobreposto}>
+          <RegisterCard className={styles.cardLogin}>
+            <RegisterCardHeader
+              title={`Cadastro de Usuário (${tipoConta === 'basic' ? 'Básico' : 'Premium'})`}
+              logoSrc="https://i.ibb.co/HTNLMqjX/cbf2.png"
+              logoAlt="Logo CBF"
+              logoClassName={styles.logo}
+              logoContainerClassName={styles.logoContainer}
+              titleClassName={styles.titulo}
+            />
+            <CardContent>
+              <RegisterForm onSubmit={handleSubmitRegistro} className={styles.formulario}>
+                <div className={styles.campoFormulario}>
+                  <Label htmlFor="nome-completo">Nome Completo</Label>
+                  <Input
+                    id="nome-completo"
+                    name="full-name"
+                    placeholder="Seu nome completo"
+                    required
+                  />
                 </div>
-                <EnhancedPasswordInput
-                  id="senha"
-                  name="password"
-                  placeholder="Sua senha"
-                  required
-                  type={mostrarSenha ? 'text' : 'password'}
-                  inputClassName={styles.inputSenha}
-                  buttonClassName={styles.botaoMostrarSenha}
-                  iconClassName={styles.iconeOlho}
-                  onToggleVisibility={() => setMostrarSenha((prev) => !prev)}
-                  mostrarSenha={mostrarSenha}
-                />
-              </div>
-              <input type="hidden" name="account-type" value={tipoConta} />
-              {erro && (
-                <div className={styles.mensagemErro}>{erro}</div>
-              )}
-              <Button type="submit" className={styles.botaoSubmit}>
-                Criar Conta
-              </Button>
-            </RegisterForm>
-            <RegisterFooter className={styles.rodape}>
-              Já tem uma conta?{" "}
-              <Link href="/login" className={styles.linkCadastro}>
-                Faça login
-              </Link>
-            </RegisterFooter>
-          </CardContent>
-        </RegisterCard>
-        {tipoConta === 'premium' && (
-          <PaymentModal
-            isOpen={modalPagamentoAberto}
-            onClose={() => setModalPagamentoAberto(false)}
-            onPaymentSuccess={handlePaymentSuccess} // Pass the new handler
-          />
-        )}
-      </RegisterContainer>
+                <div className={styles.campoFormulario}>
+                  <Label htmlFor="email">Email</Label>
+                  <Input
+                    id="email"
+                    name="email"
+                    type="email"
+                    placeholder="seu@email.com"
+                    required
+                  />
+                </div>
+                <div className={styles.campoFormulario}>
+                  <div className={styles.labelSenha}>
+                    <Label htmlFor="senha">Senha</Label>
+                  </div>
+                  <EnhancedPasswordInput
+                    id="senha"
+                    name="password"
+                    placeholder="Sua senha"
+                    required
+                    type={mostrarSenha ? 'text' : 'password'}
+                    inputClassName={styles.inputSenha}
+                    buttonClassName={styles.botaoMostrarSenha}
+                    iconClassName={styles.iconeOlho}
+                    onToggleVisibility={() => setMostrarSenha((prev) => !prev)}
+                    mostrarSenha={mostrarSenha}
+                  />
+                </div>
+                <input type="hidden" name="account-type" value={tipoConta} />
+                {erro && (
+                  <div className={styles.mensagemErro}>{erro}</div>
+                )}
+                <Button type="submit" className={styles.botaoSubmit}>
+                  Criar Conta
+                </Button>
+              </RegisterForm>
+              <RegisterFooter className={styles.rodape}>
+                Já tem uma conta?{" "}
+                <Link href="/login" className={styles.linkCadastro}>
+                  Faça login
+                </Link>
+              </RegisterFooter>
+            </CardContent>
+          </RegisterCard>
+          {tipoConta === 'premium' && (
+            <PaymentModal
+              isOpen={modalPagamentoAberto}
+              onClose={() => setModalPagamentoAberto(false)}
+              onPaymentSuccess={handlePaymentSuccess}
+            />
+          )}
+        </RegisterContainer>
+      </div>
     </div>
   )
 }

@@ -16,9 +16,10 @@ import type { PlayerStatsColumn } from '@/lib/definitions';
 interface ColumnSelectorProps {
   allColumns: PlayerStatsColumn[];
   selectedColumns: string[];
+  label?: string;
 }
 
-export function ColumnSelector({ allColumns, selectedColumns }: ColumnSelectorProps) {
+export function ColumnSelector({ allColumns, selectedColumns, label = 'Colunas' }: ColumnSelectorProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -45,7 +46,7 @@ export function ColumnSelector({ allColumns, selectedColumns }: ColumnSelectorPr
       <DropdownMenuTrigger asChild>
         <Button variant="outline" className="w-full sm:w-auto">
           <SlidersHorizontal className="mr-2 h-4 w-4" />
-          Colunas
+          {label}
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56">

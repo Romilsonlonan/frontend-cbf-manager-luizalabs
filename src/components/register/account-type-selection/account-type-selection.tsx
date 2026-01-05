@@ -11,7 +11,7 @@ const AccountTypeSelection: React.FC<AccountTypeSelectionProps> = ({ onSelectAcc
     return (
         <div className={loginStyles.containerLogin}> {/* Apply login page background */}
             <div className={styles.containerSelecao}> {/* Use the container for centering */}
-                <h2>Selecione o Tipo de Conta</h2>
+                <h1 className={styles.tituloSelecao}>Selecione o Tipo de Conta</h1>
                 <div className={styles.gridPlanos}> {/* Use grid for cards */}
                     <AccountTypeCard
                         title="Conta Básica"
@@ -28,7 +28,7 @@ const AccountTypeSelection: React.FC<AccountTypeSelectionProps> = ({ onSelectAcc
                     <AccountTypeCard
                         title="Conta Premium"
                         description="Acesso total com todos os recursos."
-                        icon={<span>⭐</span>}
+                        icon={<span style={{ filter: 'hue-rotate(190deg) saturate(1.5) brightness(0.7)' }}>⭐</span>} // Estrela azul escuro
                         onClick={() => onSelectAccountType('premium')}
                         className={styles.cardPlano} // Apply card styling
                         headerClassName={styles.headerPlano}

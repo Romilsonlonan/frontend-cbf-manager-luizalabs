@@ -156,6 +156,8 @@ export function EditClubModal({ open, onOpenChange, clubToEdit, onClubUpdated }:
                     <div className={styles.formField}>
                         <Label htmlFor="shield">Escudo</Label>
                         <ImageUpload
+                            id="escudo-upload"
+                            labelText="Escudo do Clube"
                             onImageSelect={setSelectedImage}
                             maxSizeMB={5}
                             initialImageUrl={clubToEdit?.shield_image_url ? `http://localhost:8000${clubToEdit.shield_image_url}` : undefined}
@@ -165,6 +167,8 @@ export function EditClubModal({ open, onOpenChange, clubToEdit, onClubUpdated }:
                     <div className={styles.formField}>
                         <Label htmlFor="banner">Banner (Opcional)</Label>
                         <ImageUpload
+                            id="banner-upload"
+                            labelText="Banner do Clube"
                             onImageSelect={setSelectedBannerImage}
                             maxSizeMB={5}
                             initialImageUrl={clubToEdit?.banner_image_url ? `http://localhost:8000${clubToEdit.banner_image_url}` : undefined}

@@ -2,7 +2,8 @@
 
 import React from 'react';
 import styles from './PlayerTable.module.css';
-import { GoalkeeperResponse, FieldPlayerResponse } from '@/lib/types'; // Import PlayerResponse type
+import { GoalkeeperResponse, FieldPlayerResponse } from '@/lib/types';
+import type { PlayerStatsColumn } from '@/lib/definitions';
 
 type PlayerType = GoalkeeperResponse | FieldPlayerResponse;
 
@@ -10,9 +11,10 @@ interface PlayerTableProps {
     players: PlayerType[];
     isLoading: boolean;
     error: string | null;
+    columns?: PlayerStatsColumn[];
 }
 
-export function PlayerTable({ players, isLoading, error }: PlayerTableProps) {
+export function PlayerTable({ players, isLoading, error, columns }: PlayerTableProps) {
     if (isLoading) {
         return (
             <div className={styles.playerTableContainer}>
@@ -41,76 +43,34 @@ export function PlayerTable({ players, isLoading, error }: PlayerTableProps) {
         );
     }
 
+    const isGoalkeeperTable = players.length > 0 && players[0].player_type === 'goalkeeper';
+
     return (
         <div className={styles.playerTableContainer}>
-            <h3 className={styles.playerTableTitle}>Tabela de Jogadores</h3>
+            <h3 className={styles.playerTableTitle}>Tabela de {isGoalkeeperTable ? 'Goleiros' : 'Jogadores de Campo'}</h3>
             <div className={styles.tableWrapper}>
                 <table className={styles.playerTable}>
                     <thead>
                         <tr>
-                            <th>Nome</th>
-                            <th>Pos</th>
-                            <th>Idade</th>
-                            <th>Alt</th>
-                            <th>P</th>
-                            <th>NAC</th>
-                            <th>J</th>
-                            <th>SUB</th>
-                            <th>G</th>
-                            <th>A</th>
-                            <th>TC</th>
-                            <th>CG</th>
-                            <th>FC</th>
-                            <th>FS</th>
-                            <th>CA</th>
-                            <th>CV</th>
-                            <th>D</th>
-                            <th>GS</th>
+                            {columns?.map((col) => (
+                                <th key={col.key}>{col.name}</th>
+                            ))}
                         </tr>
                     </thead>
-                    <tbody>
-                        {players.map((player) => (
+                    <tbody>{players.map((player) => (
                             <tr key={player.id}>
-                                <td>{player.name}</td>
-                                <td>{player.position}</td>
-                                <td>{player.age}</td>
-                                <td>{player.height || 0}</td>
-                                <td>{player.weight || 0}</td>
-                                <td>{player.nationality || 'N/A'}</td>
-                                <td>{player.games || 0}</td>
-                                <td>{player.substitutions || 0}</td>
-                                {player.player_type === 'field_player' ? (
-                                    <>
-                                        <td>{player.goals || 0}</td>
-                                        <td>{player.assists || 0}</td>
-                                        <td>{player.total_shots || 0}</td>
-                                        <td>{player.shots_on_goal || 0}</td>
-                                        <td>{player.fouls_committed || 0}</td>
-                                        <td>{player.fouls_suffered || 0}</td>
-                                        <td>{player.yellow_cards || 0}</td>
-                                        <td>{player.red_cards || 0}</td>
-                                        <td>{'N/A'}</td> {/* Defenses for field player */}
-                                        <td>{'N/A'}</td> {/* Goals Conceded for field player */}
-                                    </>
-                                ) : (
-                                    <>
-                                        <td>{'N/A'}</td> {/* Goals for goalkeeper */}
-                                        <td>{player.assists || 0}</td>
-                                        <td>{'N/A'}</td> {/* Total Shots for goalkeeper */}
-                                        <td>{'N/A'}</td> {/* Shots on Goal for goalkeeper */}
-                                        <td>{player.fouls_committed || 0}</td>
-                                        <td>{player.fouls_suffered || 0}</td>
-                                        <td>{player.yellow_cards || 0}</td>
-                                        <td>{player.red_cards || 0}</td>
-                                        <td>{player.saves || 0}</td>
-                                        <td>{player.goals_conceded || 0}</td>
-                                    </>
-                                )}
+                                {columns?.map((col) => (
+                                    <td key={col.key}>{(player as any)[col.key] ?? 'N/A'}</td>
+                                ))}
                             </tr>
-                        ))}
-                    </tbody>
+                        ))}</tbody>
                 </table>
             </div>
+            {players.length > 20 && (
+                <p className="text-xs text-gray-500 mt-2 text-center italic">
+                    Total de {players.length} jogadores. Role verticalmente para ver a lista completa.
+                </p>
+            )}
         </div>
     );
 }

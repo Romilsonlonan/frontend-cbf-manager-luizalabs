@@ -1,4 +1,28 @@
-import { TeamStats } from './types';
+import { TeamStats, Club, Position, Athlete } from './types';
+
+// Dados mock para clubes
+export const clubs = [
+  { id: 1, name: 'Flamengo', logo: '/shields/flamengo.png' },
+  { id: 2, name: 'Palmeiras', logo: '/shields/palmeiras.png' },
+  { id: 3, name: 'Atlético-MG', logo: '/shields/atletico-mg.png' },
+  { id: 4, name: 'Grêmio', logo: '/shields/gremio.png' },
+  { id: 5, name: 'Botafogo', logo: '/shields/botafogo.png' },
+];
+
+// Posições dos jogadores
+export const positions = [
+  { value: 'goalkeeper', label: 'Goleiro' },
+  { value: 'defender', label: 'Defensor' },
+  { value: 'midfielder', label: 'Meio-campo' },
+  { value: 'forward', label: 'Atacante' },
+];
+
+// Atletas mock
+export const athletes = [
+  { id: 1, name: 'João Silva', position: 'goalkeeper', club: 'Flamengo' },
+  { id: 2, name: 'Pedro Santos', position: 'defender', club: 'Palmeiras' },
+  { id: 3, name: 'Carlos Oliveira', position: 'midfielder', club: 'Atlético-MG' },
+];
 
 export const teamData: TeamStats[] = [
   { name: 'Flamengo', p: 71, j: 38, v: 21, e: 8, d: 9, gp: 68, gc: 36, sg: 32 },
