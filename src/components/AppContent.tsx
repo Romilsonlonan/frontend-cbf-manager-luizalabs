@@ -2,6 +2,7 @@
 
 import React, { ReactNode, useEffect } from 'react';
 import { useLoading } from '@/context/LoadingContext';
+import { useAuth } from '@/context/AuthContext';
 import { LoadingSpinner } from './LoadingSpinner';
 
 interface AppContentProps {
@@ -10,6 +11,7 @@ interface AppContentProps {
 
 export function AppContent({ children }: AppContentProps) {
   const { isLoading } = useLoading();
+  const { loadingUser } = useAuth();
 
   useEffect(() => {
     // Solução Anti-Cache para lidar com o botão voltar do navegador
@@ -25,7 +27,11 @@ export function AppContent({ children }: AppContentProps) {
 
   return (
     <>
-      {isLoading && <LoadingSpinner />}
+      {(isLoading || loadingUser) && (
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-white/80 backdrop-blur-sm">
+          <LoadingSpinner />
+        </div>
+      )}
       {children}
     </>
   );

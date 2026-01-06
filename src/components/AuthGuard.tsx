@@ -30,8 +30,10 @@ export function AuthGuard({ children }: AuthGuardProps) {
     }
   }, [isAuthenticated, isLoading, loadingUser, pathname, router]);
 
-  // Se estiver carregando (global ou usuário), não renderiza nada
-  if (isLoading || loadingUser) {
+  // Se estiver carregando o usuário, não renderiza nada para evitar flash de conteúdo protegido.
+  // Não bloqueamos a renderização se apenas 'isLoading' for true, pois isso causaria um deadlock
+  // se um componente filho disparar um carregamento no seu useEffect (o unmount impediria o stopLoading).
+  if (loadingUser) {
     return null;
   }
 

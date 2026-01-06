@@ -3,9 +3,10 @@
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { AnimatePresence, motion } from 'framer-motion';
-import type { Athlete, Club, Position } from '@/lib/types';
+import type { Athlete, ClubSimpleResponse as Club, Position } from '@/lib/types';
 import { api } from '@/lib/api';
 import { useLoading } from '@/context/LoadingContext';
+import { useAuth } from '@/context/AuthContext';
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -31,7 +32,7 @@ const positions: { name: Position, label: string, icon: React.FC<any> }[] = [
   { name: 'G', label: 'Goleiro', icon: Target },
 ];
 
-export default function Home() {
+export default function TrainingCentersPage() {
   const [view, setView] = useState<View>('main');
   const [selectedClub, setSelectedClub] = useState<Club | null>(null);
   const [selectedAthlete, setSelectedAthlete] = useState<Athlete | null>(null);
@@ -39,6 +40,7 @@ export default function Home() {
   const [clubs, setClubs] = useState<Club[]>([]);
   const [athletes, setAthletes] = useState<Athlete[]>([]);
   const { startLoading, stopLoading } = useLoading();
+  const { token } = useAuth();
 
   const handleBack = () => {
     if (view === 'detail') {
@@ -57,17 +59,22 @@ export default function Home() {
   };
 
   useEffect(() => {
+    let isMounted = true;
     const fetchData = async () => {
-      const token = localStorage.getItem('access_token');
       if (!token) return;
 
       startLoading();
       try {
-        const clubsData = await api.getClubs(token);
+        const [clubsData, goalkeepers, fieldPlayers] = await Promise.all([
+          api.getClubs(token),
+          api.getGoalkeepers(token),
+          api.getFieldPlayers(token)
+        ]);
+
+        if (!isMounted) return;
+
+        // Mostrar todos os clubes para permitir seleção
         setClubs(clubsData as unknown as Club[]);
-        
-        const goalkeepers = await api.getGoalkeepers(token);
-        const fieldPlayers = await api.getFieldPlayers(token);
         
         const mapAthlete = (a: any, pos: Position): Athlete => ({
           ...a,
@@ -97,7 +104,10 @@ export default function Home() {
     };
 
     fetchData();
-  }, [startLoading, stopLoading]);
+    return () => {
+      isMounted = false;
+    };
+  }, [token, startLoading, stopLoading]);
 
   const handleSelectClub = (club: Club) => {
     setSelectedClub(club);
@@ -106,7 +116,6 @@ export default function Home() {
   };
 
   const handleSelectAthlete = async (athlete: Athlete) => {
-    const token = localStorage.getItem('access_token');
     if (!token) {
       setSelectedAthlete(athlete);
       setView('detail');
@@ -219,25 +228,43 @@ export default function Home() {
         </div>
 
         {!selectedClub ? (
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-            {clubs.map((club) => (
-              <Card key={club.id} className="text-center hover:shadow-lg transition-shadow cursor-pointer" onClick={() => handleSelectClub(club)}>
-                <CardContent className="p-4 flex flex-col items-center justify-center">
-                  <Image src={club.shield_image_url || '/placeholder-avatar.jpg'} alt={club.name} width={80} height={80} className="rounded-full mb-3" data-ai-hint="club logo" />
-                  <p className="font-semibold text-sm">{club.name}</p>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
+          clubs.length === 0 ? (
+            <div className="text-center py-12 bg-accent/5 rounded-xl border-2 border-dashed border-accent/20">
+              <Shield className="h-12 w-12 text-accent/20 mx-auto mb-4" />
+              <p className="text-muted-foreground">Nenhum clube encontrado.</p>
+              <p className="text-xs text-muted-foreground/60 mt-2">Certifique-se de que os clubes estão cadastrados corretamente.</p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+              {clubs.map((club) => (
+                <Card key={club.id} className="text-center hover:shadow-lg transition-shadow cursor-pointer" onClick={() => handleSelectClub(club)}>
+                  <CardContent className="p-4 flex flex-col items-center justify-center">
+                    <div className="relative w-20 h-20 mb-3">
+                      <Image
+                        src={club.shield_image_url ? (club.shield_image_url.startsWith('http') ? club.shield_image_url : `http://localhost:8000${club.shield_image_url}`) : '/placeholder-avatar.jpg'}
+                        alt={club.name}
+                        fill
+                        className="rounded-full object-cover"
+                        data-ai-hint="club logo"
+                      />
+                    </div>
+                    <p className="font-semibold text-sm">{club.name}</p>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          )
         ) : !selectedPosition ? (
            <div>
              <h3 className="text-xl font-semibold mb-4 text-center text-muted-foreground">Selecione a Posição</h3>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
                 {positions.map(pos => (
                     <Card key={pos.name} className="text-center hover:shadow-lg transition-shadow cursor-pointer" onClick={() => setSelectedPosition(pos.name)}>
-                        <CardContent className="p-6 flex flex-col items-center justify-center">
-                            <pos.icon className="h-10 w-10 text-primary mb-3" />
-                            <p className="font-semibold">{pos.label}</p>
+                        <CardContent className="p-4 flex flex-col items-center justify-center">
+                            <div className="p-4 bg-accent/20 rounded-full mb-3">
+                                <pos.icon className="h-8 w-8 text-accent" />
+                            </div>
+                            <p className="font-semibold text-sm">{pos.label}</p>
                         </CardContent>
                     </Card>
                 ))}
@@ -245,79 +272,79 @@ export default function Home() {
            </div>
         ) : (
           <div>
-            <h3 className="text-2xl font-bold mb-4 text-primary">{positionMap[selectedPosition]}s</h3>
-            {filteredAthletes.length > 0 ? (
+            <h3 className="text-xl font-semibold mb-4 text-center text-muted-foreground">
+              Atletas - {positionMap[selectedPosition]}
+            </h3>
+            {filteredAthletes.length === 0 ? (
+              <div className="text-center py-12 bg-accent/5 rounded-xl border-2 border-dashed border-accent/20">
+                <p className="text-muted-foreground">Nenhum atleta encontrado para esta posição.</p>
+              </div>
+            ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {filteredAthletes.map(athlete => (
-                  <Card key={athlete.id} className="cursor-pointer hover:border-primary overflow-hidden text-center" onClick={() => handleSelectAthlete(athlete)}>
-                    <CardContent className="p-6">
-                      <div className="flex justify-center mb-4">
-                        <Image
-                          src="https://i.ibb.co/M5gD2pfw/homem.png"
-                          alt="Ilustração de um atleta"
-                          width={100}
-                          height={100}
-                          className="rounded-full object-cover border-4 border-primary"
-                          data-ai-hint="athlete illustration"
-                        />
-                      </div>
-                      <CardTitle className="text-lg mb-2">{athlete.name}</CardTitle>
-                      <div className="text-sm text-muted-foreground space-y-1">
-                        <p><strong>Idade:</strong> {athlete.age} anos</p>
-                        <p><strong>Altura:</strong> {athlete.height} cm</p>
-                        <p><strong>Peso:</strong> {athlete.weight} kg</p>
+                {filteredAthletes.map((athlete) => (
+                  <Card key={athlete.id} className="hover:shadow-lg transition-shadow cursor-pointer" onClick={() => handleSelectAthlete(athlete)}>
+                    <CardContent className="p-4">
+                      <div className="flex items-center space-x-4">
+                        <div className="relative w-12 h-12">
+                          <Image
+                            src={athlete.image_url || '/placeholder-avatar.jpg'}
+                            alt={athlete.name}
+                            fill
+                            className="rounded-full object-cover"
+                          />
+                        </div>
+                        <div>
+                          <p className="font-semibold">{athlete.name}</p>
+                          <p className="text-sm text-muted-foreground">{athlete.position} • {athlete.age} anos</p>
+                        </div>
                       </div>
                     </CardContent>
                   </Card>
                 ))}
               </div>
-            ) : (
-              <p className="text-center text-muted-foreground mt-8">Nenhum atleta encontrado para esta posição.</p>
             )}
           </div>
         )}
       </motion.div>
-    )
+    );
   };
 
-  const renderDetailView = () => (
-    selectedAthlete && (
+  const renderDetailView = () => {
+    if (!selectedAthlete) return null;
+
+    return (
       <motion.div
         key="detail"
-        initial={{ opacity: 0, y: 50 }}
-        animate={{ opacity: 1, y: 0 }}
-        exit={{ opacity: 0, y: -50 }}
+        initial={{ opacity: 0, x: 100 }}
+        animate={{ opacity: 1, x: 0 }}
+        exit={{ opacity: 0, x: -100 }}
         transition={{ duration: 0.3 }}
-        className="w-full max-w-6xl"
+        className="w-full max-w-4xl"
       >
         <div className="flex items-center mb-8">
           <Button variant="ghost" size="icon" onClick={handleBack}>
             <ArrowLeft className="h-6 w-6" />
           </Button>
-          <div className='ml-4'>
-            <h2 className="font-headline text-3xl font-bold text-primary">{selectedAthlete.name}</h2>
-            <p className='text-muted-foreground'>ID do Atleta: {selectedAthlete.id}</p>
-          </div>
+          <h2 className="font-headline text-3xl font-bold text-primary ml-4">
+            Detalhes do Atleta
+          </h2>
         </div>
+
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          <div className="lg:col-span-2">
-            <ProgressDashboard athlete={selectedAthlete} />
-          </div>
-          <div className="lg:col-span-2">
-            <AthleteDataForm athlete={selectedAthlete} />
-          </div>
+          <AthleteDataForm athlete={selectedAthlete} />
+          <ProgressDashboard athlete={selectedAthlete} />
         </div>
       </motion.div>
-    )
-  );
+    );
+  };
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center p-8 sm:p-12 md:p-24 bg-background font-body">
+    <div className="container mx-auto px-4 py-8">
       <AnimatePresence mode="wait">
         {view === 'main' && renderMainView()}
         {view === 'management' && renderManagementView()}
         {view === 'detail' && renderDetailView()}
       </AnimatePresence>
-    </main>
+    </div>
   );
 }

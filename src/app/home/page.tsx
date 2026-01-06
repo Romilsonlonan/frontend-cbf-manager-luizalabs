@@ -44,6 +44,7 @@ import {
    APP / DOMAIN
 ======================= */
 import { useAuth } from '@/context/AuthContext';
+import { useLoading } from '@/context/LoadingContext';
 import { api } from '@/lib/api';
 import { LoadingSpinner } from '@/components/LoadingSpinner';
 import type { TeamStats, SortKey } from '@/lib/types';
@@ -87,10 +88,11 @@ const SortableHeader: FC<{
 export default function DashboardWithLeaderboardPage() {
   /* ---------- Dashboard State ---------- */
   const { token, onAuthError } = useAuth();
+  const { startLoading, stopLoading } = useLoading();
   const [totalAthletes, setTotalAthletes] = useState<number | null>(null);
   const [totalClubs, setTotalClubs] = useState<number | null>(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [dashboardError, setDashboardError] = useState<string | null>(null);
 
   /* ---------- Leaderboard State ---------- */
   const [searchQuery, setSearchQuery] = useState('');
@@ -100,20 +102,21 @@ export default function DashboardWithLeaderboardPage() {
   });
   const [isScraping, setIsScraping] = useState(false); // New state for scraping loading
   const [leaderboardData, setLeaderboardData] = useState<TeamStats[]>([]); // Inicializa vazio para evitar dados estáticos
+  const [leaderboardError, setLeaderboardError] = useState<string | null>(null);
 
   const fetchLeaderboardData = useCallback(async () => {
     if (!token) {
-      setError('Authentication token not found.');
+      setLeaderboardError('Authentication token not found.');
       return;
     }
     setIsScraping(true);
-    setError(null);
+    setLeaderboardError(null);
     try {
       const data = await api.scrapeBrasileiraoLeaderboard(token, onAuthError);
       setLeaderboardData(data);
     } catch (err) {
       console.error('Failed to scrape leaderboard data:', err);
-      setError('Falha ao atualizar a classificação do Brasileirão.');
+      setLeaderboardError('Falha ao atualizar a classificação do Brasileirão.');
     } finally {
       setIsScraping(false);
     }
@@ -121,13 +124,14 @@ export default function DashboardWithLeaderboardPage() {
 
   const fetchDashboardData = useCallback(async () => {
     if (!token) {
-      setError('Authentication token not found.');
+      setDashboardError('Authentication token not found.');
       setLoading(false);
       return;
     }
 
     try {
       setLoading(true);
+      startLoading();
       const athletesCount = await api.getTotalAthletesCount(token, onAuthError);
       const clubsCount = await api.getTotalClubsCount(token, onAuthError);
 
@@ -135,11 +139,12 @@ export default function DashboardWithLeaderboardPage() {
       setTotalClubs(clubsCount);
     } catch (err) {
       console.error(err);
-      setError('Falha ao carregar dados do painel.');
+      setDashboardError('Falha ao carregar dados do painel.');
     } finally {
       setLoading(false);
+      stopLoading();
     }
-  }, [token, onAuthError]);
+  }, [token, onAuthError, startLoading, stopLoading]);
 
   useEffect(() => {
     fetchDashboardData();
@@ -198,8 +203,8 @@ export default function DashboardWithLeaderboardPage() {
     );
   }
 
-  if (error) {
-    return <p className="text-red-500">{error}</p>;
+  if (dashboardError) {
+    return <p className="text-red-500 p-10">{dashboardError}</p>;
   }
 
   /* =======================
@@ -266,6 +271,12 @@ export default function DashboardWithLeaderboardPage() {
            LEADERBOARD
         ======================= */}
         <section>
+          {leaderboardError && (
+            <div className="bg-destructive/15 text-destructive p-4 rounded-md mb-4 flex items-center justify-between">
+              <span>{leaderboardError}</span>
+              <Button variant="ghost" size="sm" onClick={handleRefreshLeaderboard}>Tentar novamente</Button>
+            </div>
+          )}
           <Card className="shadow-2xl">
             <CardHeader>
               <div className="flex items-center justify-between">

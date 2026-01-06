@@ -13,6 +13,7 @@ import { Goal, Shield, Trophy, Users } from 'lucide-react';
 import Image from 'next/image';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { useAuth } from '@/context/AuthContext';
+import { useLoading } from '@/context/LoadingContext';
 import { api } from '@/lib/api';
 import { GoalkeeperResponse, FieldPlayerResponse, Player, Club } from '@/lib/types';
 
@@ -47,6 +48,7 @@ const getColumnsByOrder = (keys: readonly string[]): PlayerStatsColumn[] => {
 export default function Home() {
   const searchParams = useSearchParams();
   const { token, onAuthError } = useAuth();
+  const { startLoading, stopLoading } = useLoading();
 
   const [goalkeepers, setGoalkeepers] = useState<GoalkeeperResponse[]>([]);
   const [fieldPlayers, setFieldPlayers] = useState<FieldPlayerResponse[]>([]);
@@ -70,6 +72,7 @@ export default function Home() {
     }
 
     setLoading(true);
+    startLoading();
     setError(null);
 
     try {
@@ -100,8 +103,9 @@ export default function Home() {
       setError('Failed to fetch players.');
     } finally {
       setLoading(false);
+      stopLoading();
     }
-  }, [token, currentCategory, selectedClubId, onAuthError]);
+  }, [token, currentCategory, selectedClubId, onAuthError, startLoading, stopLoading]);
 
   // ======================================================
   // 📡 Fetch de clubes

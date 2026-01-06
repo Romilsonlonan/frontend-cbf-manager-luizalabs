@@ -29,6 +29,7 @@ export type Athlete = {
     goals_conceded?: number;
     player_type?: string; // Added player_type
     updated_at?: string; // Added updated_at
+    image_url?: string; // Added image_url
     bodyFat?: number;
     muscle?: number;
     labData?: {

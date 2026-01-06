@@ -1,6 +1,6 @@
 'use client';
 
-import React, { createContext, useState, useContext, useEffect, ReactNode } from 'react';
+import React, { createContext, useState, useContext, useEffect, useCallback, useMemo, ReactNode } from 'react';
 import { useRouter } from 'next/navigation';
 import { getCurrentUser, updateUserProfile, changePassword, deleteAccount, uploadProfileImage, scrapeAthletes, scrapeClubPlayers } from '@/lib/api';
 import { useLoading } from './LoadingContext';
@@ -35,28 +35,28 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const router = useRouter();
   const { startLoading, stopLoading } = useLoading();
 
-  const handleAuthError = () => {
+  const handleAuthError = useCallback(() => {
     console.log('AuthContext: Authentication error detected, logging out.');
-    localStorage.removeItem('token');
+    localStorage.removeItem('access_token');
     setToken(null);
     setIsAuthenticated(false);
     setUser(null);
     setLoadingUser(false); // Set loading to false on error
     router.push('/login');
-  };
+  }, [router]);
 
-  const updateUser = (userData: Partial<User>) => {
+  const updateUser = useCallback((userData: Partial<User>) => {
     setUser((prevUser) => {
       if (!prevUser) return null;
       return { ...prevUser, ...userData };
     });
-  };
+  }, []);
 
   useEffect(() => {
     console.log('AuthContext useEffect: Starting to load user.');
     setLoadingUser(true); // Start loading
     const loadUser = async () => {
-      const storedToken = localStorage.getItem('token');
+      const storedToken = localStorage.getItem('access_token');
       console.log('AuthContext useEffect: Stored token found:', storedToken ? 'Yes' : 'No');
       if (storedToken) {
         // Verificação básica de expiração de JWT para evitar flicker de "conectado" com token expirado
@@ -86,7 +86,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           } else {
             console.error('AuthContext useEffect: Error loading user:', error);
           }
-          localStorage.removeItem('token');
+          localStorage.removeItem('access_token');
           setToken(null);
           setIsAuthenticated(false);
           setUser(null);
@@ -98,10 +98,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     loadUser();
   }, []);
 
-  const login = (newToken: string) => {
+  const login = useCallback((newToken: string) => {
     console.log('AuthContext login: Attempting to log in with new token.');
     setLoadingUser(true); // Start loading on login
-    localStorage.setItem('token', newToken);
+    localStorage.setItem('access_token', newToken);
     setToken(newToken);
     setIsAuthenticated(true);
     getCurrentUser(newToken, startLoading, stopLoading, handleAuthError).then((currentUser: User) => {
@@ -110,25 +110,36 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setLoadingUser(false); // Finish loading on successful login
     }).catch((error: any) => {
       console.error('AuthContext login: Failed to fetch user after login:', error);
-      localStorage.removeItem('token');
+      localStorage.removeItem('access_token');
       setToken(null);
       setIsAuthenticated(false);
       setUser(null);
       setLoadingUser(false); // Finish loading on failed login
     });
-  };
+  }, [startLoading, stopLoading, handleAuthError]);
 
-  const logout = () => {
-    localStorage.removeItem('token');
+  const logout = useCallback(() => {
+    localStorage.removeItem('access_token');
     setToken(null);
     setIsAuthenticated(false);
     setUser(null);
     setLoadingUser(false); // Set loading to false on logout
     router.push('/login');
-  };
+  }, [router]);
+
+  const authValue = useMemo(() => ({
+    user,
+    isAuthenticated,
+    token,
+    loadingUser,
+    login,
+    logout,
+    updateUser,
+    onAuthError: handleAuthError
+  }), [user, isAuthenticated, token, loadingUser, login, logout, updateUser, handleAuthError]);
 
   return (
-    <AuthContext.Provider value={{ user, isAuthenticated, token, loadingUser, login, logout, updateUser, onAuthError: handleAuthError }}>
+    <AuthContext.Provider value={authValue}>
       {children}
     </AuthContext.Provider>
   );

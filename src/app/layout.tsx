@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { Suspense } from 'react';
 import './globals.css';
 import { Toaster } from '@/components/ui/toaster';
 import { Inter } from 'next/font/google';
@@ -10,6 +11,7 @@ import { ThemeProvider } from '@/context/ThemeContext';
 import { AuthGuard } from '@/components/AuthGuard';
 import { AppContent } from '@/components/AppContent';
 import { ClientGate } from '@/components/ClientGate';
+import { PageLoader } from '@/components/PageLoader';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -33,9 +35,12 @@ export default function RootLayout({
           <LoadingProvider>
             <ThemeProvider>
               <AuthProvider>
-                <AuthGuard>
-                  <AppContent>{children}</AppContent>
-                </AuthGuard>
+                <AppContent>
+                  <Suspense fallback={null}>
+                    <PageLoader />
+                  </Suspense>
+                  <AuthGuard>{children}</AuthGuard>
+                </AppContent>
               </AuthProvider>
             </ThemeProvider>
           </LoadingProvider>

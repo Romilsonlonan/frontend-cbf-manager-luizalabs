@@ -22,10 +22,12 @@ import Statistics from '@/components/home/statistics/statistics';
 import { GoalsByAthleteDashboard } from '@/components/home/statistics/GoalsByAthleteDashboard';
 import { FoulsCardsDashboard } from '@/components/home/statistics/FoulsCardsDashboard';
 import { AgeDashboard } from '@/components/home/statistics/AgeDashboard';
+import { useLoading } from '@/context/LoadingContext';
 import { useAuth } from '@/context/AuthContext';
 
 export default function StatisticsPage() {
   const { token, onAuthError } = useAuth();
+  const { startLoading, stopLoading } = useLoading();
   const [selectedClub, setSelectedClub] = useState<string>('Todos');
   const [clubs, setClubs] = useState<Club[]>([]);
 
@@ -36,14 +38,17 @@ export default function StatisticsPage() {
         return;
       }
       try {
+        startLoading();
         const fetchedClubs = await api.getClubs(token, onAuthError);
         setClubs(fetchedClubs);
       } catch (error) {
         console.error('Error fetching clubs:', error);
+      } finally {
+        stopLoading();
       }
     };
     fetchClubs();
-  }, [token, onAuthError]);
+  }, [token, onAuthError, startLoading, stopLoading]);
 
   return (
     <div className="grid gap-8 h-full flex-col">

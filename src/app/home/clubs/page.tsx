@@ -9,6 +9,7 @@ import { Plus, Users, Calendar, Trophy, Building, Search, Building2, Pencil, Tra
 import { scrapeClubPlayers, getClubs } from '@/lib/api' // Import specific functions
 import { useToast } from '@/hooks/use-toast'
 import { useAuth } from '@/context/AuthContext'
+import { useLoading } from '@/context/LoadingContext'
 import { ClubSimpleResponse, GoalkeeperResponse, FieldPlayerResponse } from '@/lib/types' // Importa as interfaces ClubSimpleResponse, GoalkeeperResponse e FieldPlayerResponse
 import { useRouter } from 'next/navigation';
 
@@ -18,6 +19,7 @@ type Club = ClubSimpleResponse;
 export default function ClubsPage() {
   const [clubs, setClubs] = useState<Club[]>([])
   const [loading, setLoading] = useState(true)
+  const { startLoading, stopLoading } = useLoading()
   const [clubModalOpen, setClubModalOpen] = useState(false)
   const [editModalOpen, setEditModalOpen] = useState(false) // State for edit modal
   const [clubToEdit, setClubToEdit] = useState<Club | null>(null) // State for club being edited
@@ -30,6 +32,7 @@ export default function ClubsPage() {
     if (!token) return;
     try {
       setLoading(true)
+      startLoading()
       const data = await getClubs(token) // Use the exported getClubs function
       setClubs(data)
     } catch (error) {
@@ -41,6 +44,7 @@ export default function ClubsPage() {
       });
     } finally {
       setLoading(false)
+      stopLoading()
     }
   }
 

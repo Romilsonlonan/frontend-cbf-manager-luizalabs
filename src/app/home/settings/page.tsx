@@ -43,7 +43,7 @@ export default function UserSettings() {
     setError('');
     startLoading();
     try {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem('access_token');
       if (!token) throw new Error('Token de autenticação não encontrado.');
       if (!user) throw new Error('Informações do usuário não disponíveis.');
 
@@ -62,7 +62,7 @@ export default function UserSettings() {
     setError('');
     startLoading();
     try {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem('access_token');
       if (!token) throw new Error('Token de autenticação não encontrado.');
 
       await changePassword(token, oldPass, newPass, startLoading, stopLoading);
@@ -85,7 +85,7 @@ export default function UserSettings() {
     setError('');
     startLoading();
     try {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem('access_token');
       if (!token) throw new Error('Token de autenticação não encontrado.');
 
       await deleteAccount(token, startLoading, stopLoading);
@@ -113,7 +113,7 @@ export default function UserSettings() {
     }
     startLoading();
     try {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem('access_token');
       if (!token) throw new Error('Token de autenticação não encontrado.');
       if (!user) throw new Error('Informações do usuário não disponíveis.');
 
@@ -141,7 +141,7 @@ export default function UserSettings() {
   };
 
   const handleThemeChange = (newTheme: string) => {
-    setTheme(newTheme);
+    setTheme(newTheme as 'light' | 'dark');
     localStorage.setItem('theme', newTheme);
     document.documentElement.classList.toggle('dark', newTheme === 'dark');
   };
