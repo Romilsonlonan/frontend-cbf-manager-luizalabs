@@ -36,9 +36,10 @@ const formSchema = z.object({
 
 type AthleteDataFormProps = {
   athlete: Athlete;
+  onSaveSuccess?: () => void;
 }
 
-export function AthleteDataForm({ athlete }: AthleteDataFormProps) {
+export function AthleteDataForm({ athlete, onSaveSuccess }: AthleteDataFormProps) {
   const { toast } = useToast()
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -96,6 +97,10 @@ export function AthleteDataForm({ athlete }: AthleteDataFormProps) {
         title: "Dados Atualizados!",
         description: `Os dados de ${values.name} foram salvos com sucesso no backend.`,
       });
+
+      if (onSaveSuccess) {
+        onSaveSuccess();
+      }
     } catch (error) {
       console.error("Erro ao salvar dados do atleta:", error);
       toast({
@@ -116,8 +121,8 @@ export function AthleteDataForm({ athlete }: AthleteDataFormProps) {
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
             <div className="space-y-4">
-              <h3 className="text-lg font-medium text-primary">Informações Pessoais</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              <h3 className="text-lg font-medium text-primary border-b pb-2">Informações Pessoais</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4">
                 <FormField control={form.control} name="name" render={({ field }) => (
                   <FormItem>
                     <FormLabel>Nome</FormLabel>
@@ -132,6 +137,7 @@ export function AthleteDataForm({ athlete }: AthleteDataFormProps) {
                     <FormMessage />
                   </FormItem>
                 )} />
+                
                 <FormField control={form.control} name="height" render={({ field }) => (
                   <FormItem>
                     <FormLabel>Altura (cm)</FormLabel>
@@ -146,6 +152,7 @@ export function AthleteDataForm({ athlete }: AthleteDataFormProps) {
                     <FormMessage />
                   </FormItem>
                 )} />
+                
                 <FormField control={form.control} name="bodyFat" render={({ field }) => (
                   <FormItem>
                     <FormLabel>% de Gordura</FormLabel>
@@ -164,8 +171,8 @@ export function AthleteDataForm({ athlete }: AthleteDataFormProps) {
             </div>
             <Separator />
             <div className="space-y-4">
-              <h3 className="text-lg font-medium text-primary">Dados Laboratoriais</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+              <h3 className="text-lg font-medium text-primary border-b pb-2">Dados Laboratoriais</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4">
                 <FormField control={form.control} name="hdl" render={({ field }) => (
                   <FormItem>
                     <FormLabel>Colesterol HDL</FormLabel>
@@ -180,6 +187,7 @@ export function AthleteDataForm({ athlete }: AthleteDataFormProps) {
                     <FormMessage />
                   </FormItem>
                 )} />
+                
                 <FormField control={form.control} name="totalCholesterol" render={({ field }) => (
                   <FormItem>
                     <FormLabel>Colesterol Total</FormLabel>
@@ -196,9 +204,9 @@ export function AthleteDataForm({ athlete }: AthleteDataFormProps) {
                 )} />
               </div>
             </div>
-            <div className="flex justify-end">
-              <Button type="submit">
-                <Save className="mr-2 h-4 w-4" />
+            <div className="flex justify-center pt-4">
+              <Button type="submit" className="px-8 h-12 text-base font-semibold shadow-md hover:shadow-lg transition-all bg-accent hover:bg-accent/90 text-accent-foreground">
+                <Save className="mr-2 h-5 w-5" />
                 Salvar Alterações
               </Button>
             </div>

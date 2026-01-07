@@ -178,7 +178,7 @@ export default function Home() {
   // ======================================================
   return (
     <div className="min-h-screen bg-background text-foreground">
-      <header className="relative h-48 md:h-64 w-full">
+      <header className="relative h-80 md:h-[500px] w-full">
         <Image
           src={bannerImageUrl}
           alt={bannerImageHint}

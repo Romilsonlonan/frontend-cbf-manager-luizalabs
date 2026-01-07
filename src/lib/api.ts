@@ -113,9 +113,23 @@ export const changePassword = async (token: string, currentPassword: string, new
         onAuthError?.();
         throw new Error('Token inválido ou expirado');
       }
-      const errorBody = await response.json();
-      console.error('API Response not OK for changePassword:', response, errorBody);
-      throw new Error(errorBody.detail || 'Falha ao alterar senha');
+      
+      let errorDetail = 'Falha ao alterar senha';
+      try {
+        const errorBody = await response.json();
+        if (errorBody.detail) {
+          if (Array.isArray(errorBody.detail)) {
+            errorDetail = errorBody.detail.map((err: any) => err.msg || JSON.stringify(err)).join(', ');
+          } else {
+            errorDetail = errorBody.detail;
+          }
+        }
+      } catch (e) {
+        console.error('Error parsing error response:', e);
+      }
+      
+      console.error('API Response not OK for changePassword:', response.status, errorDetail);
+      throw new Error(errorDetail);
     }
 
     const data = await response.json();
@@ -682,6 +696,121 @@ export const getNutritionalPlans = async (athleteId: number, isGoalkeeper: boole
   return response.json();
 };
 
+export const getAppointments = async (token: string, startDate?: string, endDate?: string) => {
+  let url = new URL(`${API_URL}/appointments/`);
+  if (startDate) url.searchParams.append('start_date', startDate);
+  if (endDate) url.searchParams.append('end_date', endDate);
+  
+  const response = await fetch(url.toString(), {
+    headers: { 'Authorization': `Bearer ${token}` },
+  });
+  if (!response.ok) throw new Error('Erro ao buscar consultas');
+  return response.json();
+};
+
+export const createAppointment = async (appointmentData: any, token: string) => {
+  const response = await fetch(`${API_URL}/appointments/`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+    body: JSON.stringify(appointmentData),
+  });
+  if (!response.ok) throw new Error('Erro ao criar consulta');
+  return response.json();
+};
+
+export const updateAppointmentStatus = async (appointmentId: number, status: string, token: string) => {
+  const response = await fetch(`${API_URL}/appointments/${appointmentId}/status?status=${status}`, {
+    method: 'PATCH',
+    headers: { 'Authorization': `Bearer ${token}` },
+  });
+  if (!response.ok) throw new Error('Erro ao atualizar status da consulta');
+  return response.json();
+};
+
+export const updateAppointment = async (appointmentId: number, appointmentData: any, token: string) => {
+  const response = await fetch(`${API_URL}/appointments/${appointmentId}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+    body: JSON.stringify(appointmentData),
+  });
+  if (!response.ok) throw new Error('Erro ao atualizar consulta');
+  return response.json();
+};
+
+export const deleteAppointment = async (appointmentId: number, token: string) => {
+  const response = await fetch(`${API_URL}/appointments/${appointmentId}`, {
+    method: 'DELETE',
+    headers: { 'Authorization': `Bearer ${token}` },
+  });
+  if (!response.ok) throw new Error('Erro ao excluir consulta');
+  return true;
+};
+
+export const getServices = async () => {
+  const response = await fetch(`${API_URL}/services/`);
+  if (!response.ok) throw new Error('Erro ao buscar serviços');
+  return response.json();
+};
+
+export const getLocations = async () => {
+  const response = await fetch(`${API_URL}/locations/`);
+  if (!response.ok) throw new Error('Erro ao buscar locais');
+  return response.json();
+};
+
+export const getAvailabilities = async (token: string) => {
+  const response = await fetch(`${API_URL}/availabilities/`, {
+    headers: { 'Authorization': `Bearer ${token}` },
+  });
+  if (!response.ok) throw new Error('Erro ao buscar disponibilidades');
+  return response.json();
+};
+
+export const updateAvailability = async (availabilityData: any, token: string) => {
+  const response = await fetch(`${API_URL}/availabilities/`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+    body: JSON.stringify(availabilityData),
+  });
+  if (!response.ok) throw new Error('Erro ao atualizar disponibilidade');
+  return response.json();
+};
+
+export const createLocation = async (locationData: any, token: string) => {
+  const response = await fetch(`${API_URL}/locations/`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+    body: JSON.stringify(locationData),
+  });
+  if (!response.ok) throw new Error('Erro ao criar local');
+  return response.json();
+};
+
+export const createService = async (serviceData: any, token: string) => {
+  const response = await fetch(`${API_URL}/services/`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+    body: JSON.stringify(serviceData),
+  });
+  if (!response.ok) throw new Error('Erro ao criar serviço');
+  return response.json();
+};
+
 export const api = {
   login,
   getCurrentUser,
@@ -709,6 +838,17 @@ export const api = {
   getAthleteProgress,
   createNutritionalPlan,
   getNutritionalPlans,
+  getAppointments,
+  createAppointment,
+  updateAppointmentStatus,
+  updateAppointment,
+  deleteAppointment,
+  getServices,
+  createService,
+  getLocations,
+  createLocation,
+  getAvailabilities,
+  updateAvailability,
 };
 
 export const clubsApi = {
