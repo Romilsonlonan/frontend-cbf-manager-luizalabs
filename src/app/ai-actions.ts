@@ -3,7 +3,7 @@
 import { ChatMistralAI } from "@langchain/mistralai";
 import { HumanMessage, SystemMessage } from "@langchain/core/messages";
 
-const MISTRAL_API_KEY = "c5AEU69RT95B4kgqz6dQsgMyZCYvGx2K";
+const MISTRAL_API_KEY = process.env.MISTRAL_API_KEY;
 
 const chat = new ChatMistralAI({
   apiKey: MISTRAL_API_KEY,
