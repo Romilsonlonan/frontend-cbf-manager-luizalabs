@@ -1,0 +1,7 @@
+.loadingContainer {
+  @apply min-h-screen flex items-center justify-center;
+}
+
+.loadingText {
+  @apply text-lg font-medium text-muted-foreground animate-pulse;
+}

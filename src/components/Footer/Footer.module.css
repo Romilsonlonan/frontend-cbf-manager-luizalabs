@@ -1,0 +1,15 @@
+.footer {
+  @apply text-center py-6 text-sm text-muted-foreground border-t border-border mt-auto;
+}
+
+.text {
+  @apply mb-2;
+}
+
+.links {
+  @apply flex justify-center gap-4 text-xs;
+}
+
+.link {
+  @apply hover:text-primary transition-colors;
+}

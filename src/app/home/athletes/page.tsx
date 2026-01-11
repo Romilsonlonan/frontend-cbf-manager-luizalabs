@@ -16,6 +16,8 @@ import { useAuth } from '@/context/AuthContext';
 import { useLoading } from '@/context/LoadingContext';
 import { api } from '@/lib/api';
 import { GoalkeeperResponse, FieldPlayerResponse, Player, Club } from '@/lib/types';
+import { IsLoading } from '@/components/home/athletes/is-loading/IsLoading';
+import { Glossary } from '@/components/home/athletes/glossary/Glossary';
 
 // ======================================================
 // 🔒 ORDEM OFICIAL ESPN — GOLEIROS (FONTE DA VERDADE)
@@ -158,11 +160,7 @@ export default function Home() {
   // ⏳ Loading & Error States
   // ======================================================
   if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <p>Carregando jogadores...</p>
-      </div>
-    );
+    return <IsLoading />;
   }
 
   if (error) {
@@ -177,7 +175,7 @@ export default function Home() {
   // 🧩 RENDER
   // ======================================================
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <div className="bg-background text-foreground">
       <header className="relative h-80 md:h-[500px] w-full">
         <Image
           src={bannerImageUrl}
@@ -272,95 +270,10 @@ export default function Home() {
               />
             )}
 
-            {/* Glossário */}
-            <div className="mt-8 pt-6 border-t border-border">
-              <p className="text-xs font-semibold text-muted-foreground mb-4 uppercase tracking-wider">
-                Glossário
-              </p>
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-y-4 gap-x-4 text-xs text-muted-foreground">
-                <div className="flex flex-col gap-1">
-                  <span className="font-bold text-foreground">Nome:</span>
-                  <span>Nome</span>
-                </div>
-                <div className="flex flex-col gap-1">
-                  <span className="font-bold text-foreground">POS:</span>
-                  <span>Posição</span>
-                </div>
-                <div className="flex flex-col gap-1">
-                  <span className="font-bold text-foreground">Idade:</span>
-                  <span>Idade atual do jogador</span>
-                </div>
-                <div className="flex flex-col gap-1">
-                  <span className="font-bold text-foreground">Alt:</span>
-                  <span>Altura</span>
-                </div>
-                <div className="flex flex-col gap-1">
-                  <span className="font-bold text-foreground">P:</span>
-                  <span>Peso</span>
-                </div>
-                <div className="flex flex-col gap-1">
-                  <span className="font-bold text-foreground">NAC:</span>
-                  <span>Nacionalidade</span>
-                </div>
-
-                <div className="flex flex-col gap-1">
-                  <span className="font-bold text-foreground">J:</span>
-                  <span>Jogos</span>
-                </div>
-                <div className="flex flex-col gap-1">
-                  <span className="font-bold text-foreground">SUB:</span>
-                  <span>Substitute Appearances</span>
-                </div>
-                <div className="flex flex-col gap-1">
-                  <span className="font-bold text-foreground">G:</span>
-                  <span>Total de gols</span>
-                </div>
-                <div className="flex flex-col gap-1">
-                  <span className="font-bold text-foreground">A:</span>
-                  <span>Assistências</span>
-                </div>
-                <div className="flex flex-col gap-1">
-                  <span className="font-bold text-foreground">TC:</span>
-                  <span>Finalizações</span>
-                </div>
-                <div className="flex flex-col gap-1">
-                  <span className="font-bold text-foreground">CG:</span>
-                  <span>Chutes a gol</span>
-                </div>
-
-                <div className="flex flex-col gap-1">
-                  <span className="font-bold text-foreground">FC:</span>
-                  <span>Faltas cometidas</span>
-                </div>
-                <div className="flex flex-col gap-1">
-                  <span className="font-bold text-foreground">FS:</span>
-                  <span>Faltas sofridas</span>
-                </div>
-                <div className="flex flex-col gap-1">
-                  <span className="font-bold text-foreground">CA:</span>
-                  <span>Cartões amarelos</span>
-                </div>
-                <div className="flex flex-col gap-1">
-                  <span className="font-bold text-foreground">CV:</span>
-                  <span>Cartões vermelhos</span>
-                </div>
-                <div className="flex flex-col gap-1">
-                  <span className="font-bold text-foreground">D:</span>
-                  <span>Defesas</span>
-                </div>
-                <div className="flex flex-col gap-1">
-                  <span className="font-bold text-foreground">GS:</span>
-                  <span>Gols sofridos</span>
-                </div>
-              </div>
-            </div>
+            <Glossary />
           </CardContent>
         </Card>
       </main>
-
-      <footer className="text-center py-6 text-sm text-muted-foreground">
-        <p>Desenvolvido com paixão pelo Gigante da Colina.</p>
-      </footer>
     </div>
   );
 }
