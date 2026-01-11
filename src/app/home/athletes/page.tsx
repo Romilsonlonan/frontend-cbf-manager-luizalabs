@@ -1,35 +1,14 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useMemo } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { allStatsColumns, categories } from '@/lib/roster-data';
+import { allStatsColumns } from '@/lib/roster-data';
 import { PlayerStatsColumn } from '@/lib/definitions';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
-import { useAuth } from '@/context/AuthContext';
-import { useLoading } from '@/context/LoadingContext';
-import { api } from '@/lib/api';
-import { GoalkeeperResponse, FieldPlayerResponse, Club } from '@/lib/types';
 import { IsLoading } from '@/components/home/athletes/is-loading/IsLoading';
 import { AthletesPageContent } from '@/components/home/athletes/AthletesPageContent';
-
-// ======================================================
-// 🔒 ORDEM OFICIAL ESPN — GOLEIROS (FONTE DA VERDADE)
-// ======================================================
-const GOALKEEPER_ESPN_ORDER = [
-  'name', 'position', 'age', 'height', 'weight', 'nationality',
-  'games', 'substitutions', 'saves', 'goals_conceded', 'assists',
-  'fouls_committed', 'fouls_suffered', 'yellow_cards', 'red_cards',
-] as const;
-
-// ======================================================
-// 🔒 ORDEM OFICIAL ESPN — JOGADORES DE CAMPO (FONTE DA VERDADE)
-// ======================================================
-const FIELD_PLAYER_ESPN_ORDER = [
-  'name', 'position', 'age', 'height', 'weight', 'nationality',
-  'games', 'substitutions', 'goals', 'assists',
-  'total_shots', 'shots_on_goal', 'fouls_committed', 'fouls_suffered',
-  'yellow_cards', 'red_cards',
-] as const;
+import { PLAYER_COLUMNS } from '@/constants/player-columns';
+import { useAthletesData } from '@/hooks/useAthletesData';
 
 // ======================================================
 // 🧠 Função utilitária — preserva a ordem SEMPRE
@@ -42,112 +21,52 @@ const getColumnsByOrder = (keys: readonly string[]): PlayerStatsColumn[] => {
 
 export default function Home() {
   const searchParams = useSearchParams();
-  const { token, onAuthError } = useAuth();
-  const { startLoading, stopLoading } = useLoading();
-
-  const [goalkeepers, setGoalkeepers] = useState<GoalkeeperResponse[]>([]);
-  const [fieldPlayers, setFieldPlayers] = useState<FieldPlayerResponse[]>([]);
-  const [clubs, setClubs] = useState<Club[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
 
   const currentCategory = searchParams.get('category') || 'Todos';
-  const selectedStatColKeys = searchParams.get('columns')?.split(',') || [];
+  const selectedStatColKeys = useMemo(() => searchParams.get('columns')?.split(',') || [], [searchParams]);
   const selectedClubIdString = searchParams.get('clubId');
-  const selectedClubId = selectedClubIdString && selectedClubIdString !== 'all' ? parseInt(selectedClubIdString) : null;
+  const selectedClubId = useMemo(() => 
+    selectedClubIdString && selectedClubIdString !== 'all' ? parseInt(selectedClubIdString) : null
+  , [selectedClubIdString]);
+
+  const {
+    goalkeepers,
+    fieldPlayers,
+    clubs,
+    loading,
+    error,
+  } = useAthletesData(currentCategory, selectedClubId);
 
   // ======================================================
-  // 📡 Fetch de dados
+  // 🏟️ Hero image (Memoizada)
   // ======================================================
-  const fetchPlayers = useCallback(async () => {
-    if (!token) {
-      setError('Authentication token not found.');
-      setLoading(false);
-      return;
-    }
-
-    setLoading(true);
-    startLoading();
-    setError(null);
-
-    try {
-      if (currentCategory === 'Goleiros') {
-        const data = await api.getGoalkeepers(token, selectedClubId, '', onAuthError);
-        setGoalkeepers(data);
-        setFieldPlayers([]);
-      } else if (currentCategory === 'Todos') {
-        const [gks, fps] = await Promise.all([
-          api.getGoalkeepers(token, selectedClubId, '', onAuthError),
-          api.getFieldPlayers(token, selectedClubId, '', '', onAuthError),
-        ]);
-        setGoalkeepers(gks);
-        setFieldPlayers(fps);
-      } else {
-        const backendPositionMap: Record<string, string> = {
-          'Defensores': 'Defensor',
-          'Meio-Campistas': 'Meio-Campista',
-          'Atacantes': 'Atacante',
-        };
-        const positionFilter = backendPositionMap[currentCategory] || '';
-        const data = await api.getFieldPlayers(token, selectedClubId, '', positionFilter, onAuthError);
-        setFieldPlayers(data);
-        setGoalkeepers([]);
-      }
-    } catch (err) {
-      console.error(err);
-      setError('Failed to fetch players.');
-    } finally {
-      setLoading(false);
-      stopLoading();
-    }
-  }, [token, currentCategory, selectedClubId, onAuthError, startLoading, stopLoading]);
+  const bannerData = useMemo(() => {
+    const selectedClub = clubs.find(club => club.id === selectedClubId);
+    const url = selectedClub?.banner_image_url 
+      ? `http://localhost:8000${selectedClub.banner_image_url}` 
+      : (PlaceHolderImages.find(img => img.id === 'stadium-hero')?.imageUrl ?? 'https://i.ibb.co/5gRwYCCV/torcidas.png');
+    const hint = selectedClub?.name ? `Banner do clube ${selectedClub.name}` : 'soccer stadium';
+    
+    return { url, hint };
+  }, [clubs, selectedClubId]);
 
   // ======================================================
-  // 📡 Fetch de clubes
+  // 📊 COLUNAS (Memoizadas)
   // ======================================================
-  const fetchClubs = useCallback(async () => {
-    if (!token) return;
-
-    try {
-      const data = await api.getClubs(token, onAuthError);
-      setClubs(data);
-    } catch (err) {
-      console.error('Erro ao buscar clubes:', err);
-    }
-  }, [token, onAuthError]);
-
-  useEffect(() => {
-    fetchPlayers();
-  }, [fetchPlayers]);
-
-  useEffect(() => {
-    fetchClubs();
-  }, [fetchClubs]);
-
-  // ======================================================
-  // 🏟️ Hero image
-  // ======================================================
-  const selectedClub = clubs.find(club => club.id === selectedClubId);
-  const bannerImageUrl = selectedClub?.banner_image_url ? `http://localhost:8000${selectedClub.banner_image_url}` : (PlaceHolderImages.find(img => img.id === 'stadium-hero')?.imageUrl ?? 'https://i.ibb.co/5gRwYCCV/torcidas.png');
-  const bannerImageHint = selectedClub?.name ? `Banner do clube ${selectedClub.name}` : 'soccer stadium';
-
-  // ======================================================
-  // 📊 COLUNAS
-  // ======================================================
-  const goalkeeperColumns = getColumnsByOrder(
+  const goalkeeperColumns = useMemo(() => getColumnsByOrder(
     selectedStatColKeys.length > 0 && (currentCategory === 'Goleiros' || currentCategory === 'Todos')
       ? selectedStatColKeys
-      : GOALKEEPER_ESPN_ORDER
-  );
+      : PLAYER_COLUMNS.GOALKEEPER
+  ), [selectedStatColKeys, currentCategory]);
 
-  const fieldPlayerColumns = getColumnsByOrder(
+  const fieldPlayerColumns = useMemo(() => getColumnsByOrder(
     selectedStatColKeys.length > 0 && (currentCategory === 'Defensores' || currentCategory === 'Meio-Campistas' || currentCategory === 'Atacantes' || currentCategory === 'Todos')
       ? selectedStatColKeys
-      : FIELD_PLAYER_ESPN_ORDER
-  );
+      : PLAYER_COLUMNS.FIELD_PLAYER
+  ), [selectedStatColKeys, currentCategory]);
 
-  const selectableGoalkeeperColumns = getColumnsByOrder(GOALKEEPER_ESPN_ORDER);
-  const selectableFieldPlayerColumns = getColumnsByOrder(FIELD_PLAYER_ESPN_ORDER);
+  const selectableGoalkeeperColumns = useMemo(() => getColumnsByOrder(PLAYER_COLUMNS.GOALKEEPER), []);
+  const selectableFieldPlayerColumns = useMemo(() => getColumnsByOrder(PLAYER_COLUMNS.FIELD_PLAYER), []);
 
   // ======================================================
   // ⏳ Loading & Error States
@@ -176,8 +95,8 @@ export default function Home() {
       fieldPlayerColumns={fieldPlayerColumns}
       selectableGoalkeeperColumns={selectableGoalkeeperColumns}
       selectableFieldPlayerColumns={selectableFieldPlayerColumns}
-      bannerImageUrl={bannerImageUrl}
-      bannerImageHint={bannerImageHint}
+      bannerImageUrl={bannerData.url}
+      bannerImageHint={bannerData.hint}
       loading={loading}
       error={error}
     />
