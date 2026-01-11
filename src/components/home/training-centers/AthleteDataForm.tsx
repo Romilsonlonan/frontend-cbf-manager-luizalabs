@@ -205,7 +205,7 @@ export function AthleteDataForm({ athlete, onSaveSuccess }: AthleteDataFormProps
               </div>
             </div>
             <div className="flex justify-center pt-4">
-              <Button type="submit" className="px-8 h-12 text-base font-semibold shadow-md hover:shadow-lg transition-all bg-accent hover:bg-accent/90 text-accent-foreground">
+              <Button type="submit" className="px-8 h-12 text-base font-semibold shadow-md hover:shadow-lg transition-all bg-primary hover:bg-primary/90 text-primary-foreground">
                 <Save className="mr-2 h-5 w-5" />
                 Salvar Alterações
               </Button>

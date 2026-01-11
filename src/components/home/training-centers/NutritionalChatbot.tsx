@@ -92,7 +92,7 @@ export function NutritionalChatbot({ athletes, clubs }: NutritionalChatbotProps)
     <div className="flex flex-col gap-6 p-6 bg-card text-card-foreground rounded-xl border shadow-lg h-full overflow-hidden">
       <div className="flex items-center justify-between border-b border-border pb-4">
         <div>
-          <h2 className="text-2xl font-bold flex items-center gap-2 text-accent">
+          <h2 className="text-2xl font-bold flex items-center gap-2 text-primary">
             <Utensils className="h-6 w-6" />
             Nova Consulta Nutricional
           </h2>
@@ -171,7 +171,7 @@ export function NutritionalChatbot({ athletes, clubs }: NutritionalChatbotProps)
             </div>
 
             <Button
-              className="w-full gap-2 h-12 text-lg font-semibold shadow-md hover:shadow-lg transition-all bg-accent hover:bg-accent/90 text-accent-foreground"
+              className="w-full gap-2 h-12 text-lg font-semibold shadow-md hover:shadow-lg transition-all bg-primary hover:bg-primary/90 text-primary-foreground"
               onClick={handleGenerate}
               disabled={isGenerating || !selectedAthleteId}
             >

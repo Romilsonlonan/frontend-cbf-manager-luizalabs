@@ -201,7 +201,7 @@ export function AppointmentCalendar({ athletes }: AppointmentCalendarProps) {
             <Button 
               variant="default" 
               size="sm" 
-              className="gap-2 bg-accent hover:bg-accent/90 text-accent-foreground"
+              className="gap-2 bg-primary hover:bg-primary/90 text-primary-foreground"
               onClick={() => {
                 setSelectedAppointment(null)
                 setIsCreateModalOpen(true)
@@ -248,7 +248,7 @@ export function AppointmentCalendar({ athletes }: AppointmentCalendarProps) {
         <div className="flex-1 overflow-auto relative">
           {isLoading && (
             <div className="absolute inset-0 bg-background/50 backdrop-blur-[1px] z-50 flex items-center justify-center">
-              <Loader2 className="h-8 w-8 animate-spin text-accent" />
+              <Loader2 className="h-8 w-8 animate-spin text-primary" />
             </div>
           )}
           <div className="min-w-[800px]">
@@ -260,12 +260,12 @@ export function AppointmentCalendar({ athletes }: AppointmentCalendarProps) {
               {weekDays.map((day, i) => (
                 <div 
                   key={i} 
-                  className={`p-4 text-center border-r last:border-r-0 ${isToday(day) ? 'bg-accent/5' : ''}`}
+                  className={`p-4 text-center border-r last:border-r-0 ${isToday(day) ? 'bg-primary/5' : ''}`}
                 >
                   <p className="text-xs font-medium text-muted-foreground uppercase mb-1">
                     {format(day, "eee", { locale: ptBR })}
                   </p>
-                  <p className={`text-lg font-bold ${isToday(day) ? 'text-accent' : 'text-primary'}`}>
+                  <p className={`text-lg font-bold ${isToday(day) ? 'text-primary' : 'text-primary'}`}>
                     {format(day, "dd/MM")}
                   </p>
                 </div>
@@ -282,7 +282,7 @@ export function AppointmentCalendar({ athletes }: AppointmentCalendarProps) {
                   {weekDays.map((day, i) => (
                     <div 
                       key={i} 
-                      className={`relative h-20 border-r last:border-r-0 group-hover:bg-accent/5 transition-colors ${isToday(day) ? 'bg-accent/5' : ''}`}
+                      className={`relative h-20 border-r last:border-r-0 group-hover:bg-primary/5 transition-colors ${isToday(day) ? 'bg-primary/5' : ''}`}
                     >
                       {/* Renderizar consultas aqui */}
                       {appointments
@@ -346,10 +346,10 @@ export function AppointmentCalendar({ athletes }: AppointmentCalendarProps) {
       {/* Painel Lateral */}
       <div className="w-full lg:w-80 flex flex-col gap-6">
         {/* Próxima Consulta */}
-        <Card className="border-accent/20 shadow-md overflow-hidden">
-          <CardHeader className="pb-3 bg-accent/5">
+        <Card className="border-primary/20 shadow-md overflow-hidden">
+          <CardHeader className="pb-3 bg-primary/5">
             <div className="flex items-center justify-between">
-              <CardTitle className="text-sm font-bold text-accent uppercase tracking-wider">Próxima consulta</CardTitle>
+              <CardTitle className="text-sm font-bold text-primary uppercase tracking-wider">Próxima consulta</CardTitle>
               <Badge variant="outline" className="bg-yellow-500/10 text-yellow-600 border-yellow-200 text-[10px]">Atrasada</Badge>
             </div>
           </CardHeader>
@@ -376,7 +376,7 @@ export function AppointmentCalendar({ athletes }: AppointmentCalendarProps) {
                     </p>
                   </div>
                 </div>
-                <Button className="w-full bg-accent hover:bg-accent/90 text-accent-foreground font-bold">
+                <Button className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-bold">
                   Iniciar consulta
                 </Button>
               </>
@@ -393,7 +393,7 @@ export function AppointmentCalendar({ athletes }: AppointmentCalendarProps) {
           <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-widest px-1">Configurações</h3>
           
           <Card 
-            className="cursor-pointer hover:border-accent transition-colors group overflow-hidden border-l-4 border-l-purple-400"
+            className="cursor-pointer hover:border-primary transition-colors group overflow-hidden border-l-4 border-l-purple-400"
             onClick={() => setIsAvailabilityModalOpen(true)}
           >
             <CardContent className="p-4 flex items-center gap-4">
@@ -404,12 +404,12 @@ export function AppointmentCalendar({ athletes }: AppointmentCalendarProps) {
                 <p className="text-sm font-bold text-primary">Horário de trabalho</p>
                 <p className="text-[10px] text-muted-foreground">Defina sua disponibilidade semanal.</p>
               </div>
-              <ArrowRight className="h-4 w-4 text-muted-foreground group-hover:text-accent transition-colors" />
+              <ArrowRight className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors" />
             </CardContent>
           </Card>
 
           <Card 
-            className="cursor-pointer hover:border-accent transition-colors group overflow-hidden border-l-4 border-l-blue-400"
+            className="cursor-pointer hover:border-primary transition-colors group overflow-hidden border-l-4 border-l-blue-400"
             onClick={() => setIsLocationModalOpen(true)}
           >
             <CardContent className="p-4 flex items-center gap-4">
@@ -420,12 +420,12 @@ export function AppointmentCalendar({ athletes }: AppointmentCalendarProps) {
                 <p className="text-sm font-bold text-primary">Locais de consulta</p>
                 <p className="text-[10px] text-muted-foreground">Gerencie endereços e links online.</p>
               </div>
-              <ArrowRight className="h-4 w-4 text-muted-foreground group-hover:text-accent transition-colors" />
+              <ArrowRight className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors" />
             </CardContent>
           </Card>
 
           <Card 
-            className="cursor-pointer hover:border-accent transition-colors group overflow-hidden border-l-4 border-l-amber-400"
+            className="cursor-pointer hover:border-primary transition-colors group overflow-hidden border-l-4 border-l-amber-400"
             onClick={() => setIsServiceModalOpen(true)}
           >
             <CardContent className="p-4 flex items-center gap-4">
@@ -436,7 +436,7 @@ export function AppointmentCalendar({ athletes }: AppointmentCalendarProps) {
                 <p className="text-sm font-bold text-primary">Seus serviços</p>
                 <p className="text-[10px] text-muted-foreground">Tipos de consulta, preços e durações.</p>
               </div>
-              <ArrowRight className="h-4 w-4 text-muted-foreground group-hover:text-accent transition-colors" />
+              <ArrowRight className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors" />
             </CardContent>
           </Card>
         </div>

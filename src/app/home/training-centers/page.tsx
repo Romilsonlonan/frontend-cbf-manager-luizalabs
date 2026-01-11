@@ -226,8 +226,8 @@ export default function TrainingCentersPage() {
           onClick={() => setView('appointments')}
         >
           <CardHeader className="items-center text-center">
-            <div className="p-4 bg-accent/20 rounded-full mb-4">
-              <CalendarIcon className="h-8 w-8 text-accent" />
+            <div className="p-4 bg-primary/20 rounded-full mb-4">
+              <CalendarIcon className="h-8 w-8 text-primary" />
             </div>
             <CardTitle className="font-headline">Agenda de Consultas</CardTitle>
             <CardDescription>Marque e gerencie consultas nutricionais.</CardDescription>
@@ -243,8 +243,8 @@ export default function TrainingCentersPage() {
           }}
         >
           <CardHeader className="items-center text-center">
-            <div className="p-4 bg-accent/20 rounded-full mb-4">
-              <ClipboardEdit className="h-8 w-8 text-accent" />
+            <div className="p-4 bg-primary/20 rounded-full mb-4">
+              <ClipboardEdit className="h-8 w-8 text-primary" />
             </div>
             <CardTitle className="font-headline">Dados dos Atletas</CardTitle>
             <CardDescription>Adicione ou edite dados e acompanhe o progresso.</CardDescription>
@@ -253,8 +253,8 @@ export default function TrainingCentersPage() {
         <NutritionalPlanModal athletes={athletes} clubs={clubs}>
             <Card className="hover:shadow-xl hover:-translate-y-2 transition-transform duration-300 cursor-pointer">
               <CardHeader className="items-center text-center">
-                <div className="p-4 bg-accent/20 rounded-full mb-4">
-                  <UtensilsCrossed className="h-8 w-8 text-accent" />
+                <div className="p-4 bg-primary/20 rounded-full mb-4">
+                  <UtensilsCrossed className="h-8 w-8 text-primary" />
                 </div>
                 <CardTitle className="font-headline">Plano Alimentar</CardTitle>
                 <CardDescription>Cadastre novos planos nutricionais para atletas.</CardDescription>
@@ -263,7 +263,7 @@ export default function TrainingCentersPage() {
         </NutritionalPlanModal>
       </div>
 
-      <div className="mt-12 relative w-full h-[500px] rounded-2xl overflow-hidden shadow-2xl border-4 border-accent/10 group">
+      <div className="mt-12 relative w-full h-[500px] rounded-2xl overflow-hidden shadow-2xl border-4 border-primary/10 group">
         <Image
           src="https://i.ibb.co/WWKv8MLN/Empenho-Atletas.webp"
           alt="Empenho dos Atletas"
@@ -294,7 +294,7 @@ export default function TrainingCentersPage() {
         <Button variant="ghost" size="icon" onClick={() => setView('main')} className="absolute left-0">
           <ArrowLeft className="h-6 w-6" />
         </Button>
-        <h2 className="font-headline text-4xl font-bold text-accent text-center px-12">
+        <h2 className="font-headline text-4xl font-bold text-primary text-center px-12">
           Agenda de Consultas
         </h2>
       </div>
@@ -319,15 +319,15 @@ export default function TrainingCentersPage() {
           <Button variant="ghost" size="icon" onClick={handleBack} className="absolute left-0">
             <ArrowLeft className="h-6 w-6" />
           </Button>
-          <h2 className="font-headline text-4xl font-bold text-accent text-center px-12">
+          <h2 className="font-headline text-4xl font-bold text-primary text-center px-12">
             {selectedClub ? `Atletas - ${selectedClub.name}` : 'Selecione um Clube'}
           </h2>
         </div>
 
         {!selectedClub ? (
           clubs.length === 0 ? (
-            <div className="text-center py-12 bg-accent/5 rounded-xl border-2 border-dashed border-accent/20">
-              <Shield className="h-12 w-12 text-accent/20 mx-auto mb-4" />
+            <div className="text-center py-12 bg-primary/5 rounded-xl border-2 border-dashed border-primary/20">
+              <Shield className="h-12 w-12 text-primary/20 mx-auto mb-4" />
               <p className="text-muted-foreground">Nenhum clube encontrado.</p>
               <p className="text-xs text-muted-foreground/60 mt-2">Certifique-se de que os clubes estão cadastrados corretamente.</p>
             </div>
@@ -336,7 +336,7 @@ export default function TrainingCentersPage() {
               {clubs.map((club, index) => (
                 <Card key={`club-${club.id}-${index}`} className="text-center hover:shadow-lg transition-shadow cursor-pointer" onClick={() => handleSelectClub(club)}>
                   <CardContent className="p-4 flex flex-col items-center justify-center">
-                    <div className="relative w-20 h-20 mb-3 flex items-center justify-center bg-accent/10 rounded-full">
+                    <div className="relative w-20 h-20 mb-3 flex items-center justify-center bg-primary/10 rounded-full">
                       {club.shield_image_url ? (
                         <Image
                           src={club.shield_image_url.startsWith('http') ? club.shield_image_url : `http://localhost:8000${club.shield_image_url}`}
@@ -346,7 +346,7 @@ export default function TrainingCentersPage() {
                           data-ai-hint="club logo"
                         />
                       ) : (
-                        <Shield className="h-10 w-10 text-accent/40" />
+                        <Shield className="h-10 w-10 text-primary/40" />
                       )}
                     </div>
                     <p className="font-semibold text-sm">{club.name}</p>
@@ -362,14 +362,14 @@ export default function TrainingCentersPage() {
               {positions.map((pos, index) => (
                 <Card
                   key={`position-${pos.name}-${index}`}
-                  className="text-center hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 cursor-pointer border-2 hover:border-accent group bg-card/50 backdrop-blur-sm"
+                  className="text-center hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 cursor-pointer border-2 hover:border-primary group bg-card/50 backdrop-blur-sm"
                   onClick={() => setSelectedPosition(pos.name)}
                 >
                   <CardContent className="p-12 flex flex-col items-center justify-center">
-                    <div className="p-8 bg-accent/10 group-hover:bg-accent/20 rounded-full mb-8 transition-all duration-300 group-hover:scale-110">
-                      <pos.icon className="h-20 w-20 text-accent" />
+                    <div className="p-8 bg-primary/10 group-hover:bg-primary/20 rounded-full mb-8 transition-all duration-300 group-hover:scale-110">
+                      <pos.icon className="h-20 w-20 text-primary" />
                     </div>
-                    <p className="font-bold text-2xl text-primary group-hover:text-accent transition-colors">{pos.label}</p>
+                    <p className="font-bold text-2xl text-primary group-hover:text-primary transition-colors">{pos.label}</p>
                   </CardContent>
                 </Card>
               ))}
@@ -381,7 +381,7 @@ export default function TrainingCentersPage() {
               Atletas - {positionMap[selectedPosition]}
             </h3>
             {filteredAthletes.length === 0 ? (
-              <div className="text-center py-12 bg-accent/5 rounded-xl border-2 border-dashed border-accent/20">
+              <div className="text-center py-12 bg-primary/5 rounded-xl border-2 border-dashed border-primary/20">
                 <p className="text-muted-foreground">Nenhum atleta encontrado para esta posição.</p>
               </div>
             ) : (
@@ -390,7 +390,7 @@ export default function TrainingCentersPage() {
                   <Card key={`athlete-${athlete.id}-${index}`} className="hover:shadow-lg transition-shadow cursor-pointer" onClick={() => handleSelectAthlete(athlete)}>
                     <CardContent className="p-4">
                       <div className="flex items-center space-x-4">
-                        <div className="relative w-12 h-12 flex items-center justify-center bg-accent/10 rounded-full overflow-hidden">
+                        <div className="relative w-12 h-12 flex items-center justify-center bg-primary/10 rounded-full overflow-hidden">
                           {athlete.image_url ? (
                             <Image
                               src={athlete.image_url}
@@ -399,7 +399,7 @@ export default function TrainingCentersPage() {
                               className="rounded-full object-cover"
                             />
                           ) : (
-                            <User className="h-8 w-8 text-accent/40" />
+                            <User className="h-8 w-8 text-primary/40" />
                           )}
                         </div>
                         <div>
@@ -434,7 +434,7 @@ export default function TrainingCentersPage() {
           <Button variant="ghost" size="icon" onClick={handleBack}>
             <ArrowLeft className="h-6 w-6" />
           </Button>
-          <h2 className="font-headline text-3xl font-bold text-accent ml-4">
+          <h2 className="font-headline text-3xl font-bold text-primary ml-4">
             Detalhes do Atleta
           </h2>
         </div>
