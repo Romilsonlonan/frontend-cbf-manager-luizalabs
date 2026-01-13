@@ -1,90 +1,25 @@
 'use client';
 
-import React, { useState, useEffect, useCallback, useMemo, type FC } from 'react';
-import Link from 'next/link';
-
-/* =======================
-   UI COMPONENTS
-======================= */
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-
-/* =======================
-   ICONS
-======================= */
-import {
-  UsersRound,
-  Shield,
-  BarChart3,
-  Search,
-  ArrowUpDown,
-  ArrowUp,
-  ArrowDown,
-  RefreshCcw, // Added for refresh button
-} from "lucide-react";
-
-/* =======================
-   APP / DOMAIN
-======================= */
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { useLoading } from '@/context/LoadingContext';
 import { api } from '@/lib/api';
 import { LoadingSpinner } from '@/components/LoadingSpinner';
 import type { TeamStats, SortKey } from '@/lib/types';
-import { teamData as initialTeamData } from '@/lib/mock-data';
-import { TeamLogo } from '@/components/icons/team-logos'; // This path might need adjustment if the component doesn't exist
-import { cn } from '@/lib/utils';
+import { DashboardStats } from '@/components/home/dashboard/DashboardStats';
+import { LeaderboardTable } from '@/components/home/dashboard/LeaderboardTable';
+import { DashboardLayout } from '@/components/home/dashboard/DashboardLayout';
+import { HOME_STRINGS } from '@/constants/home.constants';
 
-/* =======================
-   SORTABLE HEADER
-======================= */
-const SortableHeader: FC<{
-  columnKey: SortKey;
-  label: string;
-  onSort: (key: SortKey) => void;
-  sortConfig: { key: SortKey; direction: 'asc' | 'desc' };
-  className?: string;
-}> = ({ columnKey, label, onSort, sortConfig, className }) => {
-  const isSorted = sortConfig.key === columnKey;
-  const Icon = isSorted
-    ? sortConfig.direction === 'desc'
-      ? ArrowDown
-      : ArrowUp
-    : ArrowUpDown;
-
-  return (
-    <TableHead
-      className={cn("cursor-pointer hover:bg-muted/50", className)}
-      onClick={() => onSort(columnKey)}
-    >
-      <div className="flex items-center gap-2">
-        {label}
-        <Icon className="h-4 w-4" />
-      </div>
-    </TableHead>
-  );
-};
-
-/* =======================
-   PAGE
-======================= */
+/**
+ * DashboardWithLeaderboardPage (Container Component)
+ * 
+ * Responsibilities:
+ * - Data fetching (dashboard stats, leaderboard)
+ * - State management (totals, leaderboard data, sorting, searching)
+ * - Event handling (refresh, sort, search)
+ * - Orchestrating presentation components
+ */
 export default function DashboardWithLeaderboardPage() {
   /* ---------- Dashboard State ---------- */
   const { token, onAuthError } = useAuth();
@@ -184,14 +119,6 @@ export default function DashboardWithLeaderboardPage() {
     return filtered;
   }, [searchQuery, leaderboardData, sortConfig]);
 
-  const getPositionClass = (index: number) => {
-    const total = sortedAndFilteredTeams.length;
-    if (index < 4) return 'border-l-4 border-chart-2';
-    if (index < 6) return 'border-l-4 border-chart-4';
-    if (index >= total - 4) return 'border-l-4 border-destructive';
-    return 'border-l-4 border-transparent';
-  };
-
   /* =======================
      LOADING / ERROR
   ======================= */
@@ -211,188 +138,22 @@ export default function DashboardWithLeaderboardPage() {
      RENDER
   ======================= */
   return (
-    <main className="min-h-screen bg-background p-4 sm:p-6 md:p-10">
-      <div className="container mx-auto flex flex-col gap-12">
+    <DashboardLayout>
+      <DashboardStats 
+        totalAthletes={totalAthletes} 
+        totalClubs={totalClubs} 
+      />
 
-        {/* =======================
-           DASHBOARD
-        ======================= */}
-        <section className="flex flex-col gap-6">
-          <div>
-            <h1 className="text-3xl font-bold tracking-tight">Painel de Controle</h1>
-            <p className="text-muted-foreground">
-              Visão geral do sistema de gerenciamento de atletas.
-            </p>
-          </div>
-
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between pb-2">
-                <CardTitle className="text-sm font-medium">Atletas</CardTitle>
-                <UsersRound className="h-4 w-4 text-muted-foreground" />
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">{totalAthletes}</div>
-                <Button asChild size="sm" className="mt-4">
-                  <Link href="/home/athletes">Ver Atletas</Link>
-                </Button>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between pb-2">
-                <CardTitle className="text-sm font-medium">Clubes</CardTitle>
-                <Shield className="h-4 w-4 text-muted-foreground" />
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">{totalClubs}</div>
-                <Button asChild size="sm" className="mt-4">
-                  <Link href="/home/clubs">Ver Clubes</Link>
-                </Button>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between pb-2">
-                <CardTitle className="text-sm font-medium">Estatísticas</CardTitle>
-                <BarChart3 className="h-4 w-4 text-muted-foreground" />
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">2025</div>
-                <Button asChild size="sm" className="mt-4">
-                  <Link href="/home/statistics">Ver Estatísticas</Link>
-                </Button>
-              </CardContent>
-            </Card>
-          </div>
-        </section>
-
-        {/* =======================
-           LEADERBOARD
-        ======================= */}
-        <section>
-          {leaderboardError && (
-            <div className="bg-destructive/15 text-destructive p-4 rounded-md mb-4 flex items-center justify-between">
-              <span>{leaderboardError}</span>
-              <Button variant="ghost" size="sm" onClick={handleRefreshLeaderboard}>Tentar novamente</Button>
-            </div>
-          )}
-          <Card className="shadow-2xl">
-            <CardHeader>
-              <div className="flex items-center justify-between">
-                <CardTitle className="text-3xl font-bold">Brasileirão Leaderboard</CardTitle>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={handleRefreshLeaderboard}
-                  disabled={isScraping}
-                >
-                  {isScraping ? (
-                    <LoadingSpinner className="mr-2 h-4 w-4" />
-                  ) : (
-                    <RefreshCcw className="mr-2 h-4 w-4" />
-                  )}
-                  Atualizar
-                </Button>
-              </div>
-              <CardDescription>Classificação do campeonato brasileiro</CardDescription>
-
-              <div className="relative mt-4">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-                <Input
-                  placeholder="Buscar time..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-10"
-                />
-              </div>
-            </CardHeader>
-
-            <CardContent>
-              <div className="overflow-x-auto">
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>#</TableHead>
-                      <TableHead>Time</TableHead>
-                      <SortableHeader columnKey="p" label="P" onSort={handleSort} sortConfig={sortConfig} />
-                      <SortableHeader columnKey="j" label="J" onSort={handleSort} sortConfig={sortConfig} />
-                      <SortableHeader columnKey="v" label="V" onSort={handleSort} sortConfig={sortConfig} />
-                      <SortableHeader columnKey="e" label="E" onSort={handleSort} sortConfig={sortConfig} />
-                      <SortableHeader columnKey="d" label="D" onSort={handleSort} sortConfig={sortConfig} />
-                      <SortableHeader columnKey="gp" label="GP" onSort={handleSort} sortConfig={sortConfig} />
-                      <SortableHeader columnKey="gc" label="GC" onSort={handleSort} sortConfig={sortConfig} />
-                      <SortableHeader columnKey="sg" label="SG" onSort={handleSort} sortConfig={sortConfig} />
-                    </TableRow>
-                  </TableHeader>
-
-                  <TableBody>
-                    {sortedAndFilteredTeams.map((team, index) => (
-                      <TableRow key={team.name || `team-${index}`}>
-                        <TableCell className={getPositionClass(index)}>{index + 1}</TableCell>
-                        <TableCell className="flex items-center gap-3">
-                          <TeamLogo teamName={team.name} className="h-6 w-6" />
-                          <span className="font-semibold">{team.name}</span>
-                        </TableCell>
-                        <TableCell className="font-bold">{team.p}</TableCell>
-                        <TableCell>{team.j}</TableCell>
-                        <TableCell>{team.v}</TableCell>
-                        <TableCell>{team.e}</TableCell>
-                        <TableCell>{team.d}</TableCell>
-                        <TableCell>{team.gp}</TableCell>
-                        <TableCell>{team.gc}</TableCell>
-                        <TableCell>{team.sg}</TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </div>
-
-              {/* Glossário */}
-              <div className="mt-8 pt-6 border-t border-border">
-                <p className="text-xs font-semibold text-muted-foreground mb-4 uppercase tracking-wider">
-                  Glossário
-                </p>
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-y-3 gap-x-4 text-sm text-muted-foreground">
-                  <div className="flex items-center gap-2">
-                    <span className="font-bold text-foreground min-w-[35px]">J:</span>
-                    <span>Jogos</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <span className="font-bold text-foreground min-w-[35px]">V:</span>
-                    <span>Vitórias</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <span className="font-bold text-foreground min-w-[35px]">E:</span>
-                    <span>Empate</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <span className="font-bold text-foreground min-w-[35px]">D:</span>
-                    <span>Derrotas</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <span className="font-bold text-foreground min-w-[35px]">GP:</span>
-                    <span>Gols pró</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <span className="font-bold text-foreground min-w-[35px]">GC:</span>
-                    <span>Gols contra</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <span className="font-bold text-foreground min-w-[35px]">SG:</span>
-                    <span>Saldo de gols</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <span className="font-bold text-foreground min-w-[35px]">PTS:</span>
-                    <span>Pontos</span>
-                  </div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </section>
-
-      </div>
-    </main>
+      <LeaderboardTable
+        data={leaderboardData}
+        searchQuery={searchQuery}
+        onSearchChange={setSearchQuery}
+        sortConfig={sortConfig}
+        onSort={handleSort}
+        isScraping={isScraping}
+        onRefresh={handleRefreshLeaderboard}
+        error={leaderboardError}
+      />
+    </DashboardLayout>
   );
 }

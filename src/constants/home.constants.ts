@@ -1,0 +1,30 @@
+export const HOME_STRINGS = {
+  DASHBOARD_TITLE: "Painel de Controle",
+  DASHBOARD_DESCRIPTION: "Visão geral do sistema de gerenciamento de atletas.",
+  ATHLETES_LABEL: "Atletas",
+  CLUBS_LABEL: "Clubes",
+  STATISTICS_LABEL: "Estatísticas",
+  VIEW_ATHLETES: "Ver Atletas",
+  VIEW_CLUBS: "Ver Clubes",
+  VIEW_STATISTICS: "Ver Estatísticas",
+  LEADERBOARD_TITLE: "Brasileirão Leaderboard",
+  LEADERBOARD_DESCRIPTION: "Classificação do campeonato brasileiro",
+  SEARCH_PLACEHOLDER: "Buscar time...",
+  REFRESH_BUTTON: "Atualizar",
+  RETRY_BUTTON: "Tentar novamente",
+  GLOSSARY_TITLE: "Glossário",
+  ERROR_DASHBOARD: "Falha ao carregar dados do painel.",
+  ERROR_LEADERBOARD: "Falha ao atualizar a classificação do Brasileirão.",
+  AUTH_ERROR_LOG: "Authentication token not found.",
+};
+
+export const GLOSSARY_ITEMS = [
+  { key: "J", label: "Jogos" },
+  { key: "V", label: "Vitórias" },
+  { key: "E", label: "Empate" },
+  { key: "D", label: "Derrotas" },
+  { key: "GP", label: "Gols pró" },
+  { key: "GC", label: "Gols contra" },
+  { key: "SG", label: "Saldo de gols" },
+  { key: "PTS", label: "Pontos" },
+];

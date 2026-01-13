@@ -1,0 +1,3 @@
+.pageContainer {
+  @apply grid gap-8 h-full flex-col;
+}

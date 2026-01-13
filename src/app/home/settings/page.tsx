@@ -13,8 +13,19 @@ import {
   ChangePasswordSection,
   ThemeCustomizationSection,
   DeleteAccountSection,
+  UserSettingsHeader,
+  UserSettingsLoading,
 } from '@/components/settings/user-settings';
+import { USER_SETTINGS_STRINGS } from '@/constants/settings.constants';
 
+/**
+ * UserSettings (Container Component)
+ * 
+ * Responsibilities:
+ * - State management (user, profile, password, theme)
+ * - API interaction (update profile, change password, delete account, upload image)
+ * - Orchestrating presentation components
+ */
 export default function UserSettings() {
   const { user, logout, updateUser } = useAuth();
   const { startLoading, stopLoading, isLoading } = useLoading();
@@ -63,22 +74,22 @@ export default function UserSettings() {
     startLoading();
     try {
       const token = localStorage.getItem('access_token');
-      if (!token) throw new Error('Token de autenticação não encontrado.');
+      if (!token) throw new Error(USER_SETTINGS_STRINGS.ERROR_NO_TOKEN);
 
       await changePassword(token, oldPass, newPass, startLoading, stopLoading);
-      setMessage('Senha alterada com sucesso!');
+      setMessage(USER_SETTINGS_STRINGS.SUCCESS_PASSWORD_CHANGE);
       setCurrentPassword('');
       setNewPassword('');
       setConfirmNewPassword('');
     } catch (err: any) {
-      setError(err.message || 'Falha ao alterar senha.');
+      setError(err.message || USER_SETTINGS_STRINGS.ERROR_PASSWORD_CHANGE);
     } finally {
       stopLoading();
     }
   };
 
   const handleDeleteAccount = async () => {
-    if (!window.confirm('Tem certeza que deseja excluir sua conta? Esta ação é irreversível.')) {
+    if (!window.confirm(USER_SETTINGS_STRINGS.CONFIRM_DELETE_ACCOUNT)) {
       return;
     }
     setMessage('');
@@ -86,13 +97,13 @@ export default function UserSettings() {
     startLoading();
     try {
       const token = localStorage.getItem('access_token');
-      if (!token) throw new Error('Token de autenticação não encontrado.');
+      if (!token) throw new Error(USER_SETTINGS_STRINGS.ERROR_NO_TOKEN);
 
       await deleteAccount(token, startLoading, stopLoading);
       logout();
-      setMessage('Conta excluída com sucesso.');
+      setMessage(USER_SETTINGS_STRINGS.SUCCESS_ACCOUNT_DELETE);
     } catch (err: any) {
-      setError(err.message || 'Falha ao excluir conta.');
+      setError(err.message || USER_SETTINGS_STRINGS.ERROR_ACCOUNT_DELETE);
     } finally {
       stopLoading();
     }
@@ -108,14 +119,14 @@ export default function UserSettings() {
     setMessage('');
     setError('');
     if (!file) {
-      setError('Por favor, selecione uma imagem para upload.');
+      setError(USER_SETTINGS_STRINGS.ERROR_NO_FILE);
       return;
     }
     startLoading();
     try {
       const token = localStorage.getItem('access_token');
-      if (!token) throw new Error('Token de autenticação não encontrado.');
-      if (!user) throw new Error('Informações do usuário não disponíveis.');
+      if (!token) throw new Error(USER_SETTINGS_STRINGS.ERROR_NO_TOKEN);
+      if (!user) throw new Error(USER_SETTINGS_STRINGS.ERROR_NO_USER);
 
       const formData = new FormData();
       formData.append('file', file);
@@ -123,17 +134,17 @@ export default function UserSettings() {
       const updatedUser = await uploadProfileImage(token, formData, startLoading, stopLoading);
       updateUser({ profile_image_url: updatedUser.profile_image_url });
       setProfileImageUrl(updatedUser.profile_image_url);
-      setMessage('Foto de perfil atualizada com sucesso!');
+      setMessage(USER_SETTINGS_STRINGS.SUCCESS_PHOTO_UPDATE);
       setProfileImage(null); // Clear the selected file after upload
     } catch (err: any) {
       if (err.message?.includes('Could not validate credentials') || err.message?.includes('Token inválido')) {
-        setError('Sessão expirada. Por favor, faça login novamente.');
+        setError(USER_SETTINGS_STRINGS.ERROR_SESSION_EXPIRED);
         setTimeout(() => {
           logout();
           router.push('/login');
         }, 3000);
       } else {
-        setError(err.message || 'Falha ao atualizar foto de perfil.');
+        setError(err.message || USER_SETTINGS_STRINGS.ERROR_PHOTO_UPDATE);
       }
     } finally {
       stopLoading();
@@ -147,19 +158,12 @@ export default function UserSettings() {
   };
 
   if (!user) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <p>Carregando informações do usuário...</p>
-      </div>
-    );
+    return <UserSettingsLoading />;
   }
 
   return (
     <UserSettingsPage>
-      <h1 className="text-3xl font-bold mb-6">Configurações do Usuário</h1>
-
-      {message && <div className="bg-green-100 text-green-800 p-3 rounded mb-4">{message}</div>}
-      {error && <div className="bg-red-100 text-red-800 p-3 rounded mb-4">{error}</div>}
+      <UserSettingsHeader message={message} error={error} />
 
       <ProfileImageSection
         currentImage={profileImageUrl}

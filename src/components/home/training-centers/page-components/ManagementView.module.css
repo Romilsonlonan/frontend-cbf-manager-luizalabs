@@ -1,0 +1,131 @@
+.container {
+  @apply w-full max-w-6xl mx-auto;
+}
+
+.header {
+  @apply relative flex items-center justify-center mb-12;
+}
+
+.backButton {
+  @apply absolute left-0;
+}
+
+.backIcon {
+  @apply h-6 w-6;
+}
+
+.title {
+  @apply font-headline text-4xl font-bold text-primary text-center px-12;
+}
+
+.emptyState {
+  @apply text-center py-12 bg-primary/5 rounded-xl border-2 border-dashed border-primary/20;
+}
+
+.emptyIcon {
+  @apply h-12 w-12 text-primary/20 mx-auto mb-4;
+}
+
+.emptyText {
+  @apply text-muted-foreground;
+}
+
+.emptySubtext {
+  @apply text-xs text-muted-foreground/60 mt-2;
+}
+
+.clubsGrid {
+  @apply grid grid-cols-2 md:grid-cols-4 gap-6;
+}
+
+.clubCard {
+  @apply text-center hover:shadow-lg transition-shadow cursor-pointer;
+}
+
+.clubCardContent {
+  @apply p-4 flex flex-col items-center justify-center;
+}
+
+.shieldWrapper {
+  @apply relative w-20 h-20 mb-3 flex items-center justify-center bg-primary/10 rounded-full;
+}
+
+.shieldImage {
+  @apply rounded-full object-cover;
+}
+
+.shieldPlaceholder {
+  @apply h-10 w-10 text-primary/40;
+}
+
+.clubName {
+  @apply font-semibold text-sm;
+}
+
+.positionsWrapper {
+  @apply py-8 flex flex-col items-center;
+}
+
+.sectionTitle {
+  @apply text-2xl font-semibold mb-10 text-center text-muted-foreground uppercase tracking-widest;
+}
+
+.positionsGrid {
+  @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 w-full;
+}
+
+.positionCard {
+  @apply text-center hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 cursor-pointer border-2 hover:border-primary bg-card/50 backdrop-blur-sm;
+}
+
+.positionCardContent {
+  @apply p-12 flex flex-col items-center justify-center;
+}
+
+.positionIconWrapper {
+  @apply p-8 bg-primary/10 group-hover:bg-primary/20 rounded-full mb-8 transition-all duration-300 group-hover:scale-110;
+}
+
+.positionIcon {
+  @apply h-20 w-20 text-primary;
+}
+
+.positionLabel {
+  @apply font-bold text-2xl text-primary group-hover:text-primary transition-colors;
+}
+
+.athletesGrid {
+  @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6;
+}
+
+.athleteCard {
+  @apply hover:shadow-lg transition-shadow cursor-pointer;
+}
+
+.athleteCardContent {
+  @apply p-4;
+}
+
+.athleteInfo {
+  @apply flex items-center space-x-4;
+}
+
+.avatarWrapper {
+  @apply relative w-12 h-12 flex items-center justify-center bg-primary/10 rounded-full overflow-hidden;
+}
+
+.avatarImage {
+  @apply rounded-full object-cover;
+}
+
+.avatarPlaceholder {
+  @apply h-8 w-8 text-primary/40;
+}
+
+.athleteName {
+  @apply font-semibold;
+}
+
+.athleteMeta {
+  @apply text-sm text-muted-foreground;
+}

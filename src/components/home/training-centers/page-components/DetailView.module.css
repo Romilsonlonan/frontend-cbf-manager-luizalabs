@@ -1,0 +1,23 @@
+.container {
+  @apply w-full max-w-4xl;
+}
+
+.header {
+  @apply flex items-center mb-8;
+}
+
+.backButton {
+  @apply mr-4;
+}
+
+.backIcon {
+  @apply h-6 w-6;
+}
+
+.title {
+  @apply font-headline text-3xl font-bold text-primary;
+}
+
+.contentGrid {
+  @apply grid grid-cols-1 lg:grid-cols-2 gap-8;
+}

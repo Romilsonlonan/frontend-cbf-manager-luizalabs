@@ -1,0 +1,19 @@
+.formContainer {
+  @apply space-y-4;
+}
+
+.clubInfo {
+  @apply flex items-center space-x-4;
+}
+
+.clubName {
+  @apply text-xl font-semibold;
+}
+
+.shield {
+  @apply rounded-full;
+}
+
+.fieldGroup {
+  @apply space-y-2;
+}

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Dialog,
   DialogContent,
@@ -13,6 +13,11 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useRouter } from 'next/navigation';
+import { createPaymentIntent, getCurrentUser } from '@/lib/api';
+import { useAuth } from '@/context/AuthContext';
+import { useLoading } from '@/context/LoadingContext';
+import { toast } from '@/hooks/use-toast';
+import { Loader2 } from 'lucide-react';
 
 interface PaymentModalProps {
   isOpen: boolean;
@@ -22,13 +27,118 @@ interface PaymentModalProps {
 
 export function PaymentModal({ isOpen, onClose, onPaymentSuccess }: PaymentModalProps) {
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<'credit_card' | 'debit' | 'pix'>('credit_card');
+  const [paymentStatus, setPaymentStatus] = useState<'idle' | 'processing' | 'waiting_webhook' | 'success'>('idle');
+  const { token, user, updateUser } = useAuth();
+  const { startLoading, stopLoading } = useLoading();
   const router = useRouter();
 
-  const handlePaymentSubmit = () => {
-    // Here you would typically handle the payment processing
-    // For this task, we'll just simulate success and call onPaymentSuccess
-    onPaymentSuccess(); // Call the success callback
-    onClose();
+  const handlePaymentSubmit = async () => {
+    if (!token) {
+      toast({
+        title: "Erro",
+        description: "Você precisa estar logado para realizar o pagamento.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setPaymentStatus('processing');
+    try {
+      // 1. Criar intenção de pagamento no servidor
+      const { client_secret, payment_id } = await createPaymentIntent(token);
+      console.log('Intenção de pagamento criada:', payment_id);
+
+      // 2. Simular confirmação do pagamento (em um cenário real usaríamos stripe.confirmCardPayment)
+      // Aqui simulamos que o pagamento foi confirmado no client-side
+      setPaymentStatus('waiting_webhook');
+      
+      // 3. Simular chamada do webhook pelo gateway (apenas para demonstração)
+      // Em produção, o Stripe chamaria nosso endpoint /webhooks/stripe
+      await simulateWebhookCall(payment_id);
+
+      // 4. Polling ou aguardar atualização do status do usuário
+      await checkSubscriptionStatus();
+
+    } catch (error: any) {
+      console.error('Erro no pagamento:', error);
+      toast({
+        title: "Erro no pagamento",
+        description: error.message || "Ocorreu um erro ao processar seu pagamento.",
+        variant: "destructive",
+      });
+      setPaymentStatus('idle');
+    }
+  };
+
+  const simulateWebhookCall = async (paymentId: string) => {
+    // Simula o delay do webhook
+    await new Promise(resolve => setTimeout(resolve, 2000));
+    
+    // Chamada simulada ao nosso próprio endpoint de webhook (apenas para teste local)
+    try {
+      await fetch('http://localhost:8000/webhooks/stripe', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'stripe-signature': 'simulated_signature'
+        },
+        body: JSON.stringify({
+          type: 'payment_intent.succeeded',
+          data: {
+            object: {
+              id: paymentId,
+              metadata: {
+                user_id: user?.id
+              }
+            }
+          }
+        })
+      });
+    } catch (e) {
+      console.warn('Falha ao simular chamada de webhook:', e);
+    }
+  };
+
+  const checkSubscriptionStatus = async () => {
+    let attempts = 0;
+    const maxAttempts = 5;
+    
+    const poll = async () => {
+      if (!token) return;
+      
+      try {
+        const updatedUser = await getCurrentUser(token, () => {}, () => {});
+        if (updatedUser.subscription_status === 'premium') {
+          updateUser({ subscription_status: 'premium' });
+          setPaymentStatus('success');
+          toast({
+            title: "Sucesso!",
+            description: "Seu pagamento foi confirmado e sua conta agora é Premium!",
+          });
+          setTimeout(() => {
+            onPaymentSuccess();
+            onClose();
+          }, 1500);
+          return;
+        }
+      } catch (e) {
+        console.error('Erro ao verificar status:', e);
+      }
+      
+      attempts++;
+      if (attempts < maxAttempts) {
+        setTimeout(poll, 2000);
+      } else {
+        setPaymentStatus('idle');
+        toast({
+          title: "Aguardando confirmação",
+          description: "Seu pagamento está sendo processado. O status será atualizado em breve.",
+        });
+        onClose();
+      }
+    };
+    
+    await poll();
   };
 
   return (
@@ -116,8 +226,26 @@ export function PaymentModal({ isOpen, onClose, onPaymentSuccess }: PaymentModal
             </div>
           )}
         </div>
-        <Button type="button" onClick={handlePaymentSubmit} className="w-full bg-black text-yellow-300 hover:bg-gray-800">
-          Confirmar Pagamento
+        <Button 
+          type="button" 
+          onClick={handlePaymentSubmit} 
+          disabled={paymentStatus !== 'idle'}
+          className="w-full bg-black text-yellow-300 hover:bg-gray-800"
+        >
+          {paymentStatus === 'idle' && "Confirmar Pagamento"}
+          {paymentStatus === 'processing' && (
+            <>
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              Processando...
+            </>
+          )}
+          {paymentStatus === 'waiting_webhook' && (
+            <>
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              Aguardando Confirmação...
+            </>
+          )}
+          {paymentStatus === 'success' && "Pagamento Confirmado!"}
         </Button>
       </DialogContent>
     </Dialog>

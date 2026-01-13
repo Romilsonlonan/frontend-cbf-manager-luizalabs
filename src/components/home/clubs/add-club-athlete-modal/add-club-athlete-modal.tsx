@@ -6,7 +6,6 @@ import {
     DialogTitle,
 } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
-import { Loader2 } from 'lucide-react'
 import { clubs, positions } from '@/lib/mock-data'
 import { AddClubAthleteModalButton } from './add-club-athlete-modal-button'
 import { AddClubAthleteModalInput } from './add-club-athlete-modal-input'
@@ -27,7 +26,6 @@ export function AddClubAthleteModal({
         club: '',
         age: '',
         goals: '',
-        salary: '',
         injuries: '',
         yellowCards: '',
         redCards: '',
@@ -53,7 +51,6 @@ export function AddClubAthleteModal({
                 club: formData.club,
                 age: parseInt(formData.age),
                 goals: parseInt(formData.goals),
-                salary: parseFloat(formData.salary),
                 injuries: parseInt(formData.injuries) || 0,
                 yellowCards: parseInt(formData.yellowCards) || 0,
                 redCards: parseInt(formData.redCards) || 0,
@@ -80,7 +77,6 @@ export function AddClubAthleteModal({
                 club: '',
                 age: '',
                 goals: '',
-                salary: '',
                 injuries: '',
                 yellowCards: '',
                 redCards: '',
@@ -117,20 +113,19 @@ export function AddClubAthleteModal({
                             field={{ id: 'position', label: 'Posição', placeholder: 'Selecione a posição', type: 'select', required: true }}
                             value={formData.position}
                             onChange={handleChange}
-                            options={positions}
+                            options={positions as any}
                         />
 
                         <AddClubAthleteModalInput
                             field={{ id: 'club', label: 'Clube', placeholder: 'Selecione o clube', type: 'select', required: true }}
                             value={formData.club}
                             onChange={handleChange}
-                            options={clubs}
+                            options={clubs as any}
                         />
 
                         {[
                             { id: 'age', label: 'Idade', placeholder: 'Ex: 25', type: 'number', required: true },
                             { id: 'goals', label: 'Gols (2025)', placeholder: 'Ex: 10', type: 'number', required: true },
-                            { id: 'salary', label: 'Salário', placeholder: 'Ex: 100000', type: 'number', required: true },
                             { id: 'injuries', label: 'Lesões', placeholder: 'Ex: 1', type: 'number' },
                             { id: 'yellowCards', label: 'Cartões Amarelos', placeholder: 'Ex: 5', type: 'number' },
                             { id: 'redCards', label: 'Cartões Vermelhos', placeholder: 'Ex: 1', type: 'number' },

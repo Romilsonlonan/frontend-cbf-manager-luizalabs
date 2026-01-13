@@ -91,7 +91,7 @@ export function AthletesPageContent({
                     label="Col Goleiro"
                   />
                 )}
-                {(currentCategory === 'Defensores' || currentCategory === 'Meio-Campistas' || currentCategory === 'Atacantes' || currentCategory === 'Todos') && (
+                {(currentCategory === 'Defensores' || currentCategory === 'Meio-campistas' || currentCategory === 'Atacantes' || currentCategory === 'Todos') && (
                   <ColumnSelector 
                     allColumns={selectableFieldPlayerColumns} 
                     selectedColumns={selectedStatColKeys} 

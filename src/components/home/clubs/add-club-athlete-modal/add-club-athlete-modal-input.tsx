@@ -22,7 +22,7 @@ interface AddClubAthleteModalInputProps {
     field: FormField
     value: string
     onChange: (id: string, value: string) => void
-    options?: string[] | { id: number; name: string }[]
+    options?: any[]
 }
 
 export function AddClubAthleteModalInput({
@@ -44,17 +44,23 @@ export function AddClubAthleteModalInput({
                         <SelectValue placeholder={field.placeholder} />
                     </SelectTrigger>
                     <SelectContent>
-                        {options?.map((option) => {
+                        {options?.map((option, index) => {
                             if (typeof option === 'string') {
                                 return (
                                     <SelectItem key={option} value={option}>
                                         {option}
                                     </SelectItem>
                                 )
+                            } else if (option.value && option.label) {
+                                return (
+                                    <SelectItem key={option.value} value={option.value}>
+                                        {option.label}
+                                    </SelectItem>
+                                )
                             } else {
                                 return (
-                                    <SelectItem key={option.id} value={option.name}>
-                                        {option.name}
+                                    <SelectItem key={option.id || index} value={option.name || option.value}>
+                                        {option.name || option.label}
                                     </SelectItem>
                                 )
                             }

@@ -1,0 +1,7 @@
+.pageContainer {
+  @apply flex flex-col gap-8;
+}
+
+.loadingText {
+  @apply text-muted-foreground;
+}

@@ -11,6 +11,7 @@ interface User {
   is_active: boolean;
   name?: string; // Adicionado campo de nome
   profile_image_url?: string; // Added profile image URL
+  subscription_status?: string; // Added subscription status
   // Add other user properties as needed
 }
 

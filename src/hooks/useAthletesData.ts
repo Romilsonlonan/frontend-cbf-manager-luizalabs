@@ -45,7 +45,7 @@ export const useAthletesData = (currentCategory: string, selectedClubId: number 
           setFieldPlayers(data);
           setGoalkeepers([]);
         },
-        'Meio-Campistas': async () => {
+        'Meio-campistas': async () => {
           const data = await api.getFieldPlayers(token, selectedClubId, '', 'Meio-Campista', onAuthError);
           setFieldPlayers(data);
           setGoalkeepers([]);

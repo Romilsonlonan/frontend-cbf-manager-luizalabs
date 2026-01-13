@@ -1,0 +1,7 @@
+.dashboardsContainer {
+  @apply space-y-8;
+}
+
+.topGrid {
+  @apply grid grid-cols-1 md:grid-cols-2 gap-8;
+}

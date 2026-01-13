@@ -1,0 +1,17 @@
+export const USER_SETTINGS_STRINGS = {
+  PAGE_TITLE: "Configurações do Usuário",
+  LOADING_USER: "Carregando informações do usuário...",
+  SUCCESS_PROFILE_UPDATE: "Perfil atualizado com sucesso!",
+  SUCCESS_PASSWORD_CHANGE: "Senha alterada com sucesso!",
+  SUCCESS_ACCOUNT_DELETE: "Conta excluída com sucesso.",
+  SUCCESS_PHOTO_UPDATE: "Foto de perfil atualizada com sucesso!",
+  ERROR_PROFILE_UPDATE: "Falha ao atualizar perfil.",
+  ERROR_PASSWORD_CHANGE: "Falha ao alterar senha.",
+  ERROR_ACCOUNT_DELETE: "Falha ao excluir conta.",
+  ERROR_PHOTO_UPDATE: "Falha ao atualizar foto de perfil.",
+  ERROR_NO_TOKEN: "Token de autenticação não encontrado.",
+  ERROR_NO_USER: "Informações do usuário não disponíveis.",
+  ERROR_NO_FILE: "Por favor, selecione uma imagem para upload.",
+  ERROR_SESSION_EXPIRED: "Sessão expirada. Por favor, faça login novamente.",
+  CONFIRM_DELETE_ACCOUNT: "Tem certeza que deseja excluir sua conta? Esta ação é irreversível.",
+};

@@ -1,0 +1,15 @@
+.headerContainer {
+  @apply mb-6;
+}
+
+.title {
+  @apply text-3xl font-bold mb-6;
+}
+
+.successMessage {
+  @apply bg-green-100 text-green-800 p-3 rounded mb-4;
+}
+
+.errorMessage {
+  @apply bg-red-100 text-red-800 p-3 rounded mb-4;
+}

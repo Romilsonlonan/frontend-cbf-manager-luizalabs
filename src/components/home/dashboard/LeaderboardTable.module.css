@@ -1,0 +1,99 @@
+.errorBanner {
+  @apply bg-destructive/15 text-destructive p-4 rounded-md mb-4 flex items-center justify-between;
+}
+
+.leaderboardCard {
+  @apply shadow-2xl;
+}
+
+.cardHeaderTop {
+  @apply flex items-center justify-between;
+}
+
+.cardTitle {
+  @apply text-3xl font-bold;
+}
+
+.searchWrapper {
+  @apply relative mt-4;
+}
+
+.searchIcon {
+  @apply absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground;
+}
+
+.searchInput {
+  @apply pl-10;
+}
+
+.tableWrapper {
+  @apply overflow-x-auto;
+}
+
+.sortableHeader {
+  @apply cursor-pointer hover:bg-muted/50;
+}
+
+.headerContent {
+  @apply flex items-center gap-2;
+}
+
+.sortIcon {
+  @apply h-4 w-4;
+}
+
+.teamCell {
+  @apply flex items-center gap-3;
+}
+
+.teamLogo {
+  @apply h-6 w-6;
+}
+
+.teamName {
+  @apply font-semibold;
+}
+
+.pointsCell {
+  @apply font-bold;
+}
+
+.libertadores {
+  @apply border-l-4 border-chart-2;
+}
+
+.preLibertadores {
+  @apply border-l-4 border-chart-4;
+}
+
+.relegation {
+  @apply border-l-4 border-destructive;
+}
+
+.neutral {
+  @apply border-l-4 border-transparent;
+}
+
+.refreshIcon {
+  @apply mr-2 h-4 w-4;
+}
+
+.glossary {
+  @apply mt-8 pt-6 border-t border-border;
+}
+
+.glossaryTitle {
+  @apply text-xs font-semibold text-muted-foreground mb-4 uppercase tracking-wider;
+}
+
+.glossaryGrid {
+  @apply grid grid-cols-1 sm:grid-cols-3 gap-y-3 gap-x-4 text-sm text-muted-foreground;
+}
+
+.glossaryItem {
+  @apply flex items-center gap-2;
+}
+
+.glossaryKey {
+  @apply font-bold text-foreground min-w-[35px];
+}

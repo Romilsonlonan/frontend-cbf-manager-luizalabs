@@ -1,3 +1,3 @@
 .container {
-    @apply p-6 max-w-4xl mx-auto;
+    @apply p-6 max-w-4xl mx-auto bg-yellow-50/50 rounded-lg shadow-sm;
 }

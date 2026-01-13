@@ -1,0 +1,15 @@
+.modalBody {
+  @apply grid gap-4 py-4;
+}
+
+.fieldRow {
+  @apply grid grid-cols-4 items-center gap-4;
+}
+
+.label {
+  @apply text-right;
+}
+
+.input {
+  @apply col-span-3;
+}

@@ -60,7 +60,7 @@ export default function Home() {
   ), [selectedStatColKeys, currentCategory]);
 
   const fieldPlayerColumns = useMemo(() => getColumnsByOrder(
-    selectedStatColKeys.length > 0 && (currentCategory === 'Defensores' || currentCategory === 'Meio-Campistas' || currentCategory === 'Atacantes' || currentCategory === 'Todos')
+    selectedStatColKeys.length > 0 && (currentCategory === 'Defensores' || currentCategory === 'Meio-campistas' || currentCategory === 'Atacantes' || currentCategory === 'Todos')
       ? selectedStatColKeys
       : PLAYER_COLUMNS.FIELD_PLAYER
   ), [selectedStatColKeys, currentCategory]);

@@ -1,0 +1,15 @@
+.headerContainer {
+  @apply flex flex-col gap-2;
+}
+
+.title {
+  @apply text-3xl font-bold tracking-tight;
+}
+
+.description {
+  @apply text-muted-foreground;
+}
+
+.error {
+  @apply text-red-500;
+}

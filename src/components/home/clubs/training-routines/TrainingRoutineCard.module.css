@@ -1,0 +1,15 @@
+.card {
+  @apply flex flex-col justify-between;
+}
+
+.time {
+  @apply text-sm text-gray-500;
+}
+
+.description {
+  @apply text-sm;
+}
+
+.actions {
+  @apply flex justify-end gap-2 mt-4;
+}

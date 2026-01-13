@@ -3,6 +3,23 @@ import { ClubSimpleResponse, GoalkeeperResponse, FieldPlayerResponse } from './t
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
 
+export const register = async (userData: any) => {
+  const response = await fetch(`${API_URL}/register`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(userData),
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => ({ detail: 'Erro ao registrar usuário' }));
+    throw new Error(errorData.detail || 'Erro ao registrar usuário');
+  }
+
+  return response.json();
+};
+
 export const login = async (email: string, password: string, startLoading: () => void, stopLoading: () => void) => {
   startLoading();
   try {
@@ -811,6 +828,18 @@ export const createService = async (serviceData: any, token: string) => {
   return response.json();
 };
 
+export const createPaymentIntent = async (token: string) => {
+  const response = await fetch(`${API_URL}/create-payment-intent`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+  });
+  if (!response.ok) throw new Error('Erro ao criar intenção de pagamento');
+  return response.json();
+};
+
 export const api = {
   login,
   getCurrentUser,
@@ -849,6 +878,8 @@ export const api = {
   createLocation,
   getAvailabilities,
   updateAvailability,
+  register,
+  createPaymentIntent,
 };
 
 export const clubsApi = {

@@ -1,0 +1,39 @@
+.section {
+  @apply flex flex-col gap-6;
+}
+
+.header {
+  @apply flex flex-col gap-2;
+}
+
+.title {
+  @apply text-3xl font-bold tracking-tight;
+}
+
+.description {
+  @apply text-muted-foreground;
+}
+
+.statsGrid {
+  @apply grid gap-6 md:grid-cols-2 lg:grid-cols-3;
+}
+
+.cardHeader {
+  @apply flex flex-row items-center justify-between pb-2;
+}
+
+.cardTitle {
+  @apply text-sm font-medium;
+}
+
+.icon {
+  @apply h-4 w-4 text-muted-foreground;
+}
+
+.statValue {
+  @apply text-2xl font-bold;
+}
+
+.actionButton {
+  @apply mt-4;
+}

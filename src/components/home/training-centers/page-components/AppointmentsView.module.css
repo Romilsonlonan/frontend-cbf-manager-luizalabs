@@ -1,0 +1,19 @@
+.appointmentsContainer {
+  @apply w-full;
+}
+
+.header {
+  @apply relative flex items-center justify-center mb-8;
+}
+
+.backButton {
+  @apply absolute left-0;
+}
+
+.backIcon {
+  @apply h-6 w-6;
+}
+
+.title {
+  @apply font-headline text-4xl font-bold text-primary text-center px-12;
+}
