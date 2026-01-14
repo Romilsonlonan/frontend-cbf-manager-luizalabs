@@ -39,9 +39,10 @@ import { cn } from "@/lib/utils"
 import { api } from "@/lib/api"
 import { useAuth } from "@/context/AuthContext"
 import { useToast } from "@/hooks/use-toast"
-import type { Athlete } from "@/lib/types"
+import type { Athlete, ClubSimpleResponse as Club } from "@/lib/types"
 
 const formSchema = z.object({
+  club_id: z.string().min(1, "Selecione um clube"),
   athlete_id: z.string().min(1, "Selecione um atleta"),
   service_id: z.string().min(1, "Selecione um serviço"),
   location_id: z.string().min(1, "Selecione um local"),
@@ -57,10 +58,11 @@ interface CreateAppointmentModalProps {
   onClose: () => void
   onSuccess: () => void
   athletes: Athlete[]
+  clubs: Club[]
   appointment?: any // Optional appointment for editing
 }
 
-export function CreateAppointmentModal({ isOpen, onClose, onSuccess, athletes, appointment }: CreateAppointmentModalProps) {
+export function CreateAppointmentModal({ isOpen, onClose, onSuccess, athletes, clubs, appointment }: CreateAppointmentModalProps) {
   const [services, setServices] = useState<any[]>([])
   const [locations, setLocations] = useState<any[]>([])
   const [isLoading, setIsLoading] = useState(false)
@@ -70,16 +72,28 @@ export function CreateAppointmentModal({ isOpen, onClose, onSuccess, athletes, a
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
+      club_id: "",
+      athlete_id: "",
+      service_id: "",
+      location_id: "",
       notes: "",
     },
   })
+
+  const selectedClubId = form.watch("club_id")
+
+  const filteredAthletes = athletes.filter(
+    (a) => !selectedClubId || a.club_id?.toString() === selectedClubId
+  )
 
   useEffect(() => {
     if (isOpen) {
       fetchData()
       if (appointment) {
         const startDate = new Date(appointment.start_time)
+        const athlete = athletes.find(a => a.id === appointment.athlete_id && a.position === appointment.athlete_type)
         form.reset({
+          club_id: athlete?.club_id?.toString() || "",
           athlete_id: `${appointment.athlete_type}-${appointment.athlete_id}`,
           service_id: appointment.service_id.toString(),
           location_id: appointment.location_id.toString(),
@@ -89,6 +103,7 @@ export function CreateAppointmentModal({ isOpen, onClose, onSuccess, athletes, a
         })
       } else {
         form.reset({
+          club_id: "",
           athlete_id: "",
           service_id: "",
           location_id: "",
@@ -98,7 +113,7 @@ export function CreateAppointmentModal({ isOpen, onClose, onSuccess, athletes, a
         })
       }
     }
-  }, [isOpen, appointment, form])
+  }, [isOpen, appointment, form, athletes])
 
   const fetchData = async () => {
     try {
@@ -182,18 +197,49 @@ export function CreateAppointmentModal({ isOpen, onClose, onSuccess, athletes, a
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 py-4">
             <FormField
               control={form.control}
+              name="club_id"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Clube</FormLabel>
+                  <Select 
+                    onValueChange={(val) => {
+                      field.onChange(val)
+                      form.setValue("athlete_id", "") // Reset athlete when club changes
+                    }} 
+                    value={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Selecione o clube" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {clubs.map((club) => (
+                        <SelectItem key={club.id} value={club.id.toString()}>
+                          {club.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
               name="athlete_id"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Atleta</FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                  <Select onValueChange={field.onChange} value={field.value} disabled={!selectedClubId}>
                     <FormControl>
                       <SelectTrigger>
-                        <SelectValue placeholder="Selecione o atleta" />
+                        <SelectValue placeholder={selectedClubId ? "Selecione o atleta" : "Selecione um clube primeiro"} />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      {athletes.map((athlete) => (
+                      {filteredAthletes.map((athlete) => (
                         <SelectItem key={`${athlete.position}-${athlete.id}`} value={`${athlete.position}-${athlete.id}`}>
                           {athlete.name} ({athlete.position})
                         </SelectItem>

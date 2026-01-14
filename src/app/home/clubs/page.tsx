@@ -125,13 +125,18 @@ export default function ClubsPage() {
     try {
       // The actual return type of scrapeClubPlayers needs to be verified from the backend.
       // Assuming it returns a mix of GoalkeeperResponse and FieldPlayerResponse.
-      const scrapedData: (GoalkeeperResponse | FieldPlayerResponse)[] = await scrapeClubPlayers(clubId, token, handleAuthError);
-      const playerNames = scrapedData.map(p => p.name).join(', ');
+      const result: any = await scrapeClubPlayers(clubId, token, handleAuthError);
+      
+      let description = `O valor total de ${result.total_count} jogadores do clube ${clubName} foram realizados com sucesso.`;
+      if (result.new_count === 0 && result.updated_count > 0) {
+        description = `Todos os ${result.total_count} jogadores de ${clubName} já foram adicionados anteriormente!`;
+      }
+
       toast({
         title: "Sucesso!",
-        description: `${scrapedData.length} jogadores de ${clubName} foram adicionados/atualizados: ${playerNames}.`,
+        description: description,
         variant: "success",
-        duration: 9000, // Aumenta a duração para que o usuário possa ler os nomes
+        duration: 5000,
       });
       fetchClubs(); // Refresh clubs to potentially show updated player counts
     } catch (error: any) {

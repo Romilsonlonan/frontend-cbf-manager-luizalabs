@@ -713,6 +713,17 @@ export const getNutritionalPlans = async (athleteId: number, isGoalkeeper: boole
   return response.json();
 };
 
+export const deleteNutritionalPlan = async (planId: number, token: string) => {
+  const response = await fetch(`${API_URL}/athletes/nutritional_plans/${planId}`, {
+    method: 'DELETE',
+    headers: {
+      'Authorization': `Bearer ${token}`,
+    },
+  });
+  if (!response.ok) throw new Error('Erro ao excluir plano nutricional');
+  return true;
+};
+
 export const getAppointments = async (token: string, startDate?: string, endDate?: string) => {
   let url = new URL(`${API_URL}/appointments/`);
   if (startDate) url.searchParams.append('start_date', startDate);
@@ -867,6 +878,7 @@ export const api = {
   getAthleteProgress,
   createNutritionalPlan,
   getNutritionalPlans,
+  deleteNutritionalPlan,
   getAppointments,
   createAppointment,
   updateAppointmentStatus,

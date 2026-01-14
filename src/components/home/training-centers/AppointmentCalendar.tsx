@@ -52,7 +52,7 @@ import { ptBR } from "date-fns/locale"
 import { api } from "@/lib/api"
 import { useAuth } from "@/context/AuthContext"
 import { useToast } from "@/hooks/use-toast"
-import type { Athlete } from "@/lib/types"
+import type { Athlete, ClubSimpleResponse as Club } from "@/lib/types"
 import { CreateAppointmentModal } from "./CreateAppointmentModal"
 import { AvailabilitySettingsModal } from "./AvailabilitySettingsModal"
 import { LocationSettingsModal } from "./LocationSettingsModal"
@@ -60,9 +60,10 @@ import { ServiceSettingsModal } from "./ServiceSettingsModal"
 
 interface AppointmentCalendarProps {
   athletes: Athlete[]
+  clubs: Club[]
 }
 
-export function AppointmentCalendar({ athletes }: AppointmentCalendarProps) {
+export function AppointmentCalendar({ athletes, clubs }: AppointmentCalendarProps) {
   const [currentDate, setCurrentDate] = useState(new Date())
   const [view, setView] = useState<'day' | 'week' | 'month'>('week')
   const [appointments, setAppointments] = useState<any[]>([])
@@ -450,6 +451,7 @@ export function AppointmentCalendar({ athletes }: AppointmentCalendarProps) {
         }}
         onSuccess={fetchAppointments}
         athletes={athletes}
+        clubs={clubs}
         appointment={selectedAppointment}
       />
 

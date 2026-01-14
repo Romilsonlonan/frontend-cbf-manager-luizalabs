@@ -41,6 +41,7 @@
     "dotenv": "^16.5.0",
     "embla-carousel-react": "^8.6.0",
     "framer-motion": "^12.23.26",
+    "jspdf": "^4.0.0",
     "lucide-react": "^0.475.0",
     "mkdocs": "^0.0.1",
     "next": "^15.5.6",

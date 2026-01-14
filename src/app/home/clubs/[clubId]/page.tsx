@@ -122,10 +122,16 @@ export default function ClubDetailsPage() {
 
     startLoading();
     try {
-      const scrapedData = await clubsApi.scrapeAthletes(clubId, scrapeUrl, token);
+      const result: any = await clubsApi.scrapeAthletes(clubId, scrapeUrl, token);
+      
+      let description = `O valor total de ${result.total_count} jogadores do clube ${clubDetails.name} foram realizados com sucesso.`;
+      if (result.new_count === 0 && result.updated_count > 0) {
+        description = `Todos os ${result.total_count} jogadores de ${clubDetails.name} já foram adicionados anteriormente!`;
+      }
+
       toast({
         title: 'Sucesso',
-        description: `Scraping concluído! ${scrapedData.length} atletas atualizados/adicionados.`,
+        description: description,
       });
       fetchClubDetails(); // Recarregar dados após scraping
     } catch (error: any) {

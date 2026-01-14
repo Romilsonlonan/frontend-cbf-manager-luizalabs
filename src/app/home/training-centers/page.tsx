@@ -232,6 +232,7 @@ export default function TrainingCentersPage() {
         {view === 'appointments' && (
           <AppointmentsView 
             athletes={athletes} 
+            clubs={clubs}
             onBack={() => setView('main')} 
           />
         )}

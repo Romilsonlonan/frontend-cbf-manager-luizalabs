@@ -5,16 +5,17 @@ import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft } from 'lucide-react';
 import { AppointmentCalendar } from '../AppointmentCalendar';
-import { Athlete } from '@/lib/types';
+import { Athlete, ClubSimpleResponse as Club } from '@/lib/types';
 import { TRAINING_CENTERS_STRINGS } from '@/constants/training-centers.constants';
 import styles from './AppointmentsView.module.css';
 
 interface AppointmentsViewProps {
   athletes: Athlete[];
+  clubs: Club[];
   onBack: () => void;
 }
 
-export const AppointmentsView: React.FC<AppointmentsViewProps> = ({ athletes, onBack }) => {
+export const AppointmentsView: React.FC<AppointmentsViewProps> = ({ athletes, clubs, onBack }) => {
   return (
     <motion.div
       key="appointments"
@@ -32,7 +33,7 @@ export const AppointmentsView: React.FC<AppointmentsViewProps> = ({ athletes, on
           {TRAINING_CENTERS_STRINGS.APPOINTMENTS_TITLE}
         </h2>
       </div>
-      <AppointmentCalendar athletes={athletes} />
+      <AppointmentCalendar athletes={athletes} clubs={clubs} />
     </motion.div>
   );
 };
