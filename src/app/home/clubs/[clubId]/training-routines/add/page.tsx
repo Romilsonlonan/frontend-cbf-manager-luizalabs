@@ -5,10 +5,8 @@ import { useRouter, useParams } from 'next/navigation';
 import { getClubDetails, addTrainingRoutine } from "@/lib/api";
 import { ClubDetailsResponse } from "@/lib/types";
 import { useToast } from "@/components/ui/use-toast";
-import { AddTrainingRoutineForm } from '@/components/home/clubs/training-routines/AddTrainingRoutineForm';
-import { AddTrainingRoutineHeader } from '@/components/home/clubs/training-routines/AddTrainingRoutineHeader';
-import { TRAINING_ROUTINE_STRINGS } from '@/constants/training.constants';
-import styles from './page.module.css';
+import { ADD_TRAINING_ROUTINE_CONSTANTS } from './constants';
+import { AddTrainingRoutineView } from './AddTrainingRoutineView';
 
 /**
  * AddTrainingRoutinePage (Container Component)
@@ -55,14 +53,14 @@ export default function AddTrainingRoutinePage() {
     try {
       await addTrainingRoutine(parseInt(clubId), { name: routineName, description });
       toast({
-        title: TRAINING_ROUTINE_STRINGS.SUCCESS_TOAST_TITLE,
-        description: TRAINING_ROUTINE_STRINGS.SUCCESS_TOAST_DESCRIPTION,
+        title: ADD_TRAINING_ROUTINE_CONSTANTS.SUCCESS_TOAST_TITLE,
+        description: ADD_TRAINING_ROUTINE_CONSTANTS.SUCCESS_TOAST_DESCRIPTION,
       });
       router.push(`/home/clubs/${clubId}/training-routines`);
     } catch (e: any) {
       toast({
-        title: TRAINING_ROUTINE_STRINGS.ERROR_TOAST_TITLE,
-        description: TRAINING_ROUTINE_STRINGS.ERROR_TOAST_DESCRIPTION(e.message),
+        title: ADD_TRAINING_ROUTINE_CONSTANTS.ERROR_TOAST_TITLE,
+        description: ADD_TRAINING_ROUTINE_CONSTANTS.ERROR_TOAST_DESCRIPTION(e.message),
         variant: "destructive",
       });
       setError(e.message);
@@ -71,44 +69,17 @@ export default function AddTrainingRoutinePage() {
     }
   };
 
-  if (loading) {
-    return (
-      <div className={styles.pageContainer}>
-        <AddTrainingRoutineHeader />
-        <p className={styles.loadingText}>{TRAINING_ROUTINE_STRINGS.LOADING_CLUB}</p>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className={styles.pageContainer}>
-        <AddTrainingRoutineHeader error={error} />
-      </div>
-    );
-  }
-
-  if (!club) {
-    return (
-      <div className={styles.pageContainer}>
-        <AddTrainingRoutineHeader error={TRAINING_ROUTINE_STRINGS.CLUB_NOT_FOUND} />
-      </div>
-    );
-  }
-
   return (
-    <div className={styles.pageContainer}>
-      <AddTrainingRoutineHeader clubName={club.name} />
-
-      <AddTrainingRoutineForm
-        club={club}
-        routineName={routineName}
-        description={description}
-        submitting={submitting}
-        onRoutineNameChange={setRoutineName}
-        onDescriptionChange={setDescription}
-        onSubmit={handleSubmit}
-      />
-    </div>
+    <AddTrainingRoutineView
+      club={club}
+      routineName={routineName}
+      description={description}
+      loading={loading}
+      submitting={submitting}
+      error={error}
+      onRoutineNameChange={setRoutineName}
+      onDescriptionChange={setDescription}
+      onSubmit={handleSubmit}
+    />
   );
 }

@@ -1,0 +1,87 @@
+.dialogContent {
+  @apply sm:max-w-[500px] border-none bg-gradient-to-br from-amber-500 to-orange-600 text-white p-0 overflow-hidden;
+}
+
+.closeButton {
+  @apply absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none text-white;
+}
+
+.container {
+  @apply p-6;
+}
+
+.iconWrapper {
+  @apply flex justify-center mb-4;
+}
+
+.iconContainer {
+  @apply bg-white/20 p-3 rounded-full;
+}
+
+.icon {
+  @apply h-10 w-10 text-white fill-white;
+}
+
+.title {
+  @apply text-2xl font-bold text-center text-white;
+}
+
+.description {
+  @apply text-amber-50 text-center text-lg;
+}
+
+.contentBody {
+  @apply py-6 space-y-4;
+}
+
+.trialInfoCard {
+  @apply bg-white/10 rounded-lg p-4 flex items-center gap-4;
+}
+
+.clockIcon {
+  @apply h-8 w-8 text-white;
+}
+
+.trialInfoText {
+  @apply font-semibold;
+}
+
+.trialInfoSubtext {
+  @apply text-sm text-amber-50;
+}
+
+.daysBadge {
+  @apply ml-auto bg-white text-orange-600 border-none;
+}
+
+.featuresSection {
+  @apply space-y-2;
+}
+
+.featuresTitle {
+  @apply text-sm font-medium text-amber-100 uppercase tracking-wider;
+}
+
+.featuresList {
+  @apply space-y-2;
+}
+
+.featureItem {
+  @apply flex items-center gap-2 text-sm;
+}
+
+.checkIcon {
+  @apply h-4 w-4 text-amber-200;
+}
+
+.footer {
+  @apply flex flex-col sm:flex-row gap-2;
+}
+
+.ghostButton {
+  @apply text-white hover:bg-white/10 border-white/20;
+}
+
+.primaryButton {
+  @apply bg-white text-orange-600 hover:bg-amber-50 font-bold;
+}

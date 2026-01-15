@@ -1,0 +1,71 @@
+.premiumCard {
+  @apply bg-gradient-to-br from-blue-900 to-indigo-900 text-white border-none shadow-xl;
+}
+
+.trialCard {
+  @apply bg-gradient-to-br from-amber-600 to-orange-700 text-white border-none shadow-xl relative;
+}
+
+.freeCard {
+  @apply border-dashed border-2 border-gray-200 shadow-none bg-gray-50/50;
+}
+
+.dismissButton {
+  @apply absolute right-2 top-2 text-white/70 hover:text-white transition-colors;
+}
+
+.cardHeader {
+  @apply pb-2;
+}
+
+.cardTitle {
+  @apply text-lg flex items-center gap-2;
+}
+
+.cardTitleFree {
+  @apply text-lg text-gray-700 flex items-center gap-2;
+}
+
+.starIcon {
+  @apply h-5 w-5 text-yellow-400 fill-yellow-400;
+}
+
+.clockIcon {
+  @apply h-5 w-5 text-white;
+}
+
+.arrowIcon {
+  @apply h-5 w-5 text-blue-600;
+}
+
+.textPremium {
+  @apply text-sm text-blue-100;
+}
+
+.textTrial {
+  @apply text-sm text-amber-50;
+}
+
+.textFree {
+  @apply text-sm text-gray-500;
+}
+
+.badgePremium {
+  @apply mt-4 bg-blue-500/30 text-blue-100 border-blue-400/50;
+}
+
+.trialFooter {
+  @apply mt-4 flex items-center justify-between;
+}
+
+.badgeTrial {
+  @apply bg-white/20 text-white border-white/30;
+}
+
+.buttonTrial {
+  @apply bg-white text-orange-700 hover:bg-amber-50;
+}
+
+.buttonFree {
+  @apply mt-4 w-full bg-blue-600 hover:bg-blue-700;
+}

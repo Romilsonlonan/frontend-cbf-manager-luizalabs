@@ -10,7 +10,7 @@ const chat = new ChatMistralAI({
   model: "mistral-large-latest",
 });
 
-export async function generateNutritionalPlanAction(athleteData: any) {
+export async function generateNutritionalPlanAction(athleteData: any, professionalData?: any) {
   try {
     const systemPrompt = `
       Você é um nutricionista esportivo de alto desempenho trabalhando para a CBF (Confederação Brasileira de Futebol).
@@ -48,6 +48,9 @@ export async function generateNutritionalPlanAction(athleteData: any) {
       6. Se os níveis de colesterol ou triglicerídeos estiverem fora do normal, ajuste a dieta para auxiliar na normalização (ex: redução de gorduras saturadas, aumento de fibras).
       7. Use uma linguagem profissional, clara e motivadora, como se estivesse em uma consulta real.
       8. Formate a resposta em Markdown para uma leitura agradável, usando negrito para horários e alimentos principais.
+      9. AO FINAL DO DOCUMENTO, inclua obrigatoriamente uma seção de assinatura com o nome e a profissão do responsável:
+         Responsável: ${professionalData?.name || 'Não informado'}
+         Profissão: ${professionalData?.profession || 'Nutricionista Esportivo'}
     `;
 
     const messages = [

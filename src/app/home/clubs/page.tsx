@@ -1,64 +1,67 @@
 'use client'
 
-import { useState, useEffect } from 'react'
-import { Button } from '@/components/ui/button'
-import { Card, CardContent } from '@/components/ui/card'
-import { AddClubModal } from '@/components/home/clubs/add-club-modal/add-club-modal'
-import { EditClubModal } from '@/components/home/clubs/edit-club-modal/edit-club-modal' // Import EditClubModal
-import { Plus, Users, Calendar, Trophy, Building, Search, Building2, Pencil, Trash2 } from 'lucide-react'
-import { scrapeClubPlayers, getClubs } from '@/lib/api' // Import specific functions
+import { useState, useEffect, useCallback } from 'react'
+import { scrapeClubPlayers, getClubs } from '@/lib/api'
 import { useToast } from '@/hooks/use-toast'
 import { useAuth } from '@/context/AuthContext'
 import { useLoading } from '@/context/LoadingContext'
-import { ClubSimpleResponse, GoalkeeperResponse, FieldPlayerResponse } from '@/lib/types' // Importa as interfaces ClubSimpleResponse, GoalkeeperResponse e FieldPlayerResponse
-import { useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation'
+import { CLUBS_CONSTANTS } from './constants'
+import { Club } from './types'
+import { ClubsView } from './ClubsView'
 
-// Usar ClubSimpleResponse diretamente para consistência com a API
-type Club = ClubSimpleResponse;
-
+/**
+ * ClubsPage (Container Component)
+ * 
+ * Responsibilities:
+ * - Data fetching (getClubs)
+ * - State management (clubs, loading, modals)
+ * - Event handling (handleDeleteClub, handleScrapePlayers)
+ * - Orchestrating presentation components
+ */
 export default function ClubsPage() {
   const [clubs, setClubs] = useState<Club[]>([])
   const [loading, setLoading] = useState(true)
   const { startLoading, stopLoading } = useLoading()
   const [clubModalOpen, setClubModalOpen] = useState(false)
-  const [editModalOpen, setEditModalOpen] = useState(false) // State for edit modal
-  const [clubToEdit, setClubToEdit] = useState<Club | null>(null) // State for club being edited
-  const [isDeleting, setIsDeleting] = useState(false); // State for delete loading
+  const [editModalOpen, setEditModalOpen] = useState(false)
+  const [clubToEdit, setClubToEdit] = useState<Club | null>(null)
+  const [isDeleting, setIsDeleting] = useState(false)
   const { toast } = useToast()
   const { token, logout } = useAuth()
-  const router = useRouter();
+  const router = useRouter()
 
-  const fetchClubs = async () => {
+  const fetchClubs = useCallback(async () => {
     if (!token) return;
     try {
       setLoading(true)
       startLoading()
-      const data = await getClubs(token) // Use the exported getClubs function
+      const data = await getClubs(token)
       setClubs(data)
     } catch (error) {
       console.error('Erro ao buscar clubes:', error)
       toast({
-        title: "Erro",
-        description: "Erro ao carregar dados dos clubes.",
+        title: CLUBS_CONSTANTS.TOAST_ERROR_TITLE,
+        description: CLUBS_CONSTANTS.TOAST_FETCH_ERROR_DESCRIPTION,
         variant: "destructive",
       });
     } finally {
       setLoading(false)
       stopLoading()
     }
-  }
+  }, [token, startLoading, stopLoading, toast]);
 
   const handleDeleteClub = async (clubId: number, clubName: string) => {
     if (!token) {
       toast({
-        title: "Erro de Autenticação",
-        description: "Você precisa estar logado para excluir clubes.",
+        title: CLUBS_CONSTANTS.TOAST_AUTH_ERROR_TITLE,
+        description: CLUBS_CONSTANTS.TOAST_AUTH_ERROR_DESCRIPTION,
         variant: "destructive",
       });
       return;
     }
 
-    if (!window.confirm(`Tem certeza que deseja excluir o clube ${clubName}? Esta ação é irreversível.`)) {
+    if (!window.confirm(CLUBS_CONSTANTS.DELETE_CONFIRMATION(clubName))) {
       return;
     }
 
@@ -80,16 +83,16 @@ export default function ClubsPage() {
       }
 
       toast({
-        title: "Sucesso!",
-        description: `Clube ${clubName} excluído com sucesso!`,
+        title: CLUBS_CONSTANTS.TOAST_DELETE_SUCCESS_TITLE,
+        description: CLUBS_CONSTANTS.TOAST_DELETE_SUCCESS_DESCRIPTION(clubName),
         variant: "success",
       });
-      fetchClubs(); // Refresh the list after deletion
+      fetchClubs();
     } catch (error: any) {
       console.error(`Erro ao excluir clube ${clubName}:`, error);
       toast({
-        title: "Erro na Exclusão",
-        description: error.message || `Falha ao excluir clube ${clubName}.`,
+        title: CLUBS_CONSTANTS.TOAST_DELETE_ERROR_TITLE,
+        description: CLUBS_CONSTANTS.TOAST_DELETE_ERROR_DESCRIPTION(clubName, error.message),
         variant: "destructive",
       });
     } finally {
@@ -100,22 +103,22 @@ export default function ClubsPage() {
   const handleScrapePlayers = async (clubId: number, clubName: string) => {
     if (!token) {
       toast({
-        title: "Erro de Autenticação",
-        description: "Você precisa estar logado para raspar dados de jogadores.",
+        title: CLUBS_CONSTANTS.TOAST_AUTH_ERROR_TITLE,
+        description: CLUBS_CONSTANTS.TOAST_AUTH_ERROR_DESCRIPTION,
         variant: "destructive",
       });
       return;
     }
 
     toast({
-      title: "Raspagem Iniciada",
-      description: `Iniciando raspagem de jogadores para ${clubName}...`,
+      title: CLUBS_CONSTANTS.TOAST_SCRAPE_START_TITLE,
+      description: CLUBS_CONSTANTS.TOAST_SCRAPE_START_DESCRIPTION(clubName),
     });
 
     const handleAuthError = () => {
       toast({
-        title: "Sessão Expirada",
-        description: "Sua sessão expirou. Por favor, faça login novamente.",
+        title: CLUBS_CONSTANTS.TOAST_SESSION_EXPIRED_TITLE,
+        description: CLUBS_CONSTANTS.TOAST_SESSION_EXPIRED_DESCRIPTION,
         variant: "destructive",
       });
       logout();
@@ -123,27 +126,25 @@ export default function ClubsPage() {
     };
 
     try {
-      // The actual return type of scrapeClubPlayers needs to be verified from the backend.
-      // Assuming it returns a mix of GoalkeeperResponse and FieldPlayerResponse.
       const result: any = await scrapeClubPlayers(clubId, token, handleAuthError);
       
-      let description = `O valor total de ${result.total_count} jogadores do clube ${clubName} foram realizados com sucesso.`;
+      let description = CLUBS_CONSTANTS.TOAST_SCRAPE_SUCCESS_DESCRIPTION(clubName, result.total_count);
       if (result.new_count === 0 && result.updated_count > 0) {
-        description = `Todos os ${result.total_count} jogadores de ${clubName} já foram adicionados anteriormente!`;
+        description = CLUBS_CONSTANTS.TOAST_SCRAPE_ALREADY_DONE_DESCRIPTION(clubName, result.total_count);
       }
 
       toast({
-        title: "Sucesso!",
+        title: CLUBS_CONSTANTS.TOAST_SCRAPE_SUCCESS_TITLE,
         description: description,
         variant: "success",
         duration: 5000,
       });
-      fetchClubs(); // Refresh clubs to potentially show updated player counts
+      fetchClubs();
     } catch (error: any) {
       console.error(`Erro ao raspar jogadores para ${clubName}:`, error);
       toast({
-        title: "Erro na Raspagem",
-        description: error.message || `Falha ao raspar jogadores para ${clubName}.`,
+        title: CLUBS_CONSTANTS.TOAST_SCRAPE_ERROR_TITLE,
+        description: CLUBS_CONSTANTS.TOAST_SCRAPE_ERROR_DESCRIPTION(clubName, error.message),
         variant: "destructive",
       });
     }
@@ -151,131 +152,22 @@ export default function ClubsPage() {
 
   useEffect(() => {
     fetchClubs()
-  }, [])
+  }, [fetchClubs])
 
   return (
-    <div className="space-y-6">
-      <div className="flex justify-between items-center">
-        <h1 className="text-3xl font-bold">Clubes</h1>
-        <div className="flex gap-2">
-          <Button onClick={() => setClubModalOpen(true)}>
-            <Plus className="mr-2 h-4 w-4" />
-            Adicionar Clube
-          </Button>
-        </div>
-      </div>
-
-      {loading ? (
-        <div className="text-center py-8">Carregando...</div>
-      ) : clubs.length === 0 ? (
-        <Card>
-          <CardContent className="flex flex-col items-center justify-center py-12">
-            <Users className="h-12 w-12 text-gray-400 mb-4" />
-            <p className="text-gray-500">Nenhum clube cadastrado</p>
-            <Button onClick={() => setClubModalOpen(true)} className="mt-4">
-              Adicionar primeiro clube
-            </Button>
-          </CardContent>
-        </Card>
-      ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {clubs.map((club) => (
-            <Card key={club.id} className="hover:shadow-lg transition-shadow">
-              <CardContent className="p-6">
-                <div className="flex items-center space-x-4 mb-4">
-                  {club.shield_image_url ? (
-                    <img
-                      src={`http://localhost:8000${club.shield_image_url}`}
-                      alt={`Escudo ${club.name}`}
-                      className="w-16 h-16 object-cover rounded-lg"
-                    />
-                  ) : (
-                    <div className="w-16 h-16 bg-gray-200 rounded-lg flex items-center justify-center">
-                      <Users className="h-8 w-8 text-gray-400" />
-                    </div>
-                  )}
-                  <div className="flex items-center justify-between w-full">
-                    <h3 className="font-semibold text-lg">{club.name}</h3>
-                    <div className="flex gap-1">
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={() => {
-                          setClubToEdit(club);
-                          setEditModalOpen(true);
-                        }}
-                      >
-                        <Pencil className="h-4 w-4" />
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={() => handleDeleteClub(club.id, club.name)}
-                        disabled={isDeleting}
-                      >
-                        <Trash2 className="h-4 w-4 text-red-500" />
-                      </Button>
-                    </div>
-                  </div>
-                  <p className="text-sm text-gray-500">{club.initials}</p>
-                </div>
-
-                <div className="space-y-2 text-sm">
-                  <div className="flex items-center gap-2">
-                    <Building className="h-4 w-4 text-gray-400" />
-                    <span>{club.city}</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Calendar className="h-4 w-4 text-gray-400" />
-                    <span>
-                      Fundado em{' '}
-                      {club.foundation_date
-                        ? new Date(club.foundation_date).toLocaleDateString('pt-BR')
-                        : 'Data desconhecida'}
-                    </span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Trophy className="h-4 w-4 text-gray-400" />
-                    <span>{club.br_titles} títulos brasileiros</span>
-                  </div>
-                  {club.training_center && (
-                    <div className="flex items-center gap-2">
-                      <Building2 className="h-4 w-4 text-gray-400" />
-                      <span>{club.training_center}</span>
-                    </div>
-                  )}
-                </div>
-                <div className="mt-4 pt-4 border-t">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="w-full"
-                    onClick={() => handleScrapePlayers(club.id, club.name)}
-                    disabled={!club.espn_url}
-                    title={!club.espn_url ? "Adicione a URL da ESPN para este clube para raspar jogadores" : `Raspar jogadores de ${club.name}`}
-                  >
-                    <Search className="mr-2 h-4 w-4" />
-                    Raspar Jogadores
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-      )}
-
-      <AddClubModal
-        open={clubModalOpen}
-        onOpenChange={setClubModalOpen}
-        onClubAdded={fetchClubs}
-      />
-
-      <EditClubModal
-        open={editModalOpen}
-        onOpenChange={setEditModalOpen}
-        clubToEdit={clubToEdit}
-        onClubUpdated={fetchClubs}
-      />
-    </div>
+    <ClubsView
+      clubs={clubs}
+      loading={loading}
+      isDeleting={isDeleting}
+      clubModalOpen={clubModalOpen}
+      editModalOpen={editModalOpen}
+      clubToEdit={clubToEdit}
+      onSetClubModalOpen={setClubModalOpen}
+      onSetEditModalOpen={setEditModalOpen}
+      onSetClubToEdit={setClubToEdit}
+      onDeleteClub={handleDeleteClub}
+      onScrapePlayers={handleScrapePlayers}
+      onFetchClubs={fetchClubs}
+    />
   )
 }

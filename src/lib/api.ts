@@ -248,6 +248,25 @@ export const createClub = async (formData: FormData) => {
   return response.json();
 };
 
+export const getUsers = async (token: string, onAuthError?: () => void): Promise<any[]> => {
+  const headers: HeadersInit = {
+    'Content-Type': 'application/json',
+    'Authorization': `Bearer ${token}`,
+  };
+
+  const response = await fetch(`${API_URL}/users/`, { headers });
+  if (!response.ok) {
+    if (response.status === 401) {
+      onAuthError?.();
+      throw new Error('Token inválido ou expirado. Por favor, faça login novamente.');
+    }
+    const errorBody = await response.json().catch(() => ({ detail: 'Erro desconhecido' }));
+    console.error('API Response not OK for getUsers:', response.status, errorBody);
+    throw new Error(errorBody.detail || 'Erro ao buscar usuários');
+  }
+  return response.json();
+};
+
 export const getClubs = async (token: string, onAuthError?: () => void): Promise<ClubSimpleResponse[]> => {
   const headers: HeadersInit = {
     'Content-Type': 'application/json',
@@ -859,6 +878,7 @@ export const api = {
   deleteAccount,
   uploadProfileImage,
   createClub,
+  getUsers,
   getClubs,
   getClubDetails,
   getGoalkeepers,

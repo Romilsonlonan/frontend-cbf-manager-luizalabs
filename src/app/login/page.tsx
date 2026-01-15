@@ -36,9 +36,14 @@ export default function PaginaLogin() {
     try {
       const data = await login(email, senha, startLoading, stopLoading);
       if (data && data.access_token) {
+        console.log('LoginPage: Login successful, updating auth context');
         authLogin(data.access_token);
-        console.log('LoginPage: Attempting to redirect to /home');
-        router.push('/home');
+        // O redirecionamento agora é feito pelo AuthGuard ou manualmente após o estado ser atualizado
+        // Mas para garantir, vamos forçar o redirecionamento se o AuthGuard não o fizer
+        setTimeout(() => {
+          console.log('LoginPage: Forcing redirect to /home');
+          router.push('/home');
+        }, 500);
       } else {
         setErro('Resposta de login inválida: token não encontrado.');
       }

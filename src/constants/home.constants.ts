@@ -7,6 +7,8 @@ export const HOME_STRINGS = {
   VIEW_ATHLETES: "Ver Atletas",
   VIEW_CLUBS: "Ver Clubes",
   VIEW_STATISTICS: "Ver Estatísticas",
+  TRAINING_CENTER_LABEL: "Gerenciar CT",
+  VIEW_TRAINING_CENTER: "Ir para o CT",
   LEADERBOARD_TITLE: "Brasileirão Leaderboard",
   LEADERBOARD_DESCRIPTION: "Classificação do campeonato brasileiro",
   SEARCH_PLACEHOLDER: "Buscar time...",

@@ -300,6 +300,9 @@ export function AppointmentCalendar({ athletes, clubs }: AppointmentCalendarProp
                                 <p className="font-bold truncate">
                                   {athletes.find(ath => ath.id === app.athlete_id && ath.position === app.athlete_type)?.name || "Evento Especial"}
                                 </p>
+                                <p className="opacity-80 text-[9px] font-medium truncate">
+                                  Prof: {app.nutritionist?.name || "N/A"}
+                                </p>
                                 <p className="opacity-80">{app.service?.name}</p>
                                 <div className="mt-1 flex items-center gap-1">
                                   {app.location?.is_online ? <Video className="h-2 w-2" /> : <MapPin className="h-2 w-2" />}

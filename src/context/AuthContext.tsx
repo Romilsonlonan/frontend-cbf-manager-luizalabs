@@ -10,6 +10,7 @@ interface User {
   email: string;
   is_active: boolean;
   name?: string; // Adicionado campo de nome
+  profession?: string; // Adicionado campo de profissão
   profile_image_url?: string; // Added profile image URL
   subscription_status?: string; // Added subscription status
   // Add other user properties as needed
@@ -105,18 +106,26 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     localStorage.setItem('access_token', newToken);
     setToken(newToken);
     setIsAuthenticated(true);
-    getCurrentUser(newToken, startLoading, stopLoading, handleAuthError).then((currentUser: User) => {
-      setUser(currentUser);
-      console.log('AuthContext login: User fetched and authenticated successfully.');
-      setLoadingUser(false); // Finish loading on successful login
-    }).catch((error: any) => {
-      console.error('AuthContext login: Failed to fetch user after login:', error);
-      localStorage.removeItem('access_token');
-      setToken(null);
-      setIsAuthenticated(false);
-      setUser(null);
-      setLoadingUser(false); // Finish loading on failed login
-    });
+    
+    // Usamos uma função assíncrona interna para garantir que o loadingUser seja setado corretamente
+    const fetchUserAfterLogin = async () => {
+      try {
+        const currentUser: User = await getCurrentUser(newToken, startLoading, stopLoading, handleAuthError);
+        setUser(currentUser);
+        console.log('AuthContext login: User fetched and authenticated successfully.');
+      } catch (error: any) {
+        console.error('AuthContext login: Failed to fetch user after login:', error);
+        localStorage.removeItem('access_token');
+        setToken(null);
+        setIsAuthenticated(false);
+        setUser(null);
+      } finally {
+        setLoadingUser(false); // Finish loading regardless of success or failure
+        console.log('AuthContext login: Finished loading user after login attempt.');
+      }
+    };
+
+    fetchUserAfterLogin();
   }, [startLoading, stopLoading, handleAuthError]);
 
   const logout = useCallback(() => {

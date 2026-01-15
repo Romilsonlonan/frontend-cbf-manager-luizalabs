@@ -110,6 +110,14 @@ export interface ClubSimpleResponse {
 
 export interface ClubDetailsResponse extends ClubSimpleResponse {}
 
+export interface User {
+    id: number;
+    name: string;
+    email: string;
+    profile_image_url?: string;
+    subscription_status: 'free' | 'premium';
+    profession?: string;
+}
 
 export interface GoalkeeperResponse {
     id: number;

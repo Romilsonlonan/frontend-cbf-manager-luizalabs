@@ -1,0 +1,99 @@
+.container {
+  @apply space-y-6;
+}
+
+.header {
+  @apply flex justify-between items-center;
+}
+
+.title {
+  @apply text-3xl font-bold;
+}
+
+.headerActions {
+  @apply flex gap-2;
+}
+
+.loadingWrapper {
+  @apply text-center py-8;
+}
+
+.emptyCard {
+  @apply flex flex-col items-center justify-center py-12;
+}
+
+.emptyIcon {
+  @apply h-12 w-12 text-gray-400 mb-4;
+}
+
+.emptyText {
+  @apply text-gray-500;
+}
+
+.addFirstButton {
+  @apply mt-4;
+}
+
+.clubsGrid {
+  @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4;
+}
+
+.clubCard {
+  @apply hover:shadow-lg transition-shadow;
+}
+
+.cardContent {
+  @apply p-6;
+}
+
+.cardHeader {
+  @apply flex items-center space-x-4 mb-4;
+}
+
+.shieldImage {
+  @apply w-16 h-16 object-cover rounded-lg;
+}
+
+.shieldPlaceholder {
+  @apply w-16 h-16 bg-gray-200 rounded-lg flex items-center justify-center;
+}
+
+.shieldIcon {
+  @apply h-8 w-8 text-gray-400;
+}
+
+.clubInfoMain {
+  @apply flex items-center justify-between w-full;
+}
+
+.clubName {
+  @apply font-semibold text-lg;
+}
+
+.actionButtons {
+  @apply flex gap-1;
+}
+
+.initials {
+  @apply text-sm text-gray-500;
+}
+
+.detailsList {
+  @apply space-y-2 text-sm;
+}
+
+.detailItem {
+  @apply flex items-center gap-2;
+}
+
+.detailIcon {
+  @apply h-4 w-4 text-gray-400;
+}
+
+.footer {
+  @apply mt-4 pt-4 border-t;
+}
+
+.scrapeButton {
+  @apply w-full;
+}

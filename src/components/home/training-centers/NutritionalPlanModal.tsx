@@ -8,7 +8,7 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog"
 import type { Athlete, ClubSimpleResponse as Club } from "@/lib/types"
-import { NutritionalChatbot } from "./NutritionalChatbot"
+import { NutritionalChatbot } from "./NutritionalChatbot/index"
 
 type NutritionalPlanModalProps = {
   athletes: Athlete[];
