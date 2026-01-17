@@ -36,3 +36,23 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Playwright
+/tests/
+/playwright-report/
+/test-results/
+/playwright.config.ts
+
+# Agents de reforço
+/agents/
+
+# Documentation and Agents
+/docs/architecture.md
+/docs/site/
+
+# IDEs
+.vscode/
+.marscode/
+
+# Temporary files
+*.modified

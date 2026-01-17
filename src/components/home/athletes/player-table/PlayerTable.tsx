@@ -57,13 +57,17 @@ export function PlayerTable({ players, isLoading, error, columns }: PlayerTableP
                             ))}
                         </tr>
                     </thead>
-                    <tbody>{players.map((player) => (
+                    <tbody>
+                        {players.map((player) => (
                             <tr key={player.id}>
                                 {columns?.map((col) => (
-                                    <td key={col.key}>{(player as any)[col.key] ?? 'N/A'}</td>
+                                    <td key={col.key} className={styles.tableBodyCell}>
+                                        {(player as any)[col.key] ?? 'N/A'}
+                                    </td>
                                 ))}
                             </tr>
-                        ))}</tbody>
+                        ))}
+                    </tbody>
                 </table>
             </div>
             {players.length > 20 && (
