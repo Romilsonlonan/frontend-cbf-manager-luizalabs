@@ -15,7 +15,7 @@ export function PageLoader() {
     // This is a heuristic: stop after a short delay.
     const timer = setTimeout(() => {
       stopLoading();
-    }, 300); // Adjust delay as needed
+    }, 50); // Reduced delay for snappier navigation
 
     return () => {
       clearTimeout(timer);

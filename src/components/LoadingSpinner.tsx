@@ -19,7 +19,7 @@ export function LoadingSpinner({ className }: LoadingSpinnerProps) {
         className="animate-spin"
         style={{ objectFit: 'contain', width: 'auto', height: 'auto' }}
       />
-      <p className="ml-3 text-lg font-semibold text-black">Aguarde ...</p>
+      <p className="ml-3 text-lg font-semibold text-white">Aguarde ...</p>
     </div>
   );
 }

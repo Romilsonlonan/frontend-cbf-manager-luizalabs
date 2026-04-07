@@ -5,7 +5,6 @@ import { LoadingSpinner } from '@/components/LoadingSpinner';
 import { DashboardStats } from '@/components/home/dashboard/DashboardStats';
 import { LeaderboardTable } from '@/components/home/dashboard/LeaderboardTable';
 import { DashboardLayout } from '@/components/home/dashboard/DashboardLayout';
-import { SubscriptionStatus } from '@/components/home/dashboard/SubscriptionStatus';
 import { TrialWelcomeModal } from '@/components/home/dashboard/TrialWelcomeModal';
 import { PaymentModal } from '@/components/PaymentModal';
 import { useDashboardData } from '@/hooks/useDashboardData';
@@ -61,11 +60,6 @@ export default function DashboardWithLeaderboardPage() {
         />
       </div>
 
-      <div className="flex justify-center mb-8">
-        <div className="max-w-2xl w-full">
-          <SubscriptionStatus onUpgrade={() => setIsPaymentModalOpen(true)} />
-        </div>
-      </div>
 
       <PaymentModal 
         isOpen={isPaymentModalOpen} 
@@ -76,16 +70,18 @@ export default function DashboardWithLeaderboardPage() {
         }}
       />
 
-      <LeaderboardTable
-        data={sortedAndFilteredTeams}
-        searchQuery={searchQuery}
-        onSearchChange={setSearchQuery}
-        sortConfig={sortConfig}
-        onSort={handleSort}
-        isScraping={isScraping}
-        onRefresh={refreshLeaderboard}
-        error={leaderboardError}
-      />
+      <div>
+        <LeaderboardTable
+          data={sortedAndFilteredTeams}
+          searchQuery={searchQuery}
+          onSearchChange={setSearchQuery}
+          sortConfig={sortConfig}
+          onSort={handleSort}
+          isScraping={isScraping}
+          onRefresh={refreshLeaderboard}
+          error={leaderboardError}
+        />
+      </div>
     </DashboardLayout>
   );
 }

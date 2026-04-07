@@ -1,9 +1,9 @@
 .headerContainer {
-  @apply mb-6;
+  @apply mb-6 text-center;
 }
 
 .title {
-  @apply text-3xl font-bold mb-6;
+  @apply text-3xl font-bold mb-6 text-center;
 }
 
 .successMessage {

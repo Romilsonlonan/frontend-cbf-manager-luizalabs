@@ -1,15 +1,31 @@
 .header {
-    @apply text-black text-center font-bold text-2xl;
+    color: black;
+    text-align: center;
+    font-weight: 700;
+    font-size: 1.5rem;
 }
 
 .logoContainer {
-    @apply flex justify-center mb-4;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 1rem;
 }
 
 .logo {
-    @apply h-20;
+    height: 5rem;
 }
 
 .title {
-    @apply text-black text-center font-bold text-2xl;
+    color: black;
+    text-align: center;
+    font-weight: 700;
+    font-size: 1.5rem;
+    white-space: pre-line;
+    line-height: 1.4;
+}
+
+@media (min-width: 768px) {
+    .title {
+        font-size: 1.875rem;
+    }
 }

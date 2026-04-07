@@ -53,6 +53,19 @@ next-env.d.ts
 # IDEs
 .vscode/
 .marscode/
+.github/
 
 # Temporary files
 *.modified
+
+# Playwright
+node_modules/
+/blob-report/
+/playwright/.cache/
+/playwright/.auth/
+
+# Test artifacts and logs
+e2e/
+lifecycle_result.txt
+test_output.txt
+test_result.txt

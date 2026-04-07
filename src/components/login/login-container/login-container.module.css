@@ -1,3 +1,7 @@
 .loginContainer {
-    @apply flex min-h-screen flex-col items-center justify-center bg-gray-100 py-12 px-4 sm:px-6 lg:px-8;
+    @apply flex items-center justify-center min-h-screen p-4 md:p-8;
+    background-image: url('https://i.ibb.co/GKC8d1Q/campo.webp');
+    background-size: cover;
+    background-position: center;
+    position: relative;
 }

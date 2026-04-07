@@ -1,7 +1,7 @@
 .footerText {
-    @apply mt-6 text-center text-sm text-gray-600;
+    @apply mt-4 text-center text-sm;
 }
 
 .footerLink {
-    @apply font-medium text-indigo-600 hover:text-indigo-500;
+    @apply text-white underline;
 }

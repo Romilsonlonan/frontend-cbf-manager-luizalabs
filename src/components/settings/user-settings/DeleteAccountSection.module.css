@@ -11,5 +11,26 @@
 }
 
 .deleteButton {
-    @apply px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700;
+    @apply px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 transition-all duration-200;
+}
+
+.deleteButton:hover:not(:disabled) {
+    @apply bg-red-700 transform scale-105;
+}
+
+.deleteButton:focus {
+    @apply outline-none ring-2 ring-red-400 ring-offset-2;
+}
+
+.errorMessage {
+    @apply bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-md mb-4;
+}
+
+.loadingSpinner {
+    @apply inline-block w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin;
+}
+
+/* Acessibilidade - texto apenas para leitores de tela */
+.sr-only {
+    @apply absolute w-px h-px p-0 -m-px overflow-hidden whitespace-nowrap border-0;
 }

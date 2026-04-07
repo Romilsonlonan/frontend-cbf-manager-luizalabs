@@ -3,7 +3,7 @@
 }
 
 .sidebarTrigger {
-    @apply md:hidden;
+    @apply flex;
 }
 
 .flexSpacer {

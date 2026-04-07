@@ -7,12 +7,11 @@
 }
 
 .title {
-  @apply font-headline text-5xl font-bold;
-  color: #101f0d;
+  @apply font-headline text-5xl font-bold text-white;
 }
 
 .description {
-  @apply text-muted-foreground text-lg mt-2;
+  @apply text-white/90 text-lg mt-2;
 }
 
 .mainGrid {
@@ -32,11 +31,11 @@
 }
 
 .icon {
-  @apply h-8 w-8 text-primary;
+  @apply h-8 w-8 text-white;
 }
 
 .cardTitle {
-  @apply font-headline;
+  @apply font-headline text-white;
 }
 
 .heroImageWrapper {

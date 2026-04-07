@@ -10,3 +10,4 @@ export { default as RegisterFooter } from './register-footer/register-footer';
 export { default as RegisterSuccess } from './register-success/register-success';
 export { default as EmailVerification } from './email-verification/email-verification';
 export { default as TermsAcceptance } from './terms-acceptance/terms-acceptance';
+export { RegisterPageContainer } from './register-page-container/register-page-container';

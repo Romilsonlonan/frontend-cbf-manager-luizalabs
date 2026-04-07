@@ -3,7 +3,8 @@
 }
 
 .tituloSelecao {
-    @apply font-headline text-5xl font-bold mb-8 text-black;
+    @apply text-4xl font-bold mb-8 text-black text-center;
+    font-family: var(--font-headline);
     animation: blink-white 1.5s infinite alternate;
 }
 
@@ -12,28 +13,52 @@
         color: black;
     }
     100% {
-        color: #fbbf24; /* amarelo claro */
+        color: #fbbf24;
+    }
+}
+
+@media (min-width: 768px) {
+    .tituloSelecao {
+        @apply text-5xl;
     }
 }
 
 .gridPlanos {
-    @apply grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto p-4;
+    @apply grid grid-cols-1 gap-6 w-full max-w-4xl;
+}
+
+@media (min-width: 768px) {
+    .gridPlanos {
+        @apply grid-cols-2 gap-8;
+    }
 }
 
 .cardPlano {
-    @apply bg-yellow-300/80 shadow-lg border flex flex-col;
+    @apply flex flex-col w-full min-w-[280px] max-w-[400px] mx-auto rounded-xl border bg-yellow-500/20 shadow-lg backdrop-blur-sm h-full;
 }
 
 .headerPlano {
-    @apply text-center;
+    @apply flex flex-col items-center text-center;
 }
 
 .tituloPlano {
-    @apply text-3xl font-bold text-black;
+    @apply text-2xl font-bold text-black text-center whitespace-nowrap;
+}
+
+@media (min-width: 768px) {
+    .tituloPlano {
+        @apply text-3xl;
+    }
 }
 
 .descricaoPlano {
-    @apply text-black text-lg;
+    @apply text-base text-black text-center px-2;
+}
+
+@media (min-width: 768px) {
+    .descricaoPlano {
+        @apply text-lg;
+    }
 }
 
 .icon {
@@ -41,5 +66,9 @@
 }
 
 .botaoEscolher {
-    @apply w-full bg-black text-yellow-300 hover:bg-gray-800;
+    @apply w-full bg-black text-amber-400;
+}
+
+.botaoEscolher:hover {
+    @apply bg-gray-800;
 }

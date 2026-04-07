@@ -15,19 +15,19 @@
 }
 
 .title {
-  @apply font-headline text-4xl font-bold text-primary text-center px-12;
+  @apply font-headline text-4xl font-bold text-white text-center px-12;
 }
 
 .emptyState {
-  @apply text-center py-12 bg-primary/5 rounded-xl border-2 border-dashed border-primary/20;
+  @apply text-center py-12 bg-white/5 rounded-xl border-2 border-dashed border-white/20;
 }
 
 .emptyIcon {
-  @apply h-12 w-12 text-primary/20 mx-auto mb-4;
+  @apply h-12 w-12 text-white/20 mx-auto mb-4;
 }
 
 .emptyText {
-  @apply text-muted-foreground;
+  @apply text-white/80;
 }
 
 .emptySubtext {
@@ -47,7 +47,7 @@
 }
 
 .shieldWrapper {
-  @apply relative w-20 h-20 mb-3 flex items-center justify-center bg-primary/10 rounded-full;
+  @apply relative w-20 h-20 mb-3 flex items-center justify-center bg-white/10 rounded-full;
 }
 
 .shieldImage {
@@ -55,11 +55,11 @@
 }
 
 .shieldPlaceholder {
-  @apply h-10 w-10 text-primary/40;
+  @apply h-10 w-10 text-white/40;
 }
 
 .clubName {
-  @apply font-semibold text-sm;
+  @apply font-semibold text-sm text-white;
 }
 
 .positionsWrapper {
@@ -67,7 +67,7 @@
 }
 
 .sectionTitle {
-  @apply text-2xl font-semibold mb-10 text-center text-muted-foreground uppercase tracking-widest;
+  @apply text-2xl font-semibold mb-10 text-center text-white/70 uppercase tracking-widest;
 }
 
 .positionsGrid {
@@ -75,7 +75,7 @@
 }
 
 .positionCard {
-  @apply text-center hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 cursor-pointer border-2 hover:border-primary bg-card/50 backdrop-blur-sm;
+  @apply text-center hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 cursor-pointer border-2 border-white/10 hover:border-white bg-black/40 backdrop-blur-sm;
 }
 
 .positionCardContent {
@@ -83,15 +83,15 @@
 }
 
 .positionIconWrapper {
-  @apply p-8 bg-primary/10 group-hover:bg-primary/20 rounded-full mb-8 transition-all duration-300 group-hover:scale-110;
+  @apply p-8 bg-white/10 group-hover:bg-white/20 rounded-full mb-8 transition-all duration-300 group-hover:scale-110;
 }
 
 .positionIcon {
-  @apply h-20 w-20 text-primary;
+  @apply h-20 w-20 text-white;
 }
 
 .positionLabel {
-  @apply font-bold text-2xl text-primary group-hover:text-primary transition-colors;
+  @apply font-bold text-2xl text-white group-hover:text-white transition-colors;
 }
 
 .athletesGrid {

@@ -39,13 +39,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const handleAuthError = useCallback(() => {
     console.log('AuthContext: Authentication error detected, logging out.');
+    startLoading(); // Inicia o loading antes do redirecionamento
     localStorage.removeItem('access_token');
+    sessionStorage.clear(); // Limpa flags de modais visualizados na sessão
     setToken(null);
     setIsAuthenticated(false);
     setUser(null);
     setLoadingUser(false); // Set loading to false on error
     router.push('/login');
-  }, [router]);
+    stopLoading(); // Para o loading após o redirecionamento
+  }, [router, startLoading, stopLoading]);
 
   const updateUser = useCallback((userData: Partial<User>) => {
     setUser((prevUser) => {
@@ -129,13 +132,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [startLoading, stopLoading, handleAuthError]);
 
   const logout = useCallback(() => {
+    startLoading(); // Inicia o loading antes do logout
     localStorage.removeItem('access_token');
+    sessionStorage.clear(); // Limpa flags de modais visualizados na sessão
     setToken(null);
     setIsAuthenticated(false);
     setUser(null);
     setLoadingUser(false); // Set loading to false on logout
     router.push('/login');
-  }, [router]);
+    stopLoading(); // Para o loading após o redirecionamento
+  }, [router, startLoading, stopLoading]);
 
   const authValue = useMemo(() => ({
     user,

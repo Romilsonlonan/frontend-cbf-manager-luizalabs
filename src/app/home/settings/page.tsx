@@ -16,6 +16,7 @@ import {
   UserSettingsHeader,
   UserSettingsLoading,
 } from '@/components/settings/user-settings';
+import SubscriptionSettingsSection from '@/components/settings/user-settings/SubscriptionSettingsSection';
 import { USER_SETTINGS_STRINGS } from '@/constants/settings.constants';
 
 /**
@@ -40,6 +41,7 @@ export default function UserSettings() {
   const [profileImageUrl, setProfileImageUrl] = useState(user?.profile_image_url || 'https://placehold.co/400x400/png');
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
+  const [deleteError, setDeleteError] = useState<string | null>(null);
 
   useEffect(() => {
     if (user) {
@@ -89,11 +91,10 @@ export default function UserSettings() {
   };
 
   const handleDeleteAccount = async () => {
-    if (!window.confirm(USER_SETTINGS_STRINGS.CONFIRM_DELETE_ACCOUNT)) {
-      return;
-    }
+    // A confirmação agora é tratada dentro do componente DeleteAccountSection
     setMessage('');
     setError('');
+    setDeleteError(null);
     startLoading();
     try {
       const token = localStorage.getItem('access_token');
@@ -103,7 +104,9 @@ export default function UserSettings() {
       logout();
       setMessage(USER_SETTINGS_STRINGS.SUCCESS_ACCOUNT_DELETE);
     } catch (err: any) {
-      setError(err.message || USER_SETTINGS_STRINGS.ERROR_ACCOUNT_DELETE);
+      const errorMessage = err.message || USER_SETTINGS_STRINGS.ERROR_ACCOUNT_DELETE;
+      setDeleteError(errorMessage);
+      setError(errorMessage);
     } finally {
       stopLoading();
     }
@@ -177,6 +180,8 @@ export default function UserSettings() {
         onSave={handleProfileUpdate}
       />
 
+      <SubscriptionSettingsSection />
+
       <ChangePasswordSection
         onChangePassword={handleChangePassword}
       />
@@ -198,6 +203,8 @@ export default function UserSettings() {
 
       <DeleteAccountSection
         onDeleteAccount={handleDeleteAccount}
+        isLoading={isLoading}
+        error={deleteError}
       />
     </UserSettingsPage>
   );

@@ -1,17 +1,17 @@
 import React from 'react';
 import styles from './register-card-header.module.css';
 
-import { CardDescription, CardHeader } from '@/components/ui/card'; // Assuming these are shadcn/ui components
+import { CardHeader } from '@/components/ui/card';
 
 interface RegisterCardHeaderProps {
     title: string;
     subtitle?: string;
     logoSrc?: string;
     logoAlt?: string;
-    className?: string; // Add className prop for the header div
-    logoClassName?: string; // Add className prop for the logo img
-    logoContainerClassName?: string; // Add className prop for the logo container div
-    titleClassName?: string; // Add className prop for the title h2
+    className?: string;
+    logoClassName?: string;
+    logoContainerClassName?: string;
+    titleClassName?: string;
 }
 
 const RegisterCardHeader: React.FC<RegisterCardHeaderProps> = ({
@@ -31,7 +31,9 @@ const RegisterCardHeader: React.FC<RegisterCardHeaderProps> = ({
                     <img src={logoSrc} alt={logoAlt} className={`${styles.logo} ${logoClassName || ''}`} />
                 </div>
             )}
-            <CardDescription className={`${styles.title} ${titleClassName || ''}`}>{title}</CardDescription>
+            <div className={`${styles.title} ${titleClassName || ''}`} style={{ whiteSpace: 'pre-line' }}>
+                {title}
+            </div>
             {subtitle && <p className={styles.subtitle}>{subtitle}</p>}
         </CardHeader>
     );

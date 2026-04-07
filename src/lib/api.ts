@@ -20,6 +20,45 @@ export const register = async (userData: any) => {
   return response.json();
 };
 
+export const forgotPassword = async (email: string) => {
+  const response = await fetch(`${API_URL}/auth/forgot-password`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ email }),
+  });
+
+  // Por segurança, o backend sempre retorna a mesma mensagem para e-mails existentes/inexistentes.
+  if (!response.ok) {
+    const errorData = await response
+      .json()
+      .catch(() => ({ detail: 'Erro ao solicitar recuperação de senha' }));
+    throw new Error(errorData.detail || 'Erro ao solicitar recuperação de senha');
+  }
+
+  return response.json() as Promise<{ msg: string }>;
+};
+
+export const resetPassword = async (token: string, newPassword: string) => {
+  const response = await fetch(`${API_URL}/auth/reset-password`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ token, new_password: newPassword }),
+  });
+
+  if (!response.ok) {
+    const errorData = await response
+      .json()
+      .catch(() => ({ detail: 'Erro ao redefinir senha' }));
+    throw new Error(errorData.detail || 'Erro ao redefinir senha');
+  }
+
+  return response.json() as Promise<{ msg: string }>;
+};
+
 export const login = async (email: string, password: string, startLoading: () => void, stopLoading: () => void) => {
   startLoading();
   try {
@@ -872,6 +911,8 @@ export const createPaymentIntent = async (token: string) => {
 
 export const api = {
   login,
+  forgotPassword,
+  resetPassword,
   getCurrentUser,
   updateUserProfile,
   changePassword,

@@ -79,7 +79,83 @@
   * {
     @apply border-border;
   }
-  body {
-    @apply bg-background text-foreground;
+  html, body {
+    /* Forçamos o fundo escuro e a imagem com prioridade absoluta */
+    background-color: #0b0b0b !important;
+    background-image: linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.45)), url('https://i.ibb.co/WwGBp2z/campo.webp') !important;
+    background-attachment: fixed !important;
+    background-size: cover !important;
+    background-position: center !important;
+    background-repeat: no-repeat !important;
+    min-height: 100vh !important;
+  }
+
+  /* Garantir que os containers principais sejam transparentes para mostrar o fundo */
+  main, [role="main"], .flex-1, section {
+    background-color: transparent !important;
+  }
+
+  /* Transparência e Glassmorphism apenas para o Dashboard */
+  .dashboard-layout .card, 
+  .dashboard-layout [class*="bg-card"], 
+  .dashboard-layout [class*="bg-background"], 
+  .dashboard-layout [class*="bg-white"],
+  .dashboard-layout .rounded-xl,
+  .dashboard-layout .border {
+    background-color: rgba(0, 0, 0, 0.15) !important;
+    backdrop-filter: blur(4px) !important;
+    -webkit-backdrop-filter: blur(4px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    color: white !important;
+  }
+
+  /* Tabelas Transparentes apenas no Dashboard */
+  .dashboard-layout table, 
+  .dashboard-layout thead, 
+  .dashboard-layout tbody, 
+  .dashboard-layout tr, 
+  .dashboard-layout th, 
+  .dashboard-layout td {
+    background-color: transparent !important;
+    background: transparent !important;
+    border-color: rgba(255, 255, 255, 0.1) !important;
+    color: white !important;
+  }
+
+  .dashboard-layout thead th {
+    background-color: rgba(255, 255, 255, 0.05) !important;
+  }
+
+  .dashboard-layout tbody tr:hover {
+    background-color: rgba(255, 255, 255, 0.1) !important;
+  }
+
+  .dashboard-layout [data-radix-collection-item], 
+  .dashboard-layout .relative.w-full.overflow-auto {
+    background-color: transparent !important;
+  }
+}
+
+/* Initial loader to prevent white flash */
+.initial-loader {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgb(0 0 0 / 0.9);
+    z-index: 99999;
+    transition: opacity 0.3s ease-out;
+  }
+
+.initial-loader.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Dark mode initial loader */
+@media (prefers-color-scheme: dark) {
+  .initial-loader {
+    background-color: rgb(18 18 18 / 0.9);
   }
 }

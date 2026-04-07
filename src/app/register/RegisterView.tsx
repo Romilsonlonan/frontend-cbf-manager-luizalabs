@@ -22,6 +22,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { UserIcon, MailIcon, BriefcaseIcon, LockIcon } from 'lucide-react';
 import { REGISTER_CONSTANTS, PROFESSIONS } from './constants';
 import { RegisterViewProps } from './types';
 import styles from '../login/login.module.css';
@@ -62,41 +63,47 @@ export const RegisterView: React.FC<RegisterViewProps> = ({
             <CardContent>
               <RegisterForm onSubmit={onSubmit} className={styles.formulario}>
                 <div className={styles.campoFormulario}>
-                  <Label htmlFor="nome-completo">{REGISTER_CONSTANTS.LABEL_FULL_NAME}</Label>
-                  <Input
-                    id="nome-completo"
-                    name="full-name"
-                    placeholder={REGISTER_CONSTANTS.PLACEHOLDER_FULL_NAME}
-                    required
-                  />
-                </div>
-                <div className={styles.campoFormulario}>
-                  <Label htmlFor="email">{REGISTER_CONSTANTS.LABEL_EMAIL}</Label>
-                  <Input
-                    id="email"
-                    name="email"
-                    type="email"
-                    placeholder={REGISTER_CONSTANTS.PLACEHOLDER_EMAIL}
-                    required
-                  />
-                </div>
-                <div className={styles.campoFormulario}>
-                  <Label htmlFor="profession">{REGISTER_CONSTANTS.LABEL_PROFESSION}</Label>
-                  <Select name="profession" required>
-                    <SelectTrigger id="profession">
-                      <SelectValue placeholder={REGISTER_CONSTANTS.PLACEHOLDER_PROFESSION} />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {PROFESSIONS.map((prof) => (
-                        <SelectItem key={prof} value={prof}>{prof}</SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div className={styles.campoFormulario}>
-                  <div className={styles.labelSenha}>
-                    <Label htmlFor="senha">{REGISTER_CONSTANTS.LABEL_PASSWORD}</Label>
+                  { /* <Label htmlFor="nome-completo">{REGISTER_CONSTANTS.LABEL_FULL_NAME}</Label> */ }
+                  <div className={styles.inputComIcone}>
+                    <UserIcon className={styles.iconeInput} />
+                    <Input
+                      id="nome-completo"
+                      name="full-name"
+                      placeholder={REGISTER_CONSTANTS.PLACEHOLDER_FULL_NAME}
+                      required
+                    />
                   </div>
+                </div>
+                <div className={styles.campoFormulario}>
+                  {/* <Label htmlFor="email">{REGISTER_CONSTANTS.LABEL_EMAIL}</Label> */}
+                  <div className={styles.inputComIcone}>
+                    <MailIcon className={styles.iconeInput} />
+                    <Input
+                      id="email"
+                      name="email"
+                      type="email"
+                      placeholder={REGISTER_CONSTANTS.PLACEHOLDER_EMAIL}
+                      required
+                    />
+                  </div>
+                </div>
+                <div className={styles.campoFormulario}>
+                  {/* <Label htmlFor="profession">{REGISTER_CONSTANTS.LABEL_PROFESSION}</Label> */}
+                  <div className={styles.inputComIcone}>
+                    <BriefcaseIcon className={styles.iconeInput} />
+                    <Select name="profession" required>
+                      <SelectTrigger id="profession" className={styles.inputSenha}>
+                        <SelectValue placeholder={REGISTER_CONSTANTS.PLACEHOLDER_PROFESSION} />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {PROFESSIONS.map((prof) => (
+                          <SelectItem key={prof} value={prof}>{prof}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+                <div className={styles.campoFormulario}>
                   <EnhancedPasswordInput
                     id="senha"
                     name="password"

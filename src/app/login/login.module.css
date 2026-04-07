@@ -1,7 +1,7 @@
 /* Página de Login - CBF Manager */
 
 .containerLogin {
-  @apply flex items-center justify-center min-h-screen;
+  @apply flex items-center justify-center min-h-screen p-4 md:p-8;
   background-image: url('https://i.ibb.co/GKC8d1Q/campo.webp');
   background-size: cover;
   background-position: center;
@@ -27,7 +27,7 @@
 }
 
 .cardLogin {
-  @apply mx-auto w-full max-w-md bg-yellow-300/80 shadow-lg border p-4 rounded-md;
+  @apply mx-auto w-[400px] bg-yellow-500/20 shadow-lg border p-6 md:p-8 rounded-xl backdrop-blur-sm; /* Fundo amarelado com transparência e blur */
 }
 
 .logoContainer {
@@ -39,7 +39,7 @@
 }
 
 .titulo {
-  @apply text-black text-center font-bold text-2xl;
+  @apply text-black text-center font-bold text-2xl; /* Alterado para preto */
 }
 
 .formulario {
@@ -55,15 +55,43 @@
 }
 
 .linkEsqueceuSenha {
-  @apply ml-auto inline-block text-sm underline;
+  @apply ml-auto inline-block text-sm text-black underline;
+}
+
+.linkEsqueceuSenhaContainer {
+  @apply -mt-4; /* Approxima o link da label de senha */
+}
+
+.inputComIcone {
+  @apply relative flex items-center;
+}
+
+.iconeInput {
+  @apply absolute left-3 h-5 w-5;
+  color: #888888;
+  stroke: #888888;
+  stroke-width: 1.5px;
+}
+
+/* Mobile: ícones cinza */
+@media (max-width: 768px) {
+  .iconeInput {
+    color: #888888;
+    stroke: #888888;
+  }
+}
+
+.inputComIcone input {
+  @apply pl-10; /* Adiciona padding para o ícone */
 }
 
 .inputSenhaContainer {
-  @apply relative;
+  @apply relative flex items-center;
 }
 
 .inputSenha {
-  @apply pr-10;
+  @apply pl-10 pr-10; /* Adiciona padding para o ícone e mantém para o botão de mostrar senha */
+  color: #888888;
 }
 
 .botaoMostrarSenha {
@@ -71,7 +99,18 @@
 }
 
 .iconeOlho {
-  @apply h-4 w-4 text-gray-500;
+  @apply h-4 w-4;
+  color: #888888;
+  stroke: #888888;
+  stroke-width: 1.5px;
+}
+
+/* Mobile: ícone de toggle cinza */
+@media (max-width: 768px) {
+  .iconeOlho {
+    color: #888888;
+    stroke: #888888;
+  }
 }
 
 .mensagemErro {
@@ -87,5 +126,6 @@
 }
 
 .linkCadastro {
-  @apply underline;
+  @apply text-white underline;
 }
+

@@ -1,7 +1,11 @@
 .main {
-  @apply min-h-screen bg-background p-4 sm:p-6 md:p-10;
+  @apply w-full flex flex-col items-center justify-start;
 }
 
 .dashboardContainer {
-  @apply container mx-auto flex flex-col gap-12;
+  @apply w-full max-w-full mx-auto flex flex-col gap-8 md:gap-12 items-center justify-center;
+}
+
+.dashboardContainer > * {
+  @apply w-full flex flex-col items-center justify-center;
 }

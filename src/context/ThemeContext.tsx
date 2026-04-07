@@ -24,9 +24,9 @@ const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
   // 🔒 Estado inicial determinístico (igual no server e no client)
-  const [theme, setTheme] = useState<Theme>('light');
-  const [navbarColor, setNavbarColor] = useState('default');
-  const [sidebarColor, setSidebarColor] = useState('default');
+  const [theme, setTheme] = useState<Theme>('dark');
+  const [navbarColor, setNavbarColor] = useState('black');
+  const [sidebarColor, setSidebarColor] = useState('black');
   const [mounted, setMounted] = useState(false);
 
   // ✅ Marca quando o componente já está montado no client

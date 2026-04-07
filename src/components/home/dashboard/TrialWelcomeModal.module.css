@@ -85,3 +85,103 @@
 .primaryButton {
   @apply bg-white text-orange-600 hover:bg-amber-50 font-bold;
 }
+
+.dialogContentExpiry {
+  @apply sm:max-w-[500px] md:max-w-[550px] border-none bg-gradient-to-br from-orange-500 via-orange-600 to-red-600 text-white p-0 overflow-hidden shadow-2xl;
+}
+
+.closeButtonExpiry {
+  @apply absolute right-6 top-6 rounded-full opacity-80 ring-offset-background transition-all hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 disabled:pointer-events-none text-white hover:bg-white/10 p-2;
+}
+
+.containerExpiry {
+  @apply p-6;
+}
+
+.iconWrapperExpiry {
+  @apply flex justify-center mb-4;
+}
+
+.iconContainerExpiry {
+  @apply p-3 rounded-full transition-all duration-300;
+}
+
+.iconExpiry {
+  @apply h-10 w-10 transition-all duration-300;
+}
+
+.titleExpiry {
+  @apply text-2xl font-bold text-center text-white mb-2;
+}
+
+.descriptionExpiry {
+  @apply text-orange-50 text-center text-base mb-4;
+}
+
+.contentBodyExpiry {
+  @apply py-2 space-y-4;
+}
+
+.expiryWarningCard {
+  @apply bg-white/10 rounded-xl p-4 flex items-center justify-between backdrop-blur-sm border border-white/20;
+}
+
+.expiryInfo {
+  @apply flex items-center gap-4;
+}
+
+.clockIconExpiry {
+  @apply h-8 w-8 text-orange-200;
+}
+
+.expiryText {
+  @apply font-semibold text-lg;
+}
+
+.expirySubtext {
+  @apply text-sm text-orange-100;
+}
+
+.daysBadgeExpiry {
+  @apply bg-gradient-to-r from-orange-500 to-red-500 text-white border-none px-4 py-2 text-lg font-bold;
+}
+
+.featuresSectionExpiry {
+  @apply space-y-3;
+}
+
+.featuresTitleExpiry {
+  @apply text-xs font-medium text-orange-100 uppercase tracking-wider text-center;
+}
+
+.featuresGrid {
+  @apply grid grid-cols-2 gap-3;
+}
+
+.featureCard {
+  @apply bg-white/5 rounded-lg p-3 flex flex-col items-center gap-1 text-center transition-all hover:bg-white/10;
+}
+
+.featureIcon {
+  @apply h-6 w-6 text-orange-200;
+}
+
+.urgencyMessage {
+  @apply bg-red-500/20 rounded-lg p-4 flex items-center gap-3 border border-red-400/30;
+}
+
+.urgencyText {
+  @apply text-red-100 font-medium;
+}
+
+.footerExpiry {
+  @apply flex flex-col sm:flex-row gap-3 mt-6;
+}
+
+.ghostButtonExpiry {
+  @apply text-white hover:bg-white/10 border-white/30 bg-white/5;
+}
+
+.primaryButtonExpiry {
+  @apply bg-gradient-to-r from-orange-500 to-red-500 text-white hover:from-orange-600 hover:to-red-600 font-bold px-6 py-2 text-base transition-all duration-300 hover:shadow-lg;
+}

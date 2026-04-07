@@ -7,15 +7,19 @@
 }
 
 .title {
-  @apply text-3xl font-bold tracking-tight;
+  @apply text-3xl font-bold tracking-tight text-white;
 }
 
 .description {
-  @apply text-muted-foreground;
+  @apply text-white/90;
 }
 
 .statsGrid {
   @apply grid gap-6 md:grid-cols-2 lg:grid-cols-4;
+}
+
+.statsGrid > div { /* Aplica estilos diretamente aos cards dentro da grid */
+  @apply h-full min-h-[80px]; /* Altura total e altura mínima para os cards */
 }
 
 .cardHeader {
@@ -27,7 +31,7 @@
 }
 
 .icon {
-  @apply h-4 w-4 text-muted-foreground;
+  @apply h-4 w-4 text-white;
 }
 
 .statValue {

@@ -9,7 +9,7 @@ interface TrainingRoutinesListLayoutProps {
 
 export const TrainingRoutinesListLayout: React.FC<TrainingRoutinesListLayoutProps> = ({ children }) => {
   return (
-    <div className={styles.container}>
+    <div className={styles.layoutContainer}>
       {children}
     </div>
   );

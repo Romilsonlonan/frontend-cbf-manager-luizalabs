@@ -9,10 +9,8 @@ interface DashboardLayoutProps {
 
 export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
   return (
-    <main className={styles.main}>
-      <div className={styles.dashboardContainer}>
-        {children}
-      </div>
-    </main>
+    <div className={styles.dashboardContainer}>
+      {children}
+    </div>
   );
 };

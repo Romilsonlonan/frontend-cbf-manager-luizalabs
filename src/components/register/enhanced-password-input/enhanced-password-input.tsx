@@ -1,21 +1,21 @@
 import React, { useState } from 'react';
-import { EyeIcon, EyeOffIcon } from 'lucide-react';
+import { EyeIcon, EyeOffIcon, LockIcon } from 'lucide-react';
 import styles from './enhanced-password-input.module.css';
 
-import { Input } from '@/components/ui/input'; // Assuming Input is a shadcn/ui component
-import { Button } from '@/components/ui/button'; // Assuming Button is a shadcn/ui component
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
 
 interface EnhancedPasswordInputProps {
     id: string;
     name: string;
     placeholder?: string;
     required?: boolean;
-    type?: string; // Add type prop
-    inputClassName?: string; // Add className prop for the input
-    buttonClassName?: string; // Add className prop for the button
-    iconClassName?: string; // Add className prop for the icon
-    onToggleVisibility: () => void; // Add onToggleVisibility prop
-    mostrarSenha: boolean; // Add mostrarSenha prop
+    type?: string;
+    inputClassName?: string;
+    buttonClassName?: string;
+    iconClassName?: string;
+    onToggleVisibility: () => void;
+    mostrarSenha: boolean;
 }
 
 const EnhancedPasswordInput: React.FC<EnhancedPasswordInputProps> = ({
@@ -32,6 +32,7 @@ const EnhancedPasswordInput: React.FC<EnhancedPasswordInputProps> = ({
 }) => {
     return (
         <div className={styles.inputSenhaContainer}>
+            <LockIcon className={`${styles.iconeInput} ${iconClassName || ''}`} />
             <Input
                 id={id}
                 name={name}

@@ -29,7 +29,7 @@ export const TrainingRoutinesList: React.FC<TrainingRoutinesListProps> = ({
           <div key={day} className={styles.daySection}>
             <h2 className={styles.dayTitle}>{day}</h2>
             <Separator className={styles.separator} />
-            <div className={styles.grid}>
+            <div className={styles.trainingGrid}>
               {routinesForDay.map((routine) => (
                 <TrainingRoutineCard
                   key={routine.id}

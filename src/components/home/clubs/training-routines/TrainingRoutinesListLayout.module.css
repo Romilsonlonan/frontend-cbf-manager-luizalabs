@@ -1,3 +1,3 @@
-.container {
+.layoutContainer {
   @apply container mx-auto p-4;
 }

@@ -1,0 +1,22 @@
+.inputWrapper {
+    @apply relative flex items-center w-full;
+}
+
+.icon {
+    @apply absolute left-3 h-5 w-5 pointer-events-none;
+    color: gray;
+    stroke: gray;
+    stroke-width: 1.5px;
+}
+
+/* Mobile: ícones brancos com borda preta */
+@media (max-width: 768px) {
+    .icon {
+        color: white;
+        stroke: gray;
+    }
+}
+
+.input {
+    @apply w-full pl-10;
+}

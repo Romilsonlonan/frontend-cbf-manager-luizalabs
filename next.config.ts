@@ -2,6 +2,7 @@ import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
   /* config options here */
+  outputFileTracingRoot: '/home/romilson/Projetos/luizalabs/frontend/frontend-cbf-manager-luizalabs',
   async headers() {
     return [
       {

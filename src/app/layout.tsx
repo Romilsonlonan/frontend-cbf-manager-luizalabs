@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import { Suspense } from 'react';
 import './globals.css';
 import { Toaster } from '@/components/ui/toaster';
@@ -23,6 +23,12 @@ export const metadata: Metadata = {
   description: 'Sistema de Gestão da CBF',
 };
 
+export const viewport: Viewport = {
+  themeColor: '#000000',
+  width: 'device-width',
+  initialScale: 1,
+};
+
 export default function RootLayout({
   children,
 }: {
@@ -30,7 +36,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="pt-BR" suppressHydrationWarning>
-      <body className={`${inter.variable} font-sans antialiased`}>
+      <body className={`${inter.variable} font-sans antialiased bg-background text-foreground`}>
         <ClientGate>
           <LoadingProvider>
             <ThemeProvider>
@@ -45,7 +51,6 @@ export default function RootLayout({
             </ThemeProvider>
           </LoadingProvider>
         </ClientGate>
-
         <Toaster />
       </body>
     </html>

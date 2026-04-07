@@ -1,6 +1,6 @@
 export const REGISTER_CONSTANTS = {
-  TITLE_BASIC: "Cadastro de Usuário (Básico)",
-  TITLE_PREMIUM: "Cadastro de Usuário (Premium Trial)",
+  TITLE_BASIC: "Cadastro de Usuário\nBásico",
+  TITLE_PREMIUM: "Cadastro de Usuário\nPremium",
   LOGO_SRC: "https://i.ibb.co/HTNLMqjX/cbf2.png",
   LOGO_ALT: "Logo CBF",
   

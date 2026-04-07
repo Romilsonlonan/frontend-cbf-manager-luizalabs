@@ -1,13 +1,13 @@
 .container {
-  @apply space-y-6;
+  @apply w-full max-w-7xl mx-auto px-4 md:px-8 space-y-6 flex flex-col items-center;
 }
 
 .header {
-  @apply flex justify-between items-center;
+  @apply w-full flex flex-col sm:flex-row justify-between items-center gap-4;
 }
 
 .title {
-  @apply text-3xl font-bold;
+  @apply text-3xl font-bold text-white;
 }
 
 .headerActions {
@@ -27,7 +27,7 @@
 }
 
 .emptyText {
-  @apply text-gray-500;
+  @apply text-white/80;
 }
 
 .addFirstButton {
@@ -35,7 +35,7 @@
 }
 
 .clubsGrid {
-  @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4;
+  @apply w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4;
 }
 
 .clubCard {
@@ -59,7 +59,7 @@
 }
 
 .shieldIcon {
-  @apply h-8 w-8 text-gray-400;
+  @apply h-8 w-8 text-white/60;
 }
 
 .clubInfoMain {
@@ -67,7 +67,7 @@
 }
 
 .clubName {
-  @apply font-semibold text-lg;
+  @apply font-semibold text-lg text-white;
 }
 
 .actionButtons {
@@ -75,11 +75,11 @@
 }
 
 .initials {
-  @apply text-sm text-gray-500;
+  @apply text-sm text-white/70;
 }
 
 .detailsList {
-  @apply space-y-2 text-sm;
+  @apply space-y-2 text-sm text-white/90;
 }
 
 .detailItem {
@@ -87,7 +87,7 @@
 }
 
 .detailIcon {
-  @apply h-4 w-4 text-gray-400;
+  @apply h-4 w-4 text-white/60;
 }
 
 .footer {

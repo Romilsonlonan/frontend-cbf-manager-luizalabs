@@ -7,6 +7,7 @@ import { ClubDetailsResponse } from "@/lib/types";
 import { useToast } from "@/components/ui/use-toast";
 import { ADD_TRAINING_ROUTINE_CONSTANTS } from './constants';
 import { AddTrainingRoutineView } from './AddTrainingRoutineView';
+import { useLoading } from '@/context/LoadingContext';
 
 /**
  * AddTrainingRoutinePage (Container Component)
@@ -29,6 +30,7 @@ export default function AddTrainingRoutinePage() {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const { toast } = useToast();
+  const { startLoading, stopLoading } = useLoading();
 
   useEffect(() => {
     const fetchClub = async () => {
@@ -50,6 +52,7 @@ export default function AddTrainingRoutinePage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitting(true);
+    startLoading(); // Inicia o loading antes do submit
     try {
       await addTrainingRoutine(parseInt(clubId), { name: routineName, description });
       toast({
@@ -57,6 +60,7 @@ export default function AddTrainingRoutinePage() {
         description: ADD_TRAINING_ROUTINE_CONSTANTS.SUCCESS_TOAST_DESCRIPTION,
       });
       router.push(`/home/clubs/${clubId}/training-routines`);
+      stopLoading(); // Para o loading após o redirecionamento bem-sucedido
     } catch (e: any) {
       toast({
         title: ADD_TRAINING_ROUTINE_CONSTANTS.ERROR_TOAST_TITLE,
@@ -64,8 +68,10 @@ export default function AddTrainingRoutinePage() {
         variant: "destructive",
       });
       setError(e.message);
+      stopLoading(); // Para o loading em caso de erro
     } finally {
       setSubmitting(false);
+      stopLoading(); // Garante que o loading pare após a tentativa de submit
     }
   };
 

@@ -7,11 +7,11 @@
 }
 
 .cardHeaderTop {
-  @apply flex items-center justify-between;
+  @apply flex flex-col items-start gap-y-2 sm:flex-row sm:items-center sm:justify-between sm:gap-x-4;
 }
 
 .cardTitle {
-  @apply text-3xl font-bold;
+  @apply text-2xl md:text-3xl font-bold leading-tight whitespace-normal;
 }
 
 .searchWrapper {
@@ -26,12 +26,76 @@
   @apply pl-10;
 }
 
-.tableWrapper {
-  @apply overflow-x-auto;
+/* ===========================
+   SCROLL HORIZONTAL DA TABELA
+   =========================== */
+
+.tableOuter {
+  @apply relative w-full overflow-hidden;
 }
 
+.tableWrapper {
+  @apply w-full overflow-x-auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.tableWrapper::-webkit-scrollbar {
+  height: 6px;
+}
+
+.tableWrapper::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.25);
+  border-radius: 9999px;
+}
+
+.tableWrapper table {
+  @apply w-full border-collapse whitespace-nowrap;
+}
+
+/* ===========================
+   MOBILE
+   =========================== */
+
+@media (max-width: 640px) {
+  .tableWrapper {
+    @apply border border-border rounded-lg;
+  }
+
+  .tableWrapper table {
+    @apply text-sm;
+  }
+
+  .teamCell {
+    @apply gap-2 min-w-[160px];
+  }
+
+  .teamLogo {
+    @apply h-5 w-5;
+  }
+
+  .teamName {
+    @apply text-sm;
+  }
+}
+
+/* ===========================
+   INDICADOR DE SCROLL
+   =========================== */
+
+.scrollIndicator {
+  @apply sm:hidden text-center text-xs text-muted-foreground mt-2 animate-pulse;
+}
+
+.scrollIndicator::before {
+  content: "← Arraste a tabela para o lado →";
+}
+
+/* ===========================
+   HEADER ORDENÁVEL
+   =========================== */
+
 .sortableHeader {
-  @apply cursor-pointer hover:bg-muted/50;
+  @apply cursor-pointer select-none hover:bg-muted/50 transition-colors;
 }
 
 .headerContent {
@@ -42,8 +106,12 @@
   @apply h-4 w-4;
 }
 
+/* ===========================
+   CÉLULAS DA TABELA
+   =========================== */
+
 .teamCell {
-  @apply flex items-center gap-3;
+  @apply flex items-center gap-3 min-w-[180px];
 }
 
 .teamLogo {
@@ -55,8 +123,12 @@
 }
 
 .pointsCell {
-  @apply font-bold;
+  @apply font-bold text-center min-w-[60px];
 }
+
+/* ===========================
+   FAIXAS DE CLASSIFICAÇÃO
+   =========================== */
 
 .libertadores {
   @apply border-l-4 border-chart-2;
@@ -74,24 +146,31 @@
   @apply border-l-4 border-transparent;
 }
 
+/* ===========================
+   BOTÕES / ÍCONES
+   =========================== */
+
 .refreshIcon {
   @apply mr-2 h-4 w-4;
 }
 
-.glossary {
-  @apply mt-8 pt-6 border-t border-border;
-}
+/* ===========================
+   GLOSSÁRIO
+   =========================== */
 
-.glossaryTitle {
-  @apply text-xs font-semibold text-muted-foreground mb-4 uppercase tracking-wider;
-}
 
 .glossaryGrid {
-  @apply grid grid-cols-1 sm:grid-cols-3 gap-y-3 gap-x-4 text-sm text-muted-foreground;
+  @apply flex flex-row gap-x-4 text-sm text-muted-foreground overflow-x-auto whitespace-nowrap;
+}
+
+@media (min-width: 640px) { /* sm breakpoint */
+  .glossaryGrid {
+    @apply grid grid-cols-3 gap-y-3;
+  }
 }
 
 .glossaryItem {
-  @apply flex items-center gap-2;
+  @apply flex items-center gap-2 flex-shrink-0;
 }
 
 .glossaryKey {

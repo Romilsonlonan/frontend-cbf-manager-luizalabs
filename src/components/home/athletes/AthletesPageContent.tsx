@@ -51,7 +51,7 @@ export function AthletesPageContent({
 }: AthletesPageContentProps) {
   return (
     <div className="bg-background text-foreground">
-      <header className="relative h-80 md:h-[500px] w-full">
+      <header className="relative h-64 md:h-[300px] w-full">
         <Image
           src={bannerImageUrl}
           alt={bannerImageHint}
@@ -73,8 +73,8 @@ export function AthletesPageContent({
         </div>
       </header>
 
-      <main className="container mx-auto px-4 py-8">
-        <Card className="shadow-lg border-none">
+      <main className="w-full max-w-7xl mx-auto px-4 md:px-8 py-8 flex flex-col items-center">
+        <Card className="w-full shadow-lg border-none">
           <CardHeader>
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
               <CardTitle className="font-headline text-2xl flex items-center gap-2">

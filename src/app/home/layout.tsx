@@ -13,10 +13,12 @@ export default function DashboardLayout({
   return (
     <SidebarProvider collapsible={false}>
       <SidebarNav />
-      <SidebarInset className="flex flex-col min-h-screen">
+      <SidebarInset className="flex flex-col min-h-screen w-full dashboard-layout">
         <DashboardHeader />
-        <main className="p-4 md:p-8 flex-1">
-          {children}
+        <main className="flex-1 w-full flex flex-col items-center overflow-x-hidden">
+          <div className="w-full max-w-none p-4 md:p-8">
+            {children}
+          </div>
         </main>
         <Footer />
       </SidebarInset>

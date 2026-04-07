@@ -4,6 +4,7 @@ import { useEffect, ReactNode } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 import { useLoading } from '@/context/LoadingContext';
+import { LoadingSpinner } from './LoadingSpinner';
 
 interface AuthGuardProps {
   children: ReactNode;
@@ -30,11 +31,13 @@ export function AuthGuard({ children }: AuthGuardProps) {
     }
   }, [isAuthenticated, isLoading, loadingUser, pathname, router]);
 
-  // Se estiver carregando o usuário, não renderiza nada para evitar flash de conteúdo protegido.
-  // Não bloqueamos a renderização se apenas 'isLoading' for true, pois isso causaria um deadlock
-  // se um componente filho disparar um carregamento no seu useEffect (o unmount impediria o stopLoading).
+  // Se estiver carregando o usuário, exibe um spinner de carregamento para evitar flash branco
   if (loadingUser) {
-    return null;
+    return (
+      <div className="fixed inset-0 flex items-center justify-center bg-background">
+        <LoadingSpinner />
+      </div>
+    );
   }
 
   // Se não estiver autenticado e tentar acessar uma rota protegida, não renderiza os filhos

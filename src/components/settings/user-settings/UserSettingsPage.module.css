@@ -1,3 +1,14 @@
 .container {
-    @apply p-6 max-w-4xl mx-auto bg-yellow-50/50 rounded-lg shadow-sm;
+    @apply p-6 md:p-12 w-full max-w-4xl mx-auto bg-green-200/70 rounded-xl shadow-lg flex flex-col items-center justify-center;
+}
+
+.container > * {
+    @apply w-full max-w-xl mx-auto flex flex-col items-center;
+}
+
+/* Garante que formulários e grupos dentro das seções também ocupem a largura total do max-w-xl */
+.container :global(form), 
+.container :global(.form),
+.container :global(div[class*="formGroup"]) {
+    @apply w-full;
 }
